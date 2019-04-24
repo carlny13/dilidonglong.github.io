@@ -16,11 +16,14 @@
     <content type="text"></content>
   </entry>
   <entry>
+<<<<<<< HEAD
     <title><![CDATA[about]]></title>
     <url>%2Fabout%2Findex.html</url>
     <content type="text"></content>
   </entry>
   <entry>
+=======
+>>>>>>> 8a70ea495175e5921e63dcafe246ea85902ae38c
     <title><![CDATA[相册]]></title>
     <url>%2Fgallery%2Findex.html</url>
     <content type="text"></content>
