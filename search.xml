@@ -16,12 +16,12 @@
     <content type="text"></content>
   </entry>
   <entry>
-    <title><![CDATA[archives]]></title>
+    <title><![CDATA[归档]]></title>
     <url>%2Farchives%2Findex.html</url>
     <content type="text"></content>
   </entry>
   <entry>
-    <title><![CDATA[categories]]></title>
+    <title><![CDATA[分类]]></title>
     <url>%2Fcategories%2Findex.html</url>
     <content type="text"></content>
   </entry>
