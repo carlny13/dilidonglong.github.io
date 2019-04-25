@@ -5,9 +5,9 @@
   <subtitle>兰芝生于幽谷，不以无人而不芳</subtitle>
   <link href="/atom.xml" rel="self"/>
   
-  <link href="http://yoursite.com/"/>
+  <link href="https://dilidonglong.github.io/"/>
   <updated>2019-04-24T08:40:29.611Z</updated>
-  <id>http://yoursite.com/</id>
+  <id>https://dilidonglong.github.io/</id>
   
   <author>
     <name>John Doe</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>磁盘分区</title>
-    <link href="http://yoursite.com/2019/04/24/%E7%A3%81%E7%9B%98%E5%88%86%E5%8C%BA/"/>
-    <id>http://yoursite.com/2019/04/24/磁盘分区/</id>
+    <link href="https://dilidonglong.github.io/2019/04/24/%E7%A3%81%E7%9B%98%E5%88%86%E5%8C%BA/"/>
+    <id>https://dilidonglong.github.io/2019/04/24/磁盘分区/</id>
     <published>2019-04-24T08:40:02.896Z</published>
     <updated>2019-04-24T08:40:29.611Z</updated>
     
@@ -39,8 +39,8 @@
   
   <entry>
     <title>Hello World</title>
-    <link href="http://yoursite.com/2019/04/24/hello-world/"/>
-    <id>http://yoursite.com/2019/04/24/hello-world/</id>
+    <link href="https://dilidonglong.github.io/2019/04/24/hello-world/"/>
+    <id>https://dilidonglong.github.io/2019/04/24/hello-world/</id>
     <published>2019-04-24T06:49:59.574Z</published>
     <updated>2019-04-24T06:49:59.574Z</updated>
     
