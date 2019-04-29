@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[软考试题1]]></title>
+    <url>%2F2019%2F04%2F29%2F%E8%BD%AF%E8%80%83%E8%AF%95%E9%A2%981%2F</url>
+    <content type="text"><![CDATA[问题若主机hostA的MAC地址为aa-aa-aa-aa-aa-aa，主机hostB的MAC地址为bb-bb-bb-bb-bb-bb。由hostA发出的查询hostB的MAC地址的帧格式如下图所示，则此帧中的目标MAC地址为（ D ），ARP报文中的目标MAC地址为（ C ）。 问题1选项 A aa-aa-aa-aa-aa-aa B bb-bb-bb-bb-bb-bb C 00-00-00-00-00-00 D ff-ff-ff-ff-ff-ff 问题2选项 A aa-aa-aa-aa-aa-aa B bb-bb-bb-bb-bb-bb C 00-00-00-00-00-00 D ff-ff-ff-ff-ff-ff 解析 数据包从上往下层层封装。在wireshark里面是可以看到其封装情况的。 上图就是一个arp的数据包。在中间的框中，可以知道arp报文被Ethernet（以太网）头部封装。第一个包指的是arp广播请求包，意思是“谁知道192.168.0.1的mac地址，请告诉192.168.0.114“ wireshark数据包中以太网帧头部（Ethernet）包含了destination（目标mac地址），source（源mac地址），type（类型） 问题一里面的目的mac指的就是以太网头部里面的mac地址。 即下图中写的目标mac地址，你能看到正好就是对应wireshark数据包中的destination这段。 问题二里面，ARP报文中的目标MAC地址，指的就是wireshark数据包中，红框的target mac address。arp报文是被mac头部封装的。 sender mac address表示发送方自己的mac地址； sender ip address表示发送方自己的ip地址； target mac address表示想要知道的对方的mac地址是多少，由于是广播请求，此时并不知道对方mac，所以暂时以全0替代； target ip address表示请求对方的ip地址。]]></content>
+      <categories>
+        <category>软考</category>
+      </categories>
+  </entry>
+  <entry>
     <title><![CDATA[设置分类列表页]]></title>
     <url>%2F2019%2F04%2F27%2F%E8%AE%BE%E7%BD%AE%E5%88%86%E7%B1%BB%E5%88%97%E8%A1%A8%E9%A1%B5%2F</url>
     <content type="text"><![CDATA[设置分类列表页问题最近通过github+hexo(ocean主题)搭建了博客。期间遇到了各种问题，主要还是因为自己不是程序员，有些代码看不懂。 比如我想，以后如果文章多起来，只有一个归档可不行，最好要有个分类的界面。把文章都整理好，以后也方便自己查东西。 照着网上的操作： 先生成一个分类的网页，输入命令hexo new page categories 找到对应网页的md文件，在其头部内添加上type: &quot;categories&quot; 最后测试，新建一篇文章，在文章md文件头部上添加categories: 分类的名称 保存 最后需要在主页上把分类页展现出来。 找到主题配置文件_config.yml。在meun中加入分类: /categories 保存 上述操作做完之后，查看效果。发现文章里面是有分类的显示 但是，在主页里面点击分类的连接，进入分类网页，没有任何显示。如下图红框处，最开始是没有任何显示的. 解决方法网上查了大量文章，很多都只是说了配置问题，我是按配置正确操作的，但是就是解决不了。 后来看到一篇文章，猜测出应该是这个ocean主题缺少对应的代码。 参考链接：hexo主题开发指南-分类列表页与分类文章列表页 分类列表页显示博客里的所有分类，分类文章列表页显示某个分类中的文章列表。 Hexo 并没有专门分类列表页的模板，那该如何处理呢？一般是写在页面模板中，即 layout/page.swig 里，然后判断页面类型变量 page.type，如果是 categories，则显示分类列表页。再在博客里创建一个页面，指定其 type 为 categories ocean主题是用ejs写出来的。而这个链接里面给的是swig的代码。所以估计不能直接用 定位了问题，接下来就好处理了。由于我暂时还不会写代码，所以只好找答案复制粘贴。 参考链接：Hexo-创建分类（categories）和标签（tags）首页，给出如下代码 找到 layout/_partial/article.ejs 然后找到 &lt;div class=&quot;article-entry&quot; itemprop=&quot;articleBody&quot;&gt; 这一行 这个 div 里面的内容全部替换为：(注：再此处，我没有全部替换，而是补充接在原始文档内容后了) 123456789101112131415161718192021222324252627282930313233343536373839&gt; &lt;% if (page.type === "tags") &#123; %&gt;&gt; &lt;div class="tag-cloud"&gt;&gt; &lt;div class="tag-cloud-title"&gt;&gt; &lt;%- _p('counter.tag_cloud', site.tags.length) %&gt;&gt; &lt;/div&gt;&gt; &gt; &lt;div class="tag-cloud-tags"&gt;&gt; &lt;%- tagcloud(&#123;&gt; min_font: 12,&gt; max_font: 30,&gt; amount: 200,&gt; color: true,&gt; start_color: '#ccc',&gt; end_color: '#111'&gt; &#125;) %&gt;&gt; &lt;/div&gt;&gt; &lt;/div&gt;&gt; &gt; &lt;% &#125; else if (page.type === 'categories') &#123; %&gt;&gt; &gt; &lt;div class="category-all-page"&gt;&gt; &lt;div class="category-all-title"&gt;&gt; &lt;%- _p('counter.categories', site.categories.length) %&gt;&gt; &lt;/div&gt;&gt; &gt; &lt;div class="category-all"&gt;&gt; &lt;%- list_categories() %&gt;&gt; &lt;/div&gt;&gt; &gt; &lt;/div&gt;&gt; &gt; &lt;% &#125; else &#123; %&gt;&gt; &gt; &lt;% if (post.excerpt &amp;&amp; index)&#123; %&gt; &lt;%- post.excerpt %&gt;&gt; &lt;% &#125; else &#123; %&gt;&gt; &lt;%- post.content %&gt;&gt; &lt;% &#125; %&gt;&gt; &lt;% &#125; %&gt;&gt; 修改样式，如果觉得不好看，自己改喜欢的样式 找到 yilia/source/css/_partial/article.styl 在最后面添加下面的 css 代码 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107&gt; /*tag-cloud*/&gt; .tag-cloud &#123;&gt; text-align: center;&gt; margin-top: 50px;&gt; &#125;&gt; .tag-cloud a &#123;&gt; display: inline-block;&gt; margin: 10px;&gt; &#125;&gt; .tag-cloud-title &#123;&gt; font-weight: 700;&gt; font-size: 24px;&gt; &#125;&gt; .tag-cloud-tags &#123;&gt; margin-top: 15px;&gt; a &#123;&gt; display: inline-block;&gt; text-decoration: none;&gt; font-weight: normal;&gt; font-size: 10px;&gt; color: #fff;&gt; line-height: normal;&gt; padding: 5px 5px 5px 10px;&gt; position: relative;&gt; border-radius: 0 5px 5px 0;&gt; font-family: Menlo, Monaco, "Andale Mono", "lucida console", "Courier New", monospace;&gt; &amp;:hover &#123;&gt; opacity: 0.8;&gt; &#125;&gt; &amp;:before &#123;&gt; content: " ";&gt; width: 0;&gt; height: 0;&gt; position: absolute;&gt; top: 0;&gt; left: -18px;&gt; border: 9px solid transparent;&gt; &#125;&gt; &amp;:after &#123;&gt; content: " ";&gt; width: 4px;&gt; height: 4px;&gt; background-color: #fff;&gt; border-radius: 4px;&gt; box-shadow: 0 0 0 1px rgba(0, 0, 0, .3);&gt; position: absolute;&gt; top: 7px;&gt; left: 2px;&gt; &#125;&gt; &#125;&gt; a.color1 &#123;&gt; background: #FF945C;&gt; &amp;:before &#123;&gt; border-right-color: #FF945C;&gt; &#125;&gt; &#125;&gt; a.color2 &#123;&gt; background: #F5C7B7;&gt; &amp;:before &#123;&gt; border-right-color: #F5C7B7;&gt; &#125;&gt; &#125;&gt; a.color3 &#123;&gt; background: #BA8F6C;&gt; &amp;:before &#123;&gt; border-right-color: #BA8F6C;&gt; &#125;&gt; &#125;&gt; a.color4 &#123;&gt; background: #CFB7C4;&gt; &amp;:before &#123;&gt; border-right-color: #CFB7C4;&gt; &#125;&gt; &#125;&gt; a.color5 &#123;&gt; background: #7B5D5F;&gt; &amp;:before &#123;&gt; border-right-color: #7B5D5F;&gt; &#125;&gt; &#125;&gt; &#125;&gt; &gt; /*category-all-page*/&gt; .category-all-page &#123;&gt; margin-top: 50px;&gt; .category-all-title &#123;&gt; font-weight: 700;&gt; font-size: 24px;&gt; text-align: center;&gt; &#125;&gt; .category-list-item:after &#123;&gt; content: '';&gt; clear: both;&gt; display: table;&gt; &#125;&gt; .category-list-count &#123;&gt; float: right;&gt; margin-left: 5px;&gt; &#125;&gt; .category-list-count:before &#123;&gt; content: '一共 ';&gt; &#125;&gt; .category-list-count:after &#123;&gt; content: ' 篇文章';&gt; &#125;&gt; &#125;&gt; 通过上述操作，问题解决。不过显示出来的样式不是自己喜欢的那种。等以后自己学会编程，再回头过来修改吧～]]></content>
@@ -30,6 +38,11 @@
     <content type="text"></content>
   </entry>
   <entry>
+    <title><![CDATA[关于]]></title>
+    <url>%2Fabout%2Findex.html</url>
+    <content type="text"></content>
+  </entry>
+  <entry>
     <title><![CDATA[分类]]></title>
     <url>%2Fcategories%2Findex.html</url>
     <content type="text"></content>
@@ -37,11 +50,6 @@
   <entry>
     <title><![CDATA[相册]]></title>
     <url>%2Fgallery%2Findex.html</url>
-    <content type="text"></content>
-  </entry>
-  <entry>
-    <title><![CDATA[关于]]></title>
-    <url>%2Fabout%2Findex.html</url>
     <content type="text"></content>
   </entry>
 </search>

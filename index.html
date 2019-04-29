@@ -60,6 +60,99 @@
 
     
       
+        <article id="post-软考试题1" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2019/04/29/软考试题1/">软考试题1</a>
+    </h2>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/04/29/软考试题1/" class="article-date">
+  <time datetime="2019-04-29T14:54:48.000Z" itemprop="datePublished">2019-04-29</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/软考/">软考</a>
+  </div>
+
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+      
+
+      
+        <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>若主机hostA的MAC地址为aa-aa-aa-aa-aa-aa，主机hostB的MAC地址为bb-bb-bb-bb-bb-bb。由hostA发出的查询hostB的MAC地址的帧格式如下图所示，则此帧中的目标MAC地址为（ D ），ARP报文中的目标MAC地址为（ C ）。</p>
+<p><img src="/2019/04/29/软考试题1/1.png" alt="1"></p>
+<p>问题1选项</p>
+<p>A aa-aa-aa-aa-aa-aa</p>
+<p>B bb-bb-bb-bb-bb-bb</p>
+<p>C 00-00-00-00-00-00</p>
+<p>D ff-ff-ff-ff-ff-ff</p>
+<p>问题2选项</p>
+<p>A aa-aa-aa-aa-aa-aa</p>
+<p>B bb-bb-bb-bb-bb-bb</p>
+<p>C 00-00-00-00-00-00</p>
+<p>D ff-ff-ff-ff-ff-ff</p>
+<h2 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h2><ol>
+<li>数据包从上往下层层封装。在wireshark里面是可以看到其封装情况的。</li>
+</ol>
+<p><img src="/2019/04/29/软考试题1/2.png" alt="2"></p>
+<p>上图就是一个arp的数据包。在中间的框中，可以知道arp报文被Ethernet（以太网）头部封装。第一个包指的是arp广播请求包，意思是“谁知道192.168.0.1的mac地址，请告诉192.168.0.114“</p>
+<ol start="2">
+<li>wireshark数据包中以太网帧头部（Ethernet）包含了destination（目标mac地址），source（源mac地址），type（类型）</li>
+</ol>
+<p><img src="/2019/04/29/软考试题1/3.png" alt="2"></p>
+<p>问题一里面的目的mac指的就是以太网头部里面的mac地址。</p>
+<p>即下图中写的目标mac地址，你能看到正好就是对应wireshark数据包中的destination这段。<img src="/2019/04/29/软考试题1/4.png" alt="2"></p>
+<ol start="3">
+<li><p>问题二里面，ARP报文中的目标MAC地址，指的就是wireshark数据包中，红框的target mac address。arp报文是被mac头部封装的。</p>
+</li>
+<li><p><strong>sender mac address</strong>表示发送方自己的mac地址；</p>
+<p><strong>sender ip address</strong>表示发送方自己的ip地址；</p>
+<p><strong>target mac address</strong>表示想要知道的对方的mac地址是多少，由于是广播请求，此时并不知道对方mac，所以暂时以全0替代；</p>
+<p><strong>target ip address</strong>表示请求对方的ip地址。</p>
+</li>
+</ol>
+
+      
+
+      
+
+          
+        
+          
+        </div>
+
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dilidonglong.github.io/2019/04/29/软考试题1/" data-id="cjv2i7rrk0003b8quqcvzxjt3" class="article-share-link">分享</a>
+      
+    </footer>
+
+  
+
+  
+
+  
+
+</article>
+
+
+
+      
         <article id="post-设置分类列表页" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
@@ -146,7 +239,7 @@
 
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/04/27/设置分类列表页/" data-id="cjuyxr3bn0000uwqufgeluwz5" class="article-share-link">分享</a>
+      <a data-url="https://dilidonglong.github.io/2019/04/27/设置分类列表页/" data-id="cjv2i7rsa0009b8qujwq0b9k7" class="article-share-link">分享</a>
       
     </footer>
 
@@ -600,7 +693,7 @@
 
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/04/26/tshark使用方法/" data-id="cjuyxr3dd000auwqup534tmvh" class="article-share-link">分享</a>
+      <a data-url="https://dilidonglong.github.io/2019/04/26/tshark使用方法/" data-id="cjv2i7ru8000cb8quta71rt6y" class="article-share-link">分享</a>
       
     </footer>
 
@@ -708,7 +801,7 @@
 
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/04/25/使用github-hexo创建一个博客/" data-id="cjuyxr3bw0002uwquigsn7ur7" class="article-share-link">分享</a>
+      <a data-url="https://dilidonglong.github.io/2019/04/25/使用github-hexo创建一个博客/" data-id="cjv2i7rrd0001b8qud67bkptj" class="article-share-link">分享</a>
       
     </footer>
 
