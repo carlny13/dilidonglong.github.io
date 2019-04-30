@@ -60,6 +60,283 @@
 
     
       
+        <article id="post-wireshark技巧" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2019/04/30/wireshark技巧/">wireshark技巧</a>
+    </h2>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/04/30/wireshark技巧/" class="article-date">
+  <time datetime="2019-04-30T15:40:03.000Z" itemprop="datePublished">2019-04-30</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/小技巧/">小技巧</a>
+  </div>
+
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+      
+
+      
+        <h1 id="wireshark技巧"><a href="#wireshark技巧" class="headerlink" title="wireshark技巧"></a>wireshark技巧</h1><blockquote>
+<p>资料来源：</p>
+<p><a href="https://community.emc.com/go/chinese" target="_blank" rel="noopener">1.EMC中文支持论坛</a></p>
+<p><a href="https://www.dell.com/community/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E8%AE%A8%E8%AE%BA%E5%8C%BA/%E5%A6%82%E6%9E%9C%E7%9C%8B%E4%BA%86%E8%BF%99%E4%B8%AA%E4%BD%A0%E8%BF%98%E6%98%AF%E4%B8%8D%E4%BC%9A%E7%94%A8Wireshark-%E9%82%A3%E5%B0%B1%E6%9D%A5%E6%89%BE%E6%88%91%E5%90%A7-8%E6%9C%886%E6%97%A5%E5%AE%8C%E7%BB%93/td-p/7007033/page/5" target="_blank" rel="noopener">2.如果看了这个你还是不会用Wireshark-那就来找我吧-8月6日完结</a></p>
+<p><a href="http://linux.51yip.com/search/tcpdump" target="_blank" rel="noopener">3.Linux命令手册-tcpdump</a></p>
+<p><a href="https://chegva.com/3019.html" target="_blank" rel="noopener">4.Linux上使用wireshark(tshark)抓包分析</a></p>
+<p><a href="https://chegva.com/2473.html" target="_blank" rel="noopener">5.tcpdump使用技巧</a></p>
+</blockquote>
+<h2 id="1-抓包前设置过滤条件（捕捉过滤器）"><a href="#1-抓包前设置过滤条件（捕捉过滤器）" class="headerlink" title="1.抓包前设置过滤条件（捕捉过滤器）"></a>1.抓包前设置过滤条件（捕捉过滤器）</h2><p><strong>尽量避免使用抓包过滤。即便多看几个报文，也比漏看一个报文要好。</strong>当你抓取了大量报文的时候，用显示过滤（过滤选项也更多）来重点查看某一数据流。</p>
+<h3 id="1-1-抓取指定IP地址的数据流："><a href="#1-1-抓取指定IP地址的数据流：" class="headerlink" title="1.1 抓取指定IP地址的数据流："></a>1.1 抓取指定IP地址的数据流：</h3><ol>
+<li>host 10.3.1.1：抓取发到/来自10.3.1.1的数据流</li>
+<li>host 2406:da00:ff00::6b16:f02d：抓取发到/来自IPv6地址2406:da00:ff00::6b16:f02d的数据流</li>
+<li>not host 10.3.1.1：抓取除了发到/来自10.3.1.1以外的所有数据流</li>
+<li>src host 10.3.1.1：抓取来自10.3.1.1的数据流</li>
+<li>dst host 10.3.1.1：抓取发到10.3.1.1的数据流</li>
+<li>host 10.3.1.1 or 10.3.1.2：抓取发到/来自10.3.1.1，以及与之通讯的所有数据流，与10.3.1.2，以及与之通讯的所有数据流</li>
+<li>host <a href="http://www.espn.com：抓取发到/来自所有解析为www.espn.com的IP地址的数据流" target="_blank" rel="noopener">www.espn.com：抓取发到/来自所有解析为www.espn.com的IP地址的数据流</a></li>
+</ol>
+<h3 id="1-2-抓取指定IP地址范围的数据流"><a href="#1-2-抓取指定IP地址范围的数据流" class="headerlink" title="1.2 抓取指定IP地址范围的数据流:"></a>1.2 抓取指定IP地址范围的数据流:</h3><ol>
+<li>net 10.3.0.0/16：抓取网络10.3.0.0上发到/来自所有主机的数据流(16表示长度)</li>
+<li>net 10.3.0.0 mask 255.255.0.0：与之前的过滤结果相同</li>
+<li>ip6 net 2406:da00:ff00::/64：抓取网络2406:da00:ff00:0000(IPv6)上发到/来自所有主机的数据流</li>
+<li>not dst net 10.3.0.0/16：抓取除了发到以10.3开头的IP地址以外的所有数据流</li>
+<li>not src net 10.3.0.0/16：抓取除了来自以10.3开头的IP地址以外的所有数据流</li>
+<li>ip proto &lt; protocol code &gt;：抓取ip协议字段等于&lt; protocol code &gt;值的报文。如TCP(code 6), UDP(code 17), ICMP(code 1)。</li>
+<li>ip[2:2]==&lt; number &gt;：ip报文大小</li>
+<li>ip[8]==&lt; number &gt;：TTL(Time to Live)值</li>
+<li>ip[9]==&lt; number &gt;：协议值</li>
+<li>icmp[icmptype]==&lt; identifier &gt;: 抓取 ICMP代码等于identifier的ICMP报文, 如icmp-echo 以及 icmp-request。</li>
+</ol>
+<p>方括号中第一个数字表示从<u><strong>协议头</strong></u>开始的偏移量，第二个数字表示需要观察多少位。</p>
+<p><img src="/2019/04/30/wireshark技巧/1.png" alt="image004.png"></p>
+<h3 id="1-3-抓取发到广播或多播地址的数据流"><a href="#1-3-抓取发到广播或多播地址的数据流" class="headerlink" title="1.3 抓取发到广播或多播地址的数据流:"></a>1.3 抓取发到广播或多播地址的数据流:</h3><p>只需侦听广播或多播数据流，就可以掌握网络上主机的许多信息。</p>
+<ol>
+<li>ip broadcast：抓取广播报文</li>
+<li>ip multicast：抓取多播报文</li>
+<li>dst host ff02::1：抓取到IPv6多播地址所有主机的数据流</li>
+<li>dst host ff02::2：抓取到IPv6多播地址所有路由器的数据流</li>
+</ol>
+<h3 id="1-4-抓取基于MAC地址的数据流"><a href="#1-4-抓取基于MAC地址的数据流" class="headerlink" title="1.4 抓取基于MAC地址的数据流:"></a>1.4 抓取基于MAC地址的数据流:</h3><p>当你需要抓取发到/来自某一主机的IPv4或IPv6数据流，可创建基于主机MAC地址的抓包过滤条件。</p>
+<p>应用MAC地址时，需确保与目标主机处于同一网段。</p>
+<ol>
+<li>ether host 00:08:15:00:08:15：抓取发到/来自00:08:15:00:08:15的数据流</li>
+<li>ether src 02:0A:42:23:41:AC：抓取来自02:0A:42:23:41:AC的数据流</li>
+<li>ether dst 02:0A:42:23:41:AC：抓取发到02:0A:42:23:41:AC的数据流</li>
+<li>not ether host 00:08:15:00:08:15：抓取除了发到/来自00:08:15:00:08:15以外的所有数据流</li>
+<li>ether broadcast或ether dst ff:ff:ff:ff:ff:ff：抓取广播报文</li>
+<li>ether multicast：多播报文</li>
+<li>抓取指定以太网类型的报文：ether proto 0800</li>
+<li>抓取指定VLAN：vlan &lt; vlan number &gt;</li>
+<li>抓取指定几个VLAN：vlan &lt; vlan number &gt; and vlan &lt; vlan number &gt;</li>
+</ol>
+<h3 id="1-5-抓取基于指定应用的数据流"><a href="#1-5-抓取基于指定应用的数据流" class="headerlink" title="1.5 抓取基于指定应用的数据流:"></a>1.5 抓取基于指定应用的数据流:</h3><p>你可能需要查看基于一个或几个应用的数据流。抓包过滤器语法无法识别应用名，因此需要根据端口号来定义应用。通过目标应用的TCP或UDP端口号，将不相关的报文过滤掉。</p>
+<ol>
+<li>port 53：抓取发到/来自端口53的UDP/TCP数据流（典型是DNS数据流）</li>
+<li>not port 53：抓取除了发到/来自端口53以外的UDP/TCP数据流</li>
+<li>port 80：抓取发到/来自端口80的UDP/TCP数据流（典型是HTTP数据流）</li>
+<li>udp port 67：抓取发到/来自端口67的UDP数据流（典型是DHCP据流）</li>
+<li>tcp port 21：抓取发到/来自端口21的TCP数据流（典型是FTP命令通道）</li>
+<li>portrange 1-80：抓取发到/来自端口1-80的所有UDP/TCP数据流</li>
+<li>tcp portrange 1-80：抓取发到/来自端口1-80的所有TCP数据流</li>
+</ol>
+<h3 id="1-6-抓取结合端口的数据流"><a href="#1-6-抓取结合端口的数据流" class="headerlink" title="1.6 抓取结合端口的数据流:"></a>1.6 抓取结合端口的数据流:</h3><p>当你需要抓取多个不连续端口号的数据流，将它们通过逻辑符号连接起来，如下图所示：</p>
+<ol>
+<li>port 20 or port 21：抓取发到/来自端口20或21的UDP/TCP数据流（典型是FTP数据和命令端口）</li>
+<li>host 10.3.1.1 and port 80：抓取发到/来自10.3.1.1端口80的数据流</li>
+<li>host 10.3.1.1 and not port 80：抓取发到/来自10.3.1.1除了端口80以外的数据流</li>
+<li>udp src port 68 and udp dst port 67：抓取从端口68到端口67的所有UDP数据流（典型是从DHCP客户端到DHCP服务器）</li>
+<li>udp src port 67 and udp dst port 68：抓取从端口67到端口68的所有UDP数据流（典型是从DHCP服务器到DHCP客户端）</li>
+<li>抓取TCP连接的开始（SYN）和结束（FIN）报文，配置tcp[tcpflags] &amp; (tcp-syn|tcp-fin)!=0</li>
+<li>抓取所有RST(Reset)标志位为1的TCP报文，配置tcp[tcpflags] &amp; (tcp-rst)!=0</li>
+<li>less &lt; length &gt;：抓取小于等于某一长度的报文，等同于len &lt;=&lt; length &gt;</li>
+<li>greater &lt; length &gt;：抓取大于等于某一长度的报文，等同于len &gt;=&lt; length &gt;</li>
+</ol>
+<p>SYN: 建立连接的信号</p>
+<p>FIN: 关闭连接的信号</p>
+<p>ACK: 确认接收数据的信号</p>
+<p>RST: 立即关闭连接的信号</p>
+<p>PSH: 推信号，尽快将数据转由应用处理</p>
+<ul>
+<li>tcp[13] &amp; 0x00 = 0: No flags set (null scan)</li>
+<li>tcp[13] &amp; 0x01 = 1: FIN set and ACK not set</li>
+<li>tcp[13] &amp; 0x03 = 3: SYN set and FIN set</li>
+<li>tcp[13] &amp; 0x05 = 5: RST set and FIN set</li>
+<li>tcp[13] &amp; 0x06 = 6: SYN set and RST set</li>
+<li>tcp[13] &amp; 0x08 = 8: PSH set and ACK not set</li>
+<li>tcp[13]是从<u><strong>协议头</strong></u>开始的偏移量，0,1,3,5,6,8是标识位。</li>
+</ul>
+<p><img src="/2019/04/30/wireshark技巧/2.png" alt="image005.png"></p>
+<hr>
+<h2 id="2-抓包后设置过滤条件（显示过滤器）"><a href="#2-抓包后设置过滤条件（显示过滤器）" class="headerlink" title="2.抓包后设置过滤条件（显示过滤器）"></a>2.抓包后设置过滤条件（显示过滤器）</h2><h3 id="2-1-协议过滤器"><a href="#2-1-协议过滤器" class="headerlink" title="2.1 协议过滤器"></a>2.1 协议过滤器</h3><ol>
+<li>arp：显示所有包括ARP请求和回复在内的所有ARP数据流。</li>
+<li>ip：显示内含IPv4头在内的（如ICMP目的地址不可达报文，在ICMP报文头之后返回到来方向的IPv4头）IP数据流。</li>
+<li>ipv6：显示所有IPv6数据流，包括内含IPv6报文头的IPv4报文，如6to4，Teredo，以及ISATAP数据流。</li>
+<li>tcp：显示所有基于TCP的数据流。</li>
+</ol>
+<h3 id="2-2-应用过滤器"><a href="#2-2-应用过滤器" class="headerlink" title="2.2 应用过滤器"></a>2.2 应用过滤器</h3><ol>
+<li>bootp：显示所有DHCP数据流（基于BOOTP）。</li>
+<li>dns：显示包括TCP区域传输以及基于标准UDP的DNS请求和回复在内的所有DNS数据流。</li>
+<li>tftp：显示所有TFTP（Trivial File Transfer Protocol）数据流。</li>
+<li>http：显示所有HTTP命令，回复以及数据传输报文，但不显示TCP握手报文，TCP ACK报文以及TCP结束报文。</li>
+<li>icmp：显示所有ICMP报文。</li>
+</ol>
+<h3 id="2-3-字符过滤器"><a href="#2-3-字符过滤器" class="headerlink" title="2.3 字符过滤器"></a>2.3 字符过滤器</h3><ol>
+<li>tcp.analysis.flags：显示所有包含TCP分析标识的所有报文，包括报文丢失，重传，或零窗口标识。</li>
+<li>tcp.analysis.zero_window：显示含有表明发送方的接收缓存用完标识的报文。</li>
+</ol>
+<h3 id="2-4-域过滤器"><a href="#2-4-域过滤器" class="headerlink" title="2.4 域过滤器"></a>2.4 域过滤器</h3><ol>
+<li>boot.option.hostname：显示所有包含主机名的DHCP数据流（DHCP基于BOOTP）。</li>
+<li>http:host：显示所有包含HTTP主机名字段的所有HTTP报文。此报文是客户端向网络服务器发送请求时发出的。</li>
+<li>ftp.request.command：显示所有包含命令的FTP数据流，比如USER，PASS，或RETR命令。</li>
+</ol>
+<h3 id="2-5-显示过滤器的比较运算符"><a href="#2-5-显示过滤器的比较运算符" class="headerlink" title="2.5 显示过滤器的比较运算符"></a>2.5 显示过滤器的比较运算符</h3><ol>
+<li><p>==或eq</p>
+<p>例如：ip.src == 10.2.2.2</p>
+<p>显示所有源地址为10.2.2.2的IPv4数据流</p>
+</li>
+<li><p>！=或ne</p>
+<p>例如：tcp.srcport != 80</p>
+<p>显示源端口除了80以外的所有TCP数据流</p>
+</li>
+<li><p>gt 或 &gt;</p>
+<p>例如：frame.time_relative &gt; 1</p>
+<p>显示距前一个报文到达时间相差1秒的报文</p>
+</li>
+<li><p>&lt;或lt</p>
+<p>例如：tcp.window_size &lt; 1460</p>
+<p>显示当TCP接收窗口小于1460字节时的报文</p>
+</li>
+<li><p>ge 或 &gt;=</p>
+<p>例如：dns.count.answers &gt;= 10</p>
+<p>显示包含10个以上answer的DNS响应报文</p>
+</li>
+<li><p>&lt;=或le</p>
+<p>例如：ip.ttl &lt;= 10</p>
+<p>显示IP报文中Time to Live字段小于等于10的报文</p>
+</li>
+<li><p>contains</p>
+<p>例如：http contains “GET”</p>
+<p>显示所有HTTP客户端发送给HTTP服务器的GET请求</p>
+</li>
+</ol>
+<p>对于基于TCP应用的过滤条件采用比较运算符。例如，如果想看端口80上面的HTTP数据流，使用HTTP.port==80。</p>
+<p>小贴士：</p>
+<p>运算符两边不用留空格。ip.src == 10.2.2.2与ip.src==10.2.2.2的效果是相同的。</p>
+<h3 id="2-6-举例应用"><a href="#2-6-举例应用" class="headerlink" title="2.6 举例应用"></a>2.6 举例应用</h3><h4 id="2-6-1-按照某一IP地址或主机过滤报文："><a href="#2-6-1-按照某一IP地址或主机过滤报文：" class="headerlink" title="2.6.1 按照某一IP地址或主机过滤报文："></a>2.6.1 按照某一IP地址或主机过滤报文：</h4><ul>
+<li><p>例如：ip.addr==10.3.1.1</p>
+<p>显示在IP源地址字段或IP目的地址字段包含10.3.1.1的帧。</p>
+<hr>
+</li>
+<li><p>例如：！ip.addr==10.3.1.1</p>
+<p>显示除了在IP源地址字段或IP目的地址字段包含10.3.1.1以外的帧。</p>
+<hr>
+</li>
+<li><p>例如：ipv6.addr==2406:da00:ff00::6b16:f02d</p>
+<p>显示以2406:da00:ff00::6b16:f02d为源地址或目的地址的帧。</p>
+<hr>
+</li>
+<li><p>例如：ip.src==10.3.1.1</p>
+<p>显示所有来自10.3.1.1的数据流。</p>
+<hr>
+</li>
+<li><p>例如：ip.dst==10.3.1.1</p>
+<p>显示所有发往10.3.1.1的数据流</p>
+<hr>
+</li>
+<li><p>例如：ip.host==<a href="http://www.wireshark.org" target="_blank" rel="noopener">www.wireshark.org</a></p>
+<p>显示所有解析为<a href="http://www.wireshark.org的IP" target="_blank" rel="noopener">www.wireshark.org的IP</a></p>
+<hr>
+</li>
+</ul>
+<h4 id="2-6-2-按照某一IP地址范围过滤报文："><a href="#2-6-2-按照某一IP地址范围过滤报文：" class="headerlink" title="2.6.2 按照某一IP地址范围过滤报文："></a>2.6.2 按照某一IP地址范围过滤报文：</h4><p>可以使用&gt;或&lt;比较运算符或逻辑运算符&amp;&amp;查找某一地址范围内的报文。</p>
+<ul>
+<li><p>例如：ip.addr&gt;10.3.0.1&amp;&amp;ip.addr&lt;10.3.0.5</p>
+<p>显示来自或发往10.3.0.2，10.3.0.3，10.3.0.4的数据流。</p>
+<hr>
+</li>
+<li><p>例如：(ip.addr&gt;=10.3.0.1&amp;&amp;ip.addr&lt;=10.3.0.6)&amp;&amp;!ip.addr==10.3.0.3</p>
+<p>显示来自或发往10.3.0.1，10.3.0.2，10.3.0.4，10.3.0.5，10.3.0.6的数据流，10.3.0.3排除在外。</p>
+<hr>
+</li>
+<li><p>例如：ipv6.addr&gt;=fe80::&amp;&amp;ipv6.addr&lt;fec0::</p>
+<p>显示IPv6地址从0xfe80到0xfec0开头的数据流。</p>
+<hr>
+</li>
+</ul>
+<h4 id="2-6-3-按照某一IP子网过滤报文："><a href="#2-6-3-按照某一IP子网过滤报文：" class="headerlink" title="2.6.3 按照某一IP子网过滤报文："></a>2.6.3 按照某一IP子网过滤报文：</h4><p>可以通过ip.addr字段名定义一个子网。这种格式使用IP地址后跟斜杠以及一个后缀，表明IP地址中定义的网络部分的比特数。</p>
+<ul>
+<li><p>例如：ip.addr==10.3.0.0/16</p>
+<p>显示在IP源地址或目的地址字段以10.3开头的数据流。</p>
+<hr>
+</li>
+<li><p>例如：ip.addr == 10.3.0.0/16 &amp;&amp; ！ip.addr==10.3.1.1</p>
+<p>显示除了10.3.1.1以外，在IP源地址或目的地址字段以10.3开头的数据流。</p>
+<hr>
+</li>
+<li><p>例如：!ip.addr == 10.3.0.0/16 &amp;&amp; !ip.addr==10.2.0.0/16</p>
+<p>显示所有数据流，除了在IP源地址或目的地址字段以10.3和10.2开头的数据流</p>
+<hr>
+</li>
+</ul>
+<blockquote>
+<p>注意：</p>
+<p>错误的用法导致不work：</p>
+<hr>
+<p>错误：ip.addr != 10.2.2.2</p>
+<p>显示在IP源地址或IP目的地址不包含10.2.2.2的报文。只要在源或目的IP地址不为10.2.2.2，报文就会被显示出来。这时隐含的或会导致实际上并未过滤任何报文。</p>
+<p>正确：！ip.addr == 10.2.2.2</p>
+<p>显示IP源地址和IP目的地址都不包含10.2.2.2的报文。</p>
+<hr>
+<p>错误：!tcp.flags.syn==1</p>
+<p>显示所有不含TCP SYN bit设置为1的报文。其他协议报文，必须UDP和ARP报文也符合这一过滤条件，因为它们的TCP SYN bit没有设置为1。</p>
+<p>正确：tcp.flags.syn！=1</p>
+<p>只显示包含SYN设置为0的TCP报文。</p>
+<hr>
+</blockquote>
+
+      
+
+      
+
+          
+        
+          
+        </div>
+
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dilidonglong.github.io/2019/04/30/wireshark技巧/" data-id="cjv3ynrol000iugqup92mvzc3" class="article-share-link">分享</a>
+      
+    </footer>
+
+  
+
+  
+
+  
+
+</article>
+
+
+
+      
         <article id="post-文件系统的简单操作" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
@@ -139,7 +416,7 @@
 
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/04/30/文件系统的简单操作/" data-id="cjv3ydb5s0002vkqu70cnhnro" class="article-share-link">分享</a>
+      <a data-url="https://dilidonglong.github.io/2019/04/30/文件系统的简单操作/" data-id="cjv3ynrnj0002ugqugvmdj0dz" class="article-share-link">分享</a>
       
     </footer>
 
@@ -280,7 +557,7 @@
 
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/04/30/文件系统/" data-id="cjv3ydb6t000ivkquml6unp1r" class="article-share-link">分享</a>
+      <a data-url="https://dilidonglong.github.io/2019/04/30/文件系统/" data-id="cjv3ynrom000jugqutrksqx70" class="article-share-link">分享</a>
       
     </footer>
 
@@ -430,7 +707,7 @@
 
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/04/30/磁盘分区/" data-id="cjv3ydb5y0005vkqu5ui3tsn2" class="article-share-link">分享</a>
+      <a data-url="https://dilidonglong.github.io/2019/04/30/磁盘分区/" data-id="cjv3ynrnp0005ugqu8d5zqj6w" class="article-share-link">分享</a>
       
     </footer>
 
@@ -523,108 +800,7 @@
 
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/04/29/软考试题1/" data-id="cjv3ydb640009vkqudhkhzozq" class="article-share-link">分享</a>
-      
-    </footer>
-
-  
-
-  
-
-  
-
-</article>
-
-
-
-      
-        <article id="post-设置分类列表页" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
-
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h2 itemprop="name">
-      <a class="article-title" href="/2019/04/27/设置分类列表页/">设置分类列表页</a>
-    </h2>
-  
-
-      </header>
-    
-
-    
-      <div class="article-meta">
-        <a href="/2019/04/27/设置分类列表页/" class="article-date">
-  <time datetime="2019-04-27T02:46:42.000Z" itemprop="datePublished">2019-04-27</time>
-</a>
-        
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/小技巧/">小技巧</a>
-  </div>
-
-      </div>
-    
-
-    <div class="article-entry" itemprop="articleBody">
-      
-
-      
-
-      
-        <h1 id="设置分类列表页"><a href="#设置分类列表页" class="headerlink" title="设置分类列表页"></a>设置分类列表页</h1><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>最近通过github+hexo(ocean主题)搭建了博客。期间遇到了各种问题，主要还是因为自己不是程序员，有些代码看不懂。</p>
-<p>比如我想，以后如果文章多起来，只有一个归档可不行，最好要有个分类的界面。把文章都整理好，以后也方便自己查东西。</p>
-<p>照着网上的操作：</p>
-<blockquote>
-<ol>
-<li>先生成一个分类的网页，输入命令<code>hexo new page categories</code></li>
-<li>找到对应网页的md文件，在其头部内添加上<code>type: &quot;categories&quot;</code></li>
-<li>最后测试，新建一篇文章，在文章md文件头部上添加<code>categories: 分类的名称</code></li>
-<li>保存</li>
-<li>最后需要在主页上把分类页展现出来。</li>
-<li>找到主题配置文件<code>_config.yml</code>。在<code>meun</code>中加入<code>分类: /categories</code></li>
-<li>保存</li>
-</ol>
-</blockquote>
-<p>上述操作做完之后，查看效果。发现文章里面是有分类的显示</p>
-<p><img src="/2019/04/27/设置分类列表页/1.png" alt="分类显示"></p>
-<p>但是，在主页里面点击分类的连接，进入分类网页，没有任何显示。如下图红框处，最开始是没有任何显示的.</p>
-<p><img src="/2019/04/27/设置分类列表页/2.png" alt="2"></p>
-<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><p>网上查了大量文章，很多都只是说了配置问题，我是按配置正确操作的，但是就是解决不了。</p>
-<p>后来看到一篇文章，猜测出应该是这个ocean主题缺少对应的代码。</p>
-<p>参考链接：<a href="http://chensd.com/2016-06/hexo-theme-guide.html#分类列表页与分类文章列表页" target="_blank" rel="noopener">hexo主题开发指南-分类列表页与分类文章列表页</a></p>
-<blockquote>
-<p>分类列表页显示博客里的所有分类，分类文章列表页显示某个分类中的文章列表。</p>
-<p>Hexo 并没有专门分类列表页的模板，那该如何处理呢？一般是写在页面模板中，即 <code>layout/page.swig</code> 里，然后判断页面类型变量 <code>page.type</code>，如果是 <code>categories</code>，则显示分类列表页。再在博客里创建一个页面，指定其 <code>type</code> 为 <code>categories</code> </p>
-</blockquote>
-<p>ocean主题是用ejs写出来的。而这个链接里面给的是swig的代码。所以估计不能直接用</p>
-<p>定位了问题，接下来就好处理了。由于我暂时还不会写代码，所以只好找答案复制粘贴。</p>
-<p>参考链接：<a href="http://orzcss.com/posts/5a207d64/" target="_blank" rel="noopener">Hexo-创建分类（categories）和标签（tags）首页</a>，给出如下代码</p>
-<blockquote>
-<p>找到 <code>layout/_partial/article.ejs</code> </p>
-<p>然后找到 <code>&lt;div class=&quot;article-entry&quot; itemprop=&quot;articleBody&quot;&gt;</code> 这一行</p>
-<p>这个 div 里面的内容全部替换为：(注：再此处，我没有全部替换，而是补充接在原始文档内容后了)</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">&gt; &lt;% if (page.type === "tags") &#123; %&gt;</span><br><span class="line">&gt; &lt;div class="tag-cloud"&gt;</span><br><span class="line">&gt; 	&lt;div class="tag-cloud-title"&gt;</span><br><span class="line">&gt; 	&lt;%- _p('counter.tag_cloud', site.tags.length) %&gt;</span><br><span class="line">&gt; 	&lt;/div&gt;</span><br><span class="line">&gt; </span><br><span class="line">&gt; 	&lt;div class="tag-cloud-tags"&gt;</span><br><span class="line">&gt; 	&lt;%- tagcloud(&#123;</span><br><span class="line">&gt; 		min_font: 12,</span><br><span class="line">&gt; 		max_font: 30,</span><br><span class="line">&gt; 		amount: 200,</span><br><span class="line">&gt; 		color: true,</span><br><span class="line">&gt; 		start_color: '#ccc',</span><br><span class="line">&gt; 		end_color: '#111'</span><br><span class="line">&gt; 		&#125;) %&gt;</span><br><span class="line">&gt; 	&lt;/div&gt;</span><br><span class="line">&gt; &lt;/div&gt;</span><br><span class="line">&gt; </span><br><span class="line">&gt; &lt;% &#125; else if (page.type === 'categories') &#123; %&gt;</span><br><span class="line">&gt; </span><br><span class="line">&gt; &lt;div class="category-all-page"&gt;</span><br><span class="line">&gt; 	&lt;div class="category-all-title"&gt;</span><br><span class="line">&gt; 	&lt;%- _p('counter.categories', site.categories.length) %&gt;</span><br><span class="line">&gt; 	&lt;/div&gt;</span><br><span class="line">&gt; 	</span><br><span class="line">&gt; 	&lt;div class="category-all"&gt;</span><br><span class="line">&gt; 	&lt;%- list_categories() %&gt;</span><br><span class="line">&gt; 	&lt;/div&gt;</span><br><span class="line">&gt; 	</span><br><span class="line">&gt; &lt;/div&gt;</span><br><span class="line">&gt; </span><br><span class="line">&gt; &lt;% &#125; else &#123; %&gt;</span><br><span class="line">&gt; </span><br><span class="line">&gt; 	&lt;% if (post.excerpt &amp;&amp; index)&#123; %&gt;		&lt;%- post.excerpt %&gt;</span><br><span class="line">&gt; 	&lt;% &#125; else &#123; %&gt;</span><br><span class="line">&gt; 		&lt;%- post.content %&gt;</span><br><span class="line">&gt; 	&lt;% &#125; %&gt;</span><br><span class="line">&gt; &lt;% &#125; %&gt;</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
-</blockquote>
-<blockquote>
-<p>修改样式，如果觉得不好看，自己改喜欢的样式</p>
-<p>找到 <code>yilia/source/css/_partial/article.styl</code> 在最后面添加下面的 css 代码</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="comment">/*tag-cloud*/</span></span><br><span class="line">&gt; <span class="selector-class">.tag-cloud</span> &#123;</span><br><span class="line">&gt;   text-align: center;</span><br><span class="line">&gt;   <span class="selector-tag">margin-top</span>: 50<span class="selector-tag">px</span>;</span><br><span class="line">&gt; &#125;</span><br><span class="line">&gt; <span class="selector-class">.tag-cloud</span> <span class="selector-tag">a</span> &#123;</span><br><span class="line">&gt;   display: inline-block;</span><br><span class="line">&gt;   <span class="selector-tag">margin</span>: 10<span class="selector-tag">px</span>;</span><br><span class="line">&gt; &#125;</span><br><span class="line">&gt; <span class="selector-class">.tag-cloud-title</span> &#123;</span><br><span class="line">&gt;   font-weight: 700;</span><br><span class="line">&gt;   <span class="selector-tag">font-size</span>: 24<span class="selector-tag">px</span>;</span><br><span class="line">&gt; &#125;</span><br><span class="line">&gt; <span class="selector-class">.tag-cloud-tags</span> &#123;</span><br><span class="line">&gt;   margin-top: 15px;</span><br><span class="line">&gt;   <span class="selector-tag">a</span> &#123;</span><br><span class="line">&gt;     display: inline-block;</span><br><span class="line">&gt;     <span class="selector-tag">text-decoration</span>: <span class="selector-tag">none</span>;</span><br><span class="line">&gt;     <span class="selector-tag">font-weight</span>: <span class="selector-tag">normal</span>;</span><br><span class="line">&gt;     <span class="selector-tag">font-size</span>: 10<span class="selector-tag">px</span>;</span><br><span class="line">&gt;     <span class="selector-tag">color</span>: <span class="selector-id">#fff</span>;</span><br><span class="line">&gt;     <span class="selector-tag">line-height</span>: <span class="selector-tag">normal</span>;</span><br><span class="line">&gt;     <span class="selector-tag">padding</span>: 5<span class="selector-tag">px</span> 5<span class="selector-tag">px</span> 5<span class="selector-tag">px</span> 10<span class="selector-tag">px</span>;</span><br><span class="line">&gt;     <span class="selector-tag">position</span>: <span class="selector-tag">relative</span>;</span><br><span class="line">&gt;     <span class="selector-tag">border-radius</span>: 0 5<span class="selector-tag">px</span> 5<span class="selector-tag">px</span> 0;</span><br><span class="line">&gt;     <span class="selector-tag">font-family</span>: <span class="selector-tag">Menlo</span>, <span class="selector-tag">Monaco</span>, "<span class="selector-tag">Andale</span> <span class="selector-tag">Mono</span>", "<span class="selector-tag">lucida</span> <span class="selector-tag">console</span>", "<span class="selector-tag">Courier</span> <span class="selector-tag">New</span>", <span class="selector-tag">monospace</span>;</span><br><span class="line">&gt;     &amp;<span class="selector-pseudo">:hover</span> &#123;</span><br><span class="line">&gt;       opacity: 0.8;</span><br><span class="line">&gt;     &#125;</span><br><span class="line">&gt;     &amp;<span class="selector-pseudo">:before</span> &#123;</span><br><span class="line">&gt;       content: " ";</span><br><span class="line">&gt;       <span class="selector-tag">width</span>: 0;</span><br><span class="line">&gt;       <span class="selector-tag">height</span>: 0;</span><br><span class="line">&gt;       <span class="selector-tag">position</span>: <span class="selector-tag">absolute</span>;</span><br><span class="line">&gt;       <span class="selector-tag">top</span>: 0;</span><br><span class="line">&gt;       <span class="selector-tag">left</span>: <span class="selector-tag">-18px</span>;</span><br><span class="line">&gt;       <span class="selector-tag">border</span>: 9<span class="selector-tag">px</span> <span class="selector-tag">solid</span> <span class="selector-tag">transparent</span>;</span><br><span class="line">&gt;     &#125;</span><br><span class="line">&gt;     &amp;<span class="selector-pseudo">:after</span> &#123;</span><br><span class="line">&gt;       content: " ";</span><br><span class="line">&gt;       <span class="selector-tag">width</span>: 4<span class="selector-tag">px</span>;</span><br><span class="line">&gt;       <span class="selector-tag">height</span>: 4<span class="selector-tag">px</span>;</span><br><span class="line">&gt;       <span class="selector-tag">background-color</span>: <span class="selector-id">#fff</span>;</span><br><span class="line">&gt;       <span class="selector-tag">border-radius</span>: 4<span class="selector-tag">px</span>;</span><br><span class="line">&gt;       <span class="selector-tag">box-shadow</span>: 0 0 0 1<span class="selector-tag">px</span> <span class="selector-tag">rgba</span>(0, 0, 0, <span class="selector-class">.3</span>);</span><br><span class="line">&gt;       <span class="selector-tag">position</span>: <span class="selector-tag">absolute</span>;</span><br><span class="line">&gt;       <span class="selector-tag">top</span>: 7<span class="selector-tag">px</span>;</span><br><span class="line">&gt;       <span class="selector-tag">left</span>: 2<span class="selector-tag">px</span>;</span><br><span class="line">&gt;     &#125;</span><br><span class="line">&gt;   &#125;</span><br><span class="line">&gt;   <span class="selector-tag">a</span><span class="selector-class">.color1</span> &#123;</span><br><span class="line">&gt;     background: #FF945C;</span><br><span class="line">&gt;     &amp;<span class="selector-pseudo">:before</span> &#123;</span><br><span class="line">&gt;       border-right-color: #FF945C;</span><br><span class="line">&gt;     &#125;</span><br><span class="line">&gt;   &#125;</span><br><span class="line">&gt;   <span class="selector-tag">a</span><span class="selector-class">.color2</span> &#123;</span><br><span class="line">&gt;     background: #F5C7B7;</span><br><span class="line">&gt;     &amp;<span class="selector-pseudo">:before</span> &#123;</span><br><span class="line">&gt;       border-right-color: #F5C7B7;</span><br><span class="line">&gt;     &#125;</span><br><span class="line">&gt;   &#125;</span><br><span class="line">&gt;   <span class="selector-tag">a</span><span class="selector-class">.color3</span> &#123;</span><br><span class="line">&gt;     background: #BA8F6C;</span><br><span class="line">&gt;     &amp;<span class="selector-pseudo">:before</span> &#123;</span><br><span class="line">&gt;       border-right-color: #BA8F6C;</span><br><span class="line">&gt;     &#125;</span><br><span class="line">&gt;   &#125;</span><br><span class="line">&gt;   <span class="selector-tag">a</span><span class="selector-class">.color4</span> &#123;</span><br><span class="line">&gt;     background: #CFB7C4;</span><br><span class="line">&gt;     &amp;<span class="selector-pseudo">:before</span> &#123;</span><br><span class="line">&gt;       border-right-color: #CFB7C4;</span><br><span class="line">&gt;     &#125;</span><br><span class="line">&gt;   &#125;</span><br><span class="line">&gt;   <span class="selector-tag">a</span><span class="selector-class">.color5</span> &#123;</span><br><span class="line">&gt;     background: #7B5D5F;</span><br><span class="line">&gt;     &amp;<span class="selector-pseudo">:before</span> &#123;</span><br><span class="line">&gt;       border-right-color: #7B5D5F;</span><br><span class="line">&gt;     &#125;</span><br><span class="line">&gt;   &#125;</span><br><span class="line">&gt; &#125;</span><br><span class="line">&gt; </span><br><span class="line">&gt; <span class="comment">/*category-all-page*/</span></span><br><span class="line">&gt; <span class="selector-class">.category-all-page</span> &#123;</span><br><span class="line">&gt;   margin-top: 50px;</span><br><span class="line">&gt;   <span class="selector-class">.category-all-title</span> &#123;</span><br><span class="line">&gt;     font-weight: 700;</span><br><span class="line">&gt;     <span class="selector-tag">font-size</span>: 24<span class="selector-tag">px</span>;</span><br><span class="line">&gt;     <span class="selector-tag">text-align</span>: <span class="selector-tag">center</span>;</span><br><span class="line">&gt;   &#125;</span><br><span class="line">&gt;   <span class="selector-class">.category-list-item</span><span class="selector-pseudo">:after</span> &#123;</span><br><span class="line">&gt;     content: '';</span><br><span class="line">&gt;     <span class="selector-tag">clear</span>: <span class="selector-tag">both</span>;</span><br><span class="line">&gt;     <span class="selector-tag">display</span>: <span class="selector-tag">table</span>;</span><br><span class="line">&gt;   &#125;</span><br><span class="line">&gt;   <span class="selector-class">.category-list-count</span> &#123;</span><br><span class="line">&gt;     float: right;</span><br><span class="line">&gt;     <span class="selector-tag">margin-left</span>: 5<span class="selector-tag">px</span>;</span><br><span class="line">&gt;   &#125;</span><br><span class="line">&gt;   <span class="selector-class">.category-list-count</span><span class="selector-pseudo">:before</span> &#123;</span><br><span class="line">&gt;     content: '一共 ';</span><br><span class="line">&gt;   &#125;</span><br><span class="line">&gt;   <span class="selector-class">.category-list-count</span><span class="selector-pseudo">:after</span> &#123;</span><br><span class="line">&gt;     content: ' 篇文章';</span><br><span class="line">&gt;   &#125;</span><br><span class="line">&gt; &#125;</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
-</blockquote>
-<p>通过上述操作，问题解决。不过显示出来的样式不是自己喜欢的那种。等以后自己学会编程，再回头过来修改吧～</p>
-
-      
-
-      
-
-          
-        
-          
-        </div>
-
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/04/27/设置分类列表页/" data-id="cjv3ydb610007vkquys0bpdpl" class="article-share-link">分享</a>
+      <a data-url="https://dilidonglong.github.io/2019/04/29/软考试题1/" data-id="cjv3ynrnv0009ugqum6to94z7" class="article-share-link">分享</a>
       
     </footer>
 
