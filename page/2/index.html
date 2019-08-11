@@ -60,6 +60,647 @@
 
     
       
+        <article id="post-远程桌面访问不了" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2019/07/07/远程桌面访问不了/">远程桌面访问不了</a>
+    </h2>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/07/07/远程桌面访问不了/" class="article-date">
+  <time datetime="2019-07-07T08:08:47.000Z" itemprop="datePublished">2019-07-07</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/实战/">实战</a>
+  </div>
+
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+      
+
+      
+        <h1 id="远程桌面访问不了"><a href="#远程桌面访问不了" class="headerlink" title="远程桌面访问不了"></a>远程桌面访问不了</h1><p><strong>问题：总部PC去访问分支的服务器3389桌面，会出现不定时中断的问题</strong></p>
+<ol>
+<li><p>10.0.2.132为PC 10.16.2.200为远程桌面的服务器</p>
+</li>
+<li><p>拓扑环境</p>
+<p><img src="/2019/07/07/远程桌面访问不了/13.png" alt="1"></p>
+</li>
+</ol>
+<p>总部有三层环境，AC透明模式部署，分支二层环境，就一个网段</p>
+<ol start="3">
+<li>数据包是总部访问分支访问不了的时候抓取的数据包，要求通过数据包，分析问题原因。</li>
+</ol>
+<hr>
+<p><strong>排查思路：</strong></p>
+<ol>
+<li><p>只抓取了分支vpn上eth0口的包和总部vpn设备eth0上的包（建议是分支电脑和总部服务器都抓取，抓不了也没    办法）</p>
+</li>
+<li><p>因为是终端pc访问服务器的时候经常断开。所以先看在终端侧的数据包，也即是查看zbssleth0这个包</p>
+<blockquote>
+<ol>
+<li>打开之后，先点击<strong>Statistics</strong>，选中<strong>conversation</strong></li>
+</ol>
+<p><img src="/2019/07/07/远程桌面访问不了/1.jpg" alt="1"></p>
+<ol start="2">
+<li>出现下图界面，选中<strong>TCP</strong>，看到存在三个连接。说明应该是测试过3次。其中注意到字节数Bytes， 第二个连接有112kB，比其他连接传输的数据都多，那我们就先来看这个连接。</li>
+</ol>
+<p><img src="/2019/07/07/远程桌面访问不了/2.jpg" alt="1"></p>
+<ol start="3">
+<li>怎么看呢？右键该连接后，照下图操作</li>
+</ol>
+<p><img src="/2019/07/07/远程桌面访问不了/3.jpg" alt="1"></p>
+<ol start="4">
+<li>wireshark自动过滤该连接，显示如下界面</li>
+</ol>
+<p><img src="/2019/07/07/远程桌面访问不了/4.jpg" alt="1"></p>
+<ol start="5">
+<li>我们可以点开专家分析来看看，是否存在什么问题。点开之后，记得把<strong>Limit to Display ﬁlter</strong> 给勾上，这样才会显示在wireshark过滤后展示页面的信息。</li>
+</ol>
+<p><img src="/2019/07/07/远程桌面访问不了/5.jpg" alt="1"></p>
+<p><img src="/2019/07/07/远程桌面访问不了/6.jpg" alt="1"></p>
+<ol start="6">
+<li>由于不涉及访问卡慢的问题，所以此时我们没必要看重传等信息。重点应该关注是什么导致的连接  断开。此时，明显能看到告警信息中，存在RST包，那我们就可以看下304号包与306号包。</li>
+</ol>
+<p><img src="/2019/07/07/远程桌面访问不了/7.jpg" alt="1"></p>
+<ol start="7">
+<li>找到304号包与306包后，发现后面就再也没有数据了，说明此时连接是中断了。明明数据传的好好   的，怎么突然客户端10.0.2.132就发送一个RST包呢。此时需要注意的是，我们的数据包是在总部vpn设备上eth0口抓的，也就是说这个流量是从内部传过来的。结合着总部的拓扑情况，出现中断，  可能存在2种情况。要么是客户端自己的问题，要么就是有啥子设备替客户端发送了这个RST包。</li>
+</ol>
+<p><img src="/2019/07/07/远程桌面访问不了/8.jpg" alt="1"></p>
+<ol start="8">
+<li><p>一个直接的办法就是在客户端上抓包。看下客户端有没有发出这个RST包。如果没有，结合着网络拓  扑，那基本就可以确定是AC发了这个RST包了（第一个，客户环境比较简单；第二个，谁叫AC是行  为管控呢）。如果客户端上的抓包有这个RST，那就是客户端的问题。</p>
+</li>
+<li><p>如果客户说，我电脑上不能安装其他软件（不管为啥，你就当死活不允许好了）。那就是说，我们  不能在客户端上抓包。那好，我们就只能在现有的数据包中获取蛛丝马迹了。</p>
+</li>
+<li><p>此时，我们还有一个方法判断是不是由客户端发出的这个RST包，那就是通过IP.ID这个参数。</p>
+</li>
+<li><p>IP.ID是什么鬼？那我们要知道数据包是如何封装的，如下图所示。如果看不懂，请参考<a href="https://wizardforcel.gitbooks.io/network-basic/content/0.html" target="_blank" rel="noopener">网络基本功</a>。IP.ID是IP数据报头中的一个字段。表明了一个数据包的身份，比如一个数据内容过大，被传输的时候就要对这个数据进行切割，即进行分片。当接收方收到这些分片后，需要把这些分片组装起来，那接收方每次收这么多的数据包，它咋知道哪些分片是从同一个数据内容中出来的呢？就要靠IP.ID了，通过IP.ID就可以把这些分片组装起来，还原成最初始的大块数据。就像你玩乐高玩具，乐  高里面这么多零件，如果这些零件中混入了其他玩具的零件。那你想把这个乐高玩具组装起来肯定需要一个标识来进行识别哪些零件是同属于一个乐高模型的。</p>
+<p><img src="/2019/07/07/远程桌面访问不了/9.jpg" alt="1"></p>
+</li>
+<li><p>上述还只是告诉了你，啥是IP.ID。那回到问题中来，你还需要知道的一个点就是，如果是一个设备   去发数据包，那么他的IP.ID增长是线性的。即一般来说，同一台设备发出第一个包，如果IP.ID是1，   第二个包就是2。就算不符合这规律，那数值起码也不会差太多。</p>
+</li>
+<li><p>我们再来看下wireshark，299号包的IP.ID=18970。302号包的IP.ID=18971。而304号包的IP.ID=22566。那RST包和之前的两个包，这数值也差的太多了啊，所以基本能判断这个包不是客户端发出的。</p>
+<p><img src="/2019/07/07/远程桌面访问不了/10.jpg" alt="1"></p>
+</li>
+</ol>
+<p> <img src="/2019/07/07/远程桌面访问不了/11.jpg" alt="1"></p>
+<p> <img src="/2019/07/07/远程桌面访问不了/12.jpg" alt="1"></p>
+</blockquote>
+</li>
+</ol>
+
+      
+
+      
+
+          
+        
+          
+        </div>
+
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dilidonglong.github.io/2019/07/07/远程桌面访问不了/" data-id="cjz70lit20018uoqu1stwdedj" class="article-share-link">分享</a>
+      
+    </footer>
+
+  
+
+  
+
+  
+
+</article>
+
+
+
+      
+        <article id="post-视频会议卡顿" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2019/06/13/视频会议卡顿/">视频会议卡顿</a>
+    </h2>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/06/13/视频会议卡顿/" class="article-date">
+  <time datetime="2019-06-13T14:29:26.000Z" itemprop="datePublished">2019-06-13</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/实战/">实战</a>
+  </div>
+
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+      
+
+      
+        <h1 id="视频会议卡顿——用wireshark定位问题"><a href="#视频会议卡顿——用wireshark定位问题" class="headerlink" title="视频会议卡顿——用wireshark定位问题"></a>视频会议卡顿——用wireshark定位问题</h1><p><strong>基础知识</strong>（TCP和UDP的比较）</p>
+<p>TCP报文和UDP报文如下</p>
+<p><img src="/2019/06/13/视频会议卡顿/1.png" alt="1551317757941"></p>
+<p>在报文头部中，我们可以知道，TCP除了源目端口，还会有seq号，ack号，6个标志位以及一个接受窗口字段。而UDP报文头部只有源目端口，长度和校验和字段。UDP报文头部8字节，TCP的最短报文头部20字节，UDP报文头部连TCP头部长度的一半都不到，想复杂也复杂不起来。</p>
+<p>我们知道TCP是需要建立连接后才会开始传输数据的，而UDP不用。TCP就像打电话，必须先拨通对方手机，然后才互相交流，如果对方没有听清，那自己就可以把话语重复一遍，确保对方接收无误。UDP就像发短信，我给一个人发送短信后，第一不会知道对方是否有收到；即便对方收到后，我也不知道信息发给对方有没有出错。</p>
+<p>在TCP中，假设有很长一段数据要发送，假设有4380（1460*3）字节的数据。我们知道在以太网中，以太网帧的数据部分最大长度是1500字节，假设TCP和IP头部各占20字节，那么一个TCP段的数据就是1460字节，超过这个字节就要分段。所以这4380个字节就要分成3个包去发送。这3个包就类似于下表，假设第一个包的seq号是0，那么下一个包的seq号就是1460（上一个包的seq号+长度）。</p>
+<table>
+<thead>
+<tr>
+<th>包号</th>
+<th>seq号</th>
+<th>lenth长度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>1460</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1460</td>
+<td>1460</td>
+</tr>
+<tr>
+<td>3</td>
+<td>2920</td>
+<td>1460</td>
+</tr>
+</tbody>
+</table>
+<p>正常情况下，接收方要收到这3个包。假设第二个包在传输过程中丢失了，接收方只能收到seq号是0（长度是1460字节）和seq号是2920（1460字节）的包，那他就清楚1460的这个包在路上丢失了，就可以要发送方重传第二个包。</p>
+<p>对于UDP而言，它没有建立连接的机制，同时也没有流控和差错控制机制。那它要发送数据出去，如果数据部分超过了最大的数据长度1472字节（以太网帧的数据部分最大长度是1500字节，IP头部20字节，UDP头部8字节），就要靠下层的IP来分片。分片要如何组装起来，在之前的文章中提到过，涉及的就是ip.id和片偏移。</p>
+<p>如果数据部分没有超过UDP中的最大数据长度，就不会被分片，那么每个报文的ip.id也就是不一样的。</p>
+<p>也就是说在UDP中，发送方发送一个小数据出去，接收方收到就收到了，没收到那我也不知道，也不会重传。</p>
+<p>而发送方要是发送一个大数据（超过UDP最大数据长度，会有多个分片），如果有一个分片丢失，那么接收方按ip.id和片偏移无法组装起来，那么就会向发送方发送消息，让发送方重传。此时的重传不会像TCP一样，只发送丢弃的那个包，而是要把之前这个包的所有分片全部重传。</p>
+<hr>
+<p><strong>客户问题</strong></p>
+<p>左边是分支，右边是总部。分支的视频服务器上看总部端的画面很流程，但是在总部的视频服务器上看分支端的画面则特别卡。</p>
+<p><strong>客户拓扑</strong></p>
+<p><img src="/2019/06/13/视频会议卡顿/2.png" alt="1551317757941"></p>
+<p><strong>问题分析</strong></p>
+<ol>
+<li><p>视频会议和语音通话基本都是使用UDP协议。同时数据字节不会很大，一般不会超过最大UDP数据报文长度，那么每个数据包ip.id的值是不一样的。不会出现设备收到分片组装不起来的情况。</p>
+</li>
+<li><p>分支的视频服务器看总部的画面正常，说明总部给分支传的UDP数据流是没有丢包的。</p>
+</li>
+<li><p>总部的视频服务器看分支画面有卡顿，说明分支给总部传的UDP数据流可能存在丢包。</p>
+</li>
+<li><p>总部和分支之间互传数据是互不干扰的。因为不是TCP下，建立连接后的两端数据互传。</p>
+</li>
+<li><p>两台设备上都做了策略路由，视频服务器的流量都走了联通线路。（其实最开始的情况是，分支到总部的数据往电信线路传了，总部往分支的数据就走了联通，存在总部看分支画面丢包的情况。怀疑是线路问题，就调整了策略，让数据都走了联通，但是问题还是存在。）</p>
+</li>
+<li><p>查看两端的控制台配置，策略都是正常的。出现丢包的时候，经过设备的流量都不大，cpu利用率也不高。</p>
+</li>
+<li><p>于是在客户两端都开启视频服务器的情况下，抓包分析。</p>
+</li>
+</ol>
+<p><img src="/2019/06/13/视频会议卡顿/3.png" alt="1551317757941"></p>
+<ol start="8">
+<li>先看分支的内网口（eth0）的抓包情况。</li>
+</ol>
+<p><img src="/2019/06/13/视频会议卡顿/4.png" alt="1551317757941"></p>
+<ol start="9">
+<li>由于是总部看分支，画面存在卡顿。那我们主要关注的就是分支视频服务器172.17.160.8给总部视频服务器10.16.121.250这个方向的流量</li>
+</ol>
+<p><img src="/2019/06/13/视频会议卡顿/5.png" alt="1551317757941"></p>
+<p>选择B到A这个方向。选择完后，主界面就会自动给你过滤出分支视频服务器给总部视频服务器这个方向的流量</p>
+<p><img src="/2019/06/13/视频会议卡顿/6.png" alt="1551317757941"></p>
+<p><img src="/2019/06/13/视频会议卡顿/7.png" alt="1551317757941"></p>
+<ol start="10">
+<li><p>由于画面存在卡顿，很可能的原因是丢包。UDP不像TCP那样，有所谓的seq号。在TCP中，哪个包丢了，我可以通过seq号把丢的包找到，但UDP不行。那有没有什么办法可以让UDP像TCP一样，能给这些数据包按顺序编个号吗？哪个UDP包丢了，我可以通过这个编号识别到。</p>
+</li>
+<li><p>是可以的。那就是把UDP的数据包编码为RTP的数据包，对RTP协议感兴趣的同学可以看这篇文章<a href="https://www.jianshu.com/p/631273bc9847?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=weibo" target="_blank" rel="noopener">实时传输协议RTP/RTCP</a></p>
+</li>
+</ol>
+<p><img src="/2019/06/13/视频会议卡顿/8.png" alt="1551317757941"></p>
+<p>我们来看下把UDP包编码成RTP包在wireshark中是啥样的。</p>
+<p><img src="/2019/06/13/视频会议卡顿/9.png" alt="1551317757941"></p>
+<p><img src="/2019/06/13/视频会议卡顿/10.png" alt="1551317757941"></p>
+<p>上图看到，其实所谓的编码，是把UDP包中的数据部分变成了RTP数据报文，RTP数据报文中存在seq号。</p>
+<ol start="12">
+<li>我们在<strong>会话统计</strong>中可以看到分支给总部传数据的时候，建立了6个连接。其中前2个连接的数据量相对大一些。</li>
+</ol>
+<p><img src="/2019/06/13/视频会议卡顿/11.png" alt="1551317757941"></p>
+<p>为什么前2个连接，传输的数据多些呢？</p>
+<p><img src="/2019/06/13/视频会议卡顿/12.png" alt="1551317757941"></p>
+<p><img src="/2019/06/13/视频会议卡顿/13.png" alt="1551317757941"></p>
+<ol start="13">
+<li>我们先选择第一个连接，即端口49152到端口2326的。把这个连接使用的UDP协议编码为RTP协议</li>
+</ol>
+<p><img src="/2019/06/13/视频会议卡顿/14.png" alt="1551317757941"></p>
+<p><img src="/2019/06/13/视频会议卡顿/15.png" alt="1551317757941"></p>
+<ol start="14">
+<li>编码之后，此时wireshark界面如图所示</li>
+</ol>
+<p><img src="/2019/06/13/视频会议卡顿/16.png" alt="1551317757941"></p>
+<ol start="15">
+<li>接下来，我们打开RTP流分析。可以看到面板已经给我们统计出有2个丢包了，你还能分析出是丢了哪两个包。</li>
+</ol>
+<p><img src="/2019/06/13/视频会议卡顿/17.png" alt="1551317757941"></p>
+<p><img src="/2019/06/13/视频会议卡顿/18.png" alt="1551317757941"></p>
+<p><img src="/2019/06/13/视频会议卡顿/19.png" alt="1551317757941"></p>
+<p> <strong>16.由于是打开的分支eth0接口的抓包，所以此时就可以说明，丢包是丢在了内网</strong></p>
+<ol start="17">
+<li>按照同样的方法，我们还要查看下在公网链路上是否存在丢包，以及在总部内网是否存在丢包。</li>
+</ol>
+<p><img src="/2019/06/13/视频会议卡顿/2.png" alt="1551317757941"></p>
+<ol start="18">
+<li><p>因为分支内网存在丢包，所以在查看公网链路上的数据包时（即fzeth3和zbeth2），如果公网数据包中，丢包的序列号和在fzeth0数据包内的一致，说明公网是没有丢包的。如果除去内网中丢包的序列号，还有其他序列号丢失，说明公网链路也有问题。</p>
+</li>
+<li><p>从fzeth3的数据包中，可以看到丢了2个，也是seq=34591和seq=34637丢包了。和内网抓包fzeth0丢包情况一致。而在总部设备的2个口抓包情况也是一样的，就不赘述了。查看方法和上述一致。</p>
+</li>
+</ol>
+<p><img src="/2019/06/13/视频会议卡顿/20.png" alt="1551317757941"></p>
+<ol start="20">
+<li><p>定位了问题后，可以判断分支内网存在丢包。那么有条件的话就可以在分支视频服务器及交换机上抓包对比查看。</p>
+</li>
+<li><p>最后定位出的问题是交换机网口有问题，换一个交换机问题就解决了。</p>
+</li>
+</ol>
+
+      
+
+      
+
+          
+        
+          
+        </div>
+
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dilidonglong.github.io/2019/06/13/视频会议卡顿/" data-id="cjz70liry000guoqujpbx7lgd" class="article-share-link">分享</a>
+      
+    </footer>
+
+  
+
+  
+
+  
+
+</article>
+
+
+
+      
+        <article id="post-并行-串行-异步传输" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2019/06/12/并行-串行-异步传输/">并行/串行/异步传输</a>
+    </h2>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/06/12/并行-串行-异步传输/" class="article-date">
+  <time datetime="2019-06-12T14:45:28.000Z" itemprop="datePublished">2019-06-12</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/收录文章/">收录文章</a>
+  </div>
+
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+      
+
+      
+        <h1 id="【转载】什么是并行传输、串行传输、异步传输？"><a href="#【转载】什么是并行传输、串行传输、异步传输？" class="headerlink" title="【转载】什么是并行传输、串行传输、异步传输？"></a>【转载】什么是并行传输、串行传输、异步传输？</h1><blockquote>
+<p>文章收录自互联网，著作权归原作者所有，若有冒犯请联系我删除。</p>
+<p>商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+<p>本人转载只作个人学习及后续查阅使用</p>
+<p>该篇文档作者：航空航天迷</p>
+<p>原文链接：<a href="https://www.zhihu.com/question/29033993" target="_blank" rel="noopener">什么是并行传输、串行传输、异步传输？</a></p>
+<p>来源：知乎</p>
+</blockquote>
+<hr>
+<p><img src="/2019/06/12/并行-串行-异步传输/1.jpg" alt="img"></p>
+<p>传输可以分为<strong>串行传输</strong>和<strong>并行传输。</strong></p>
+<p><strong>串行传输</strong>可分为<strong>异步传输、同步传输</strong>和<strong>等时传输</strong>。</p>
+<p>下图2是<strong>并行传输</strong>的示意图：</p>
+<p><img src="/2019/06/12/并行-串行-异步传输/2.jpg" alt="img"></p>
+<p>在<strong>并行传输</strong>中，使用多根并行的数据线一次同时传输多个比特。</p>
+<p>例如在图2中，共有8根数据线，一次同时传输8个比特，每个比特占用一根数据线。</p>
+<p>下图3是<strong>串行传输</strong>的示意图：</p>
+<p><img src="/2019/06/12/并行-串行-异步传输/3.jpg" alt="img"></p>
+<p>在<strong>串行传输</strong>中，使用一根数据线传输数据，一次传输1个比特，多个比特需要一个接一个依次传输。</p>
+<p>下面简单介绍一下<strong>串行传输</strong>与<strong>并行传输</strong>的发展历史，从而了解他们俩各自的优缺点，以及发展趋势。</p>
+<p>最早的计算机（电子管计算机和晶体管计算机），其各个接口，例如输入接口、输出接口和存储器接口等，一般采用串行接口，以<strong>串行传输</strong>的方式传输数据。</p>
+<p>下图4为电子管计算机ENIAC</p>
+<p><img src="/2019/06/12/并行-串行-异步传输/4.jpg" alt="img"></p>
+<p>电子管计算机ENIAC诞生于美国宾夕法尼亚大学。重30多吨，占地约170平方米，装有约18000只电子管。</p>
+<p>下图5为电子管计算机中使用的电子管</p>
+<p><img src="/2019/06/12/并行-串行-异步传输/5.jpg" alt="img"></p>
+<p>图5中小玻璃瓶状的东西就是电子管，电子管的体积比较大  下图6为晶体管计算机TRADIC</p>
+<p><img src="/2019/06/12/并行-串行-异步传输/6.jpg" alt="img"></p>
+<p>1954年，贝尔实验室使用800只晶体管组装了世界上第一台晶体管计算机TRADIC。相比电子管，晶体管体积小、重量轻、寿命长、发热少、功耗低，大大改进了计算机中的电子线路的结构，大幅度提高了运算速度。  下图7为晶体管计算机TRADIC中使用的晶体管</p>
+<p><img src="/2019/06/12/并行-串行-异步传输/7.jpg" alt="img"></p>
+<p>电子管计算机和晶体管计算机以<strong>串行传输</strong>的方式传输数据，其原因是当时各个部件都是分立的部件，而不是像今天这样使用集成电路设计。如果采用并行线路的话，元件的数量和占用的空间将成倍增长。比如，一个8比特并行线路的元件数量是串行线路的元件数量的8倍（因为需要为每根线路配置一套接收元件）。另外，元件的数量成倍增长的话，耗电量也会大幅增加。  集成电路技术出现后，大量元件可以集成到一个小小的芯片上，<strong>并行传输</strong>变得方便而便宜。不论是8比特、16比特还是更高比特位数的并行线路，只需要一个并行接口芯片就可以处理，而且并行接口芯片只比串行接口芯片贵一点。</p>
+<p>除了方便便宜外，在相同的工作频率下<strong>并行传输</strong>的传输速度是<strong>串行传输</strong>的数倍，迎合了人们对速度的追求，所以硬盘、打印机等设备开始使用<strong>并行传输</strong>以提高传输速度。PATA（Parallel Advanced Technology Attachment，并行高级技术附件）接口、并口（Parallel Port）和PCI（Peripheral Component Interconnect，外设部件互连）接口成为流行的并行接口。</p>
+<p>下图8为电脑主板上的PATA接口（<strong>并行传输</strong>），用于连接硬盘和光驱</p>
+<p><img src="/2019/06/12/并行-串行-异步传输/8.jpg" alt="img"></p>
+<p>下图9为用于PATA接口的连接线缆</p>
+<p><img src="/2019/06/12/并行-串行-异步传输/9.jpg" alt="img"></p>
+<p>下图10中的编号2为电脑上的并口（<strong>并行传输</strong>），用于连接打印机、扫描仪等</p>
+<p><img src="/2019/06/12/并行-串行-异步传输/10.jpg" alt="img"></p>
+<p>下图11为电脑主板上的PCI接口（<strong>并行传输</strong>），用于插接外置网卡、声卡、显卡和调制解调器卡等）</p>
+<p><img src="/2019/06/12/并行-串行-异步传输/11.jpg" alt="img"></p>
+<p>下图12为采用PCI接口的显卡</p>
+<p><img src="/2019/06/12/并行-串行-异步传输/12.jpg" alt="img"></p>
+<p>图12中的显卡使用时是插入图11中的PCI接口（插槽）中。</p>
+<p>在相同的工作频率下<strong>并行传输</strong>的传输速度是<strong>串行传输</strong>的数倍，但并行线路有一些难以克服的缺点，导致依靠并行线路的<strong>并行传输</strong>无法用于长距离通信。计算机与外界的长距离通信，例如与网络中的另外一台计算机进行通信时，只能使用<strong>串行传输</strong>。</p>
+<p>在计算机内部，如今<strong>串行传输</strong>也显示出了它的优势，有取代<strong>并行传输</strong>的趋势。</p>
+<p>例如，</p>
+<p>SATA接口取代PATA接口；</p>
+<p>USB接口取代并口；</p>
+<p>PCI Express接口取代PCI接口。</p>
+<p>为什么<strong>串行传输</strong>有取代<strong>并行传输</strong>的趋势呢？</p>
+<p>与<strong>串行传输</strong>相比，<strong>并行传输</strong>的缺点是：</p>
+<p>一、线路的成本高</p>
+<p><strong>并行传输</strong>如果每个时钟节拍发送16个比特，则需要16根数据线（另外还需要多根控制线）。</p>
+<p><img src="/2019/06/12/并行-串行-异步传输/13.jpg" alt="img"></p>
+<p>PATA（<strong>并行传输</strong>）连接线缆包含40根导线（16根数据线，24根用于接地和进行控制）；</p>
+<p>SATA（<strong>串行传输</strong>）连接线缆包含7根导线（4数据线+3接地线）。</p>
+<p>如果是长距离通信，<strong>并行传输</strong>的线路成本是<strong>串行传输</strong>的若干倍。</p>
+<p>另外，只有一对传输线时，<strong>串行传输</strong>也可以实现双向通信，所以可以直接利用现有的电话线路进行数据传输；而<strong>并行传输</strong>要多根并行的传输线，没有现有的线路可以利用，要另外专门铺设线路，成本高。</p>
+<p>二、体积大</p>
+<p>并行接口占用空间大，对应线缆占用空间也大。</p>
+<p><img src="/2019/06/12/并行-串行-异步传输/14.jpg" alt="img"></p>
+<p>如图14所示，PATA的接口与连接线缆的尺寸大大于SATA的接口与连接线缆的尺寸</p>
+<p>如果是长距离通信，要求使用比较粗的信号线，以便降低信号的衰减，<strong>并行传输</strong>需要使用多根较粗的信号线捆扎在一起组成通信线缆，占很大空间。</p>
+<p>即使是计算机内部通信，<strong>并行传输</strong>的线缆所占用的空间也比<strong>串行传输</strong>的线缆所占用的空间大很多。</p>
+<p>并行接口的尺寸比串行接口的尺寸大很多，则不利于设备的小型化。例如，在手机和穿戴式设备等领域，希望零件的尺寸越小越好。</p>
+<p>三、信号线之间的干扰大，不能用于长距离传输</p>
+<p>并排的信号线在进行高速传输时，会在每条信号线的周围产生微弱的电磁场，出现串音干扰，进而影响到其它信号线中的数据传输。传输距离越长，串音干扰越严重。</p>
+<p><img src="/2019/06/12/并行-串行-异步传输/15.jpg" alt="img"></p>
+<p>所以，PATA线缆的长度不能超过0.4米，而SATA线缆可以达到1米。</p>
+<p>四、<strong>并行传输</strong>具有同步问题</p>
+<p><img src="/2019/06/12/并行-串行-异步传输/16.jpg" alt="img"></p>
+<p><strong>并行传输</strong>中，如果并行的线路之间的物理性质不一致，例如长度上有细微差别，会导致并行线路中传输的比特不是同时到达接收方，接收器接收数据时容易出错。</p>
+<p>五、传输频率低</p>
+<p>在<strong>并行传输</strong>中，如果传输频率高的话，数据线之间会产生很大的干扰，造成数据出错，即使为数据线添加屏蔽层，也不能保证屏蔽掉高频率产生的干扰。所以，<strong>并行传输</strong>的最高传输频率有一定限制。</p>
+<p>PATA接口的最高传输频率为33MHz，这个几乎已经达到了并行接口的极限。</p>
+<p><strong>串行传输</strong>每次只传输一个比特，但是它的传输频率可以非常高，达到10GHz，是33MHz的300倍。相当于<strong>并行传输</strong>每发送1次，<strong>串行传输</strong>可以发送300次。<strong>并行传输</strong>每次发送300比特，才能赶上<strong>串行传输</strong>的速度，但是每次发送300比特，就需要300根并行的数据线，这是不现实的。</p>
+<p>因为<strong>并行传输</strong>和<strong>串行传输</strong>各自的这些优缺点，导致<strong>并行传输</strong>仅仅用于短距离传输，而长距离传输则采用<strong>串行传输</strong>；同时，在短距离传输中，<strong>串行传输</strong>也在逐步取代<strong>并行传输</strong>。</p>
+<p>什么是<strong>异步传输</strong>呢？</p>
+<p><img src="/2019/06/12/并行-串行-异步传输/17.jpg" alt="img"></p>
+<p>计算机的键盘与主机之间的数据传输就是<strong>异步传输</strong>。</p>
+<p>在键盘上按下一个字母键、数字键或特殊字符键，键盘就需要向主机发送一个对应的长度为8比特的ASCII字符，这个8比特的ASCII字符就是需要发送的数据，大小为1个字节。</p>
+<p><img src="/2019/06/12/并行-串行-异步传输/18.jpg" alt="img"></p>
+<p>如上图所示：例如，当用户按下小写字母键“k”，键盘需要向主机发送字符“01101011”</p>
+<p>用户可能在任意时刻按键盘，所以键盘向主机发送数据的时间不是固定的，也不会事先约好，任何时刻都有可能发送。</p>
+<p>主机事先并不知道键盘什么时候会给自己发送数据，只能静静地等待，一旦发现键盘向自己发送数据，则马上接收。</p>
+<p>主机如何发现键盘开始向自己发送数据了呢？</p>
+<p><img src="/2019/06/12/并行-串行-异步传输/19.jpg" alt="img"></p>
+<p>当键盘不需要向主机发送有效数据时，也就是键盘处于空闲（idle）时，键盘会连续不断地向主机发送比特“1”，告诉主机自己处于空闲状态。比特“1”用正电平表示，也就是键盘一直向主机发送正电平，表示当前没有有效数据发送给主机。</p>
+<p>当键盘被按下，键盘需要向主机发送数据时，键盘会先在数据前添加比特“0”，组成新字符，再发送。</p>
+<p><img src="/2019/06/12/并行-串行-异步传输/20.jpg" alt="img"></p>
+<p>例如，如上图所示，发送数据“01101011”之前，先在“01101011”的前面添加“0”，组成新字符“011010110”</p>
+<p>比特“0”可以用零电平表示。 </p>
+<p><img src="/2019/06/12/并行-串行-异步传输/21.jpg" alt="img"></p>
+<p>如上图所示，键盘处于空闲时，主机接收的一直是比特“1”（正电平），当主机突然接收到比特“0”（零电平）时，马上反应过来，键盘在向自己发送有效数据，则主机开始接收“0”后面的有效数据，这个“0”相当于这个新字符的起始位（start bit）。</p>
+<p>主机开始接收有效数据后，怎么才能知道有效数据接收完了要停下来呢？</p>
+<p>为了解决这个问题，键盘和主机事先约定好：</p>
+<ol>
+<li>每次发送的有效数据为1个字节，即8个比特</li>
+</ol>
+<p><img src="/2019/06/12/并行-串行-异步传输/22.jpg" alt="img"></p>
+<ol start="2">
+<li><p>数据的传输速率（例如1000比特/秒）</p>
+</li>
+<li><p>键盘在有效数据前面添加起始位（比特0），以通知主机，数据开始发送</p>
+</li>
+</ol>
+<p><img src="/2019/06/12/并行-串行-异步传输/23.jpg" alt="img"></p>
+<ol start="4">
+<li>键盘在有效数据后面添加停止位（比特1），以通知主机，数据发送结束</li>
+</ol>
+<p><img src="/2019/06/12/并行-串行-异步传输/24.jpg" alt="img"></p>
+<p>下图显示的是：键盘根据和主机的约定，发送给主机的数据和对应的信号。 </p>
+<p><img src="/2019/06/12/并行-串行-异步传输/25.jpg" alt="img"></p>
+<p>当按键“k”被按下时，键盘实际上发送的是“起始位”+k对应的ASCII码+“停止位”。</p>
+<p>键盘发送信号的过程：</p>
+<p>键盘在空闲时，连续地发送正电平给主机，表示当前没有有效数据发送给主机。</p>
+<p>当按键“k”被按下时，键盘发送“起始位”+k对应的ASCII码+“停止位”这3者所对应的信号。然后紧跟着继续发送正电平，表示又处于空闲状态。</p>
+<p>主机接收信号的过程：</p>
+<p>主机开始接收到的一直是正电平，表示当前没有有效数据发送给主机。</p>
+<p>主机接收到起始位比特“0”（零电平）后，开始接收比特“0”后面的有效数据。</p>
+<p>根据约定，有效数据为1个字节，共8个比特；数据的传输速率例如为1000比特/秒，也就是每毫秒传输1个比特，则8个比特的传输时间为8毫秒。</p>
+<p>所以主机根据自己的时钟，在起始位比特“0”后面的8毫秒内接收有效数据。</p>
+<p>具体的接收方式（举例说明）是：</p>
+<p><img src="/2019/06/12/并行-串行-异步传输/26.jpg" alt="img"></p>
+<p>主机在起始位后面的0.5毫秒、1.5毫秒、2.5毫秒、3.5毫秒、4.5毫秒、5.5毫秒、6.5毫秒、7.5毫秒分别对信号进行采样，也就是在每个比特的正中间进行采样，以获得这8比特的有效数据。</p>
+<p>根据约定，8比特的有效数据后面跟着的是停止位。</p>
+<p>如果主机在第8.5毫秒接收到比特“1”（停止位），则主机可以确定数据的发送确实结束了，则结束有效数据的接收，并接受所接收的数据。</p>
+<p>如果主机在第8.5毫秒接收到的不是比特“1”（停止位），则主机判断传输过程中发生错误，就放弃所接收到的数据。</p>
+<p>无论接受还是放弃所接收到的数据，主机都不会向键盘进行反馈。</p>
+<p>键盘向主机发送数据后，就撒手不管了，不会等待主机的确认或其他任何反馈。</p>
+<p>在停止位之后，主机接收到的是表示空闲的正电平，继续等待键盘发送数据。</p>
+
+      
+
+      
+
+          
+        
+          
+        </div>
+
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dilidonglong.github.io/2019/06/12/并行-串行-异步传输/" data-id="cjz70litd001duoqucd51zb8l" class="article-share-link">分享</a>
+      
+    </footer>
+
+  
+
+  
+
+  
+
+</article>
+
+
+
+      
+        <article id="post-访问X友软件卡顿" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2019/06/11/访问X友软件卡顿/">访问X友软件卡顿</a>
+    </h2>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/06/11/访问X友软件卡顿/" class="article-date">
+  <time datetime="2019-06-11T14:23:27.000Z" itemprop="datePublished">2019-06-11</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/实战/">实战</a>
+  </div>
+
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+      
+
+      
+        <h1 id="2017年应用访问卡慢分析"><a href="#2017年应用访问卡慢分析" class="headerlink" title="2017年应用访问卡慢分析"></a>2017年应用访问卡慢分析</h1><h2 id="1-基本情况："><a href="#1-基本情况：" class="headerlink" title="1.基本情况："></a>1.基本情况：</h2><p>客户环境现象：</p>
+<p>总部和分支使用sangfor vpn对接，分支内网电脑ping总部内网服务器，没有丢包，没有延时。但是在分支使用X友客户端访问总部的X友服务器会出现卡顿（即打开客户端后，有些内容显示出来的等待时间较长）</p>
+<p>为了排错，客户那边基本没有其他流量在跑。</p>
+<hr>
+<p>客户内网拓扑：</p>
+<p>总部和分部通过woc做vpn对接（没开加速），其中eth0口是内网口，pppoe和wan（eth2）口是外网口。分支woc的wan口（pppoe）地址是100.64.7.184，eth0（lan口）地址是10.37.11.254，lan口下连一台测试电脑10.37.11.180。总部单臂部署，X友服务器是10.37.1.77。分支pc通过X友软件和总部的X友服务器做数据交互。</p>
+<p><img src="/2019/06/11/访问X友软件卡顿/1.png" alt="1"></p>
+<h2 id="2-排错操作："><a href="#2-排错操作：" class="headerlink" title="2.排错操作："></a>2.排错操作：</h2><ol>
+<li><p>在分支客户端电脑开始访问X友前，在分支woc和总部woc的eth0口，vpntun口，wan口写下抓包命令。写完之后执行命令，之后再用电脑正式访问X友。看到现象后，等待几秒再停止所有接口的抓包。</p>
+<p><img src="/2019/06/11/访问X友软件卡顿/2.png" alt="2"></p>
+</li>
+<li><p>其实在抓到上述6份比较漂亮的包之前，我还重复上述操作过几次。虽然时间比较久了，但是我看到自己有导出csv的后缀文件，估计是我那时候想通过比较几个文件中的ip.id来判断访问应用的时候是否存在丢包。估计那时候我没看出啥东西来，就纯浪费时间去了。</p>
+<p><img src="/2019/06/11/访问X友软件卡顿/3.png" alt="3"></p>
+</li>
+<li><p>后来听说X友这种应用访问卡慢，是因为小包交互过多导致的。就试着打开了一个包fenzhieth0.pcap，然后输入过滤条件，来看下200字节以下的包有多少。emmmm一看占比57.6%呢，小包很多了很多了</p>
+<p><img src="/2019/06/11/访问X友软件卡顿/4.png" alt="4"></p>
+</li>
+<li><p>于是脑补出理由，打电话给渠道。举个例子，访问X友打开软件要传输15000字节的数据，公网延时是20-30ms，比如小包只传100字节，那这15000字节的数据就要传输150次，时间上就是20ms*150，这样访问就会出现卡顿的情况。如果是用ftp等测试，每次传输是1000字节的话，就是传输15次，所以访问ftp服务器的时候你就不会觉得卡。所以这是X友那边发包机制的问题，和我们设备没有关系</p>
+</li>
+<li><p>渠道觉得好有道理，然后就信了，之后他去和客户解释就再也没找我了。工单关闭</p>
+</li>
+</ol>
+<hr>
+<h2 id="3-上述排错错在哪"><a href="#3-上述排错错在哪" class="headerlink" title="3.上述排错错在哪"></a>3.上述排错错在哪</h2><ol>
+<li><p>自己想当然的瞎JB乱讲，同时基础概念不清晰，或者说是完全没有概念</p>
+</li>
+<li><p>在TCP中，发送方和接收方都会存在一个发送窗口和接受窗口。发送窗口表示我发送方一口气能发送多少数据，接收窗口表示我接收方还能接收多少数据放在缓存区中。发送方要尽量保证多发数据，同时也得保证接收方能接收的过来，不至于数据发生溢出。MSS是一个数据段的数据最大长度，那么发送窗口和MSS存在啥关系呢。刚刚说道，发送窗口表示我发送方一口气能发送多少数据，那么MSS的值就确定了，我要一口气发这么多数据要发出多少个包。举个例子来说，我发送方一口气能发送1000个字节，但是一个数据段的MSS是100字节，那么我一口气就能发10个包出去。</p>
+</li>
+<li><p>给渠道说的理由，看上去好像没问题。其实概念就没弄清。给渠道的说法表明，我的数据包是一个一个发出的，但是实际上TCP中不是这么传输数据的</p>
+</li>
+</ol>
+<hr>
+<h2 id="4-重新整理排错思路"><a href="#4-重新整理排错思路" class="headerlink" title="4.重新整理排错思路"></a>4.重新整理排错思路</h2><ol>
+<li><p>访问一个应用卡慢，分两种情况。一个是网络问题，一个是设备性能问题。</p>
+</li>
+<li><p>ping测试是在网络层的测试。客户环境中ping测试不丢包不延时，基本上可以判断网络是没啥问题的</p>
+</li>
+<li><p>之前做了这么一个操作，把pcap文件导出成csv文件，想通过比较各个csv文件中是否存在丢包。但是没有看是什么东西来，而且上述操作比较耗时间。要知道的是，如果数据包丢失，就会导致重传或是有重复ACK。那我们是不是可以通过wireshark工具来自动分析下</p>
+</li>
+<li><p>先通过过滤条件，把测试电脑与服务器的互访流量给过滤处理</p>
+<p><img src="/2019/06/11/访问X友软件卡顿/5.png" alt="5"></p>
+</li>
+<li><p>然后在把文件重新保存一份</p>
+<p><img src="/2019/06/11/访问X友软件卡顿/6.png" alt="6"></p>
+</li>
+<li><p>先打开fenzhieth0这个包。过滤出客户端和服务器双向交互的流量</p>
+</li>
+<li><p>随机选择一个包，然后右键点击<strong>Follow</strong>—&gt;<strong>tcp stream</strong>，过滤出一个tcp连接的互访流量</p>
+<p><img src="/2019/06/11/访问X友软件卡顿/7.png" alt="7"></p>
+</li>
+<li><p>然后点击<strong>统计</strong> <strong>statistics</strong>—&gt;<strong>TCP Stream Graphs</strong>—&gt;<strong>time sequence</strong> <strong>（stevens）</strong>，可以看到该连接，一个方向上的seq号增长情况</p>
+<p><img src="/2019/06/11/访问X友软件卡顿/8.png" alt="8"></p>
+</li>
+<li><p>可以看到弹出下框，也就意味着。在该连接中，服务器到用户客户端方向的数据流增长过程中，有5s左右是卡住了。那我们通过Stevens图，可以找到卡住的2个点，包号分别是467号包与819号包</p>
+<p><img src="/2019/06/11/访问X友软件卡顿/9.png" alt="9"></p>
+</li>
+<li><p>可以看到下图，服务器在等待客户端发送816号包。而816号包的发出，是在468号包发出之后耗时近6s。</p>
+<p><img src="/2019/06/11/访问X友软件卡顿/10.png" alt="10"></p>
+</li>
+<li><p>后续又按上述操作，观察了其他的几个tcp连接，以及zongbueth0口的抓包情况。都是一模一样的，总会有几秒卡住</p>
+</li>
+<li><p>也就意味着，这是180这台客户端的问题</p>
+</li>
+<li><p>为什么会出现这种情况，这就是X友厂商应该去分析的了。因为这个是X友应用层层面的问题</p>
+</li>
+</ol>
+<hr>
+<h2 id="5-联想"><a href="#5-联想" class="headerlink" title="5.联想"></a>5.联想</h2><ul>
+<li>为什么和我们设备无关了？ </li>
+</ul>
+<p>​       ——因为在woc的eth0口抓包，发现上图中468号包发出之后，隔了近6s才收到了816号包。我们设备都没做封装啥的操作呢，只是单纯接收包而已</p>
+<ul>
+<li>用woc开启加速后，会有效果吗？</li>
+</ul>
+<p>​        ——个人认为不会，因为woc开启后，是分支的woc设备和分支内网电脑做交互。把woc设备当做是总部的服务器，那内网客户端和woc交互数据的时候，依旧会出现上面这种情况，因为这种情况是在客户端电脑上发生的。要想解决，就得从客户端上看是什么原因导致了这6s的延时发包。</p>
+
+      
+
+      
+
+          
+        
+          
+        </div>
+
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dilidonglong.github.io/2019/06/11/访问X友软件卡顿/" data-id="cjz70lis0000juoquuvod0ri1" class="article-share-link">分享</a>
+      
+    </footer>
+
+  
+
+  
+
+  
+
+</article>
+
+
+
+      
         <article id="post-英语名词" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
@@ -255,560 +896,7 @@
 
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/05/06/英语名词/" data-id="cjy4gbs2r000co4qukb26iwkm" class="article-share-link">分享</a>
-      
-    </footer>
-
-  
-
-  
-
-  
-
-</article>
-
-
-
-      
-        <article id="post-软考试题3" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
-
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h2 itemprop="name">
-      <a class="article-title" href="/2019/05/06/软考试题3/">软考试题3</a>
-    </h2>
-  
-
-      </header>
-    
-
-    
-      <div class="article-meta">
-        <a href="/2019/05/06/软考试题3/" class="article-date">
-  <time datetime="2019-05-06T14:56:29.000Z" itemprop="datePublished">2019-05-06</time>
-</a>
-        
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/软考/">软考</a>
-  </div>
-
-      </div>
-    
-
-    <div class="article-entry" itemprop="articleBody">
-      
-
-      
-
-      
-        <h1 id="软考试题3"><a href="#软考试题3" class="headerlink" title="软考试题3"></a>软考试题3</h1><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>A、B是局域网上两个相距1km的站点，A采用同步传输方式以1Mb/s的速率向B发送长度为200，000字节的文件。假定数据帧长为128比特，其中首部为48比特:应答帧为22比特，A在收到B的应答帧后发送下一帧。传送文件花费的时间为（  ）s，有效的数据速率为（  ）Mb/s（传播速率为200m/us）<br>A.1.6            B.2.4              C.3.2                  D.3.6<br>A.0.2            B.0.5              C.0.7                  D.0.8</p>
-<h2 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h2><ol>
-<li><p>数据传输的过程中，可以理解成是寄快递。比如我想给我妈寄一支牙刷，牙刷用纸盒子包着。我妈拿到这个快递后，真正有用的想要的也就只有这个牙刷而已，那个纸盒子不是真正想要的东西。不过纸盒子上会有寄件人和收件人的信息。</p>
-</li>
-<li><p>题干中说的<code>假定数据帧长为128比特，其中首部为48比特</code>，其中首部48比特就类似于是纸盒子。128比特就类似于是被纸盒子包着的牙刷。那此时真正有用的数据部分是多少比特呢？聪明如你，很快就知道了是128-48=80bit。也就是说这80bit就类似于是这个牙刷。</p>
-<hr>
-</li>
-<li><p>现在假设寄的不是牙刷，而是一个需要组装的电脑桌。这个桌子不像牙刷那么好寄，东西太多了，一个纸盒子可能还放不下，要多个纸盒子包着，然后再寄出去。</p>
-</li>
-<li><p>题干中说的200，000字节（即200，000x8=1600，000比特）的文件就类似于是需要组装的电脑桌。每个纸盒子只能放电脑桌部件的一部分，即每个盒子只能放80比特的内容。</p>
-</li>
-<li><p>那么此时需要多少个纸盒子装呢？聪明如你，相信已经知道了。1600 000/80=20 000。</p>
-</li>
-<li><p>一个纸盒子再加上里面的部件，合起来一共是128个比特。那么所有的包裹（纸盒子+电脑桌部件）加起来，占多少个比特呢。就是20 000x128=2560 000比特。</p>
-<hr>
-</li>
-<li><p>快递公司穷，只有一辆车来运包裹，一次还只能运一个。运过去之后，还得等对方说一句我收到了，才能接着发第二个包裹。对方说的那句我收到了，就类似于题干中说的22比特的应答帧。也就是说，我发20 000个包裹过去，居然要回应20 000次我收到了。</p>
-<hr>
-</li>
-<li><p>上述了解完后，可以开始做题了。我们知道如何计算一个数据帧从发出到对方接收所需要时间的公式，即发送时延+传播时延</p>
-</li>
-<li><p><strong>发送时延=数据帧长度/数据速率。把题中数值带入，即128bit/1Mbps=0.000128s。</strong></p>
-</li>
-<li><p><strong>传播时延=两点间距离/光速的三分之二。把题中数值带入，即1000m/（2x10^8）mps=0.000005s</strong></p>
-</li>
-<li><p><strong>所以从发送方发出一个帧到接收方接收，所需要的时间是0.000128+0.000005s=0.000133s</strong></p>
-</li>
-<li><p>我们把包裹发出去，还得等对方说句收到了才能继续发下一个包裹。那么对方说一句收到了，到我们发送方接收到需要多少时间呢？同理可得，<strong>发送时延=数据帧长度/数据速率。把题中数值带入，即22bit/1Mbps=0.000022s。传播时延=两点间距离/光速的三分之二。把题中数值带入，即1000m/（2x10^8）mps=0.000005s</strong>。所以需要的时间是<strong>0.000022s+0.000005s=0.000027s</strong></p>
-<hr>
-</li>
-<li><p>综上，一来一回所需要的时间就是0.000027s+0.000133s=0.00016s</p>
-</li>
-<li><p>这还只是一个包需要的时间，现在要发20 000个包，那总共需要多长时间呢？<strong>对的，0.00016x20 000=3.2s</strong></p>
-<hr>
-</li>
-<li><p>最后一问，问你有效数据速率是多少。你的电脑桌就是真正有效的东西，总共也就1600，000比特，为了发这1600000比特，花了一共3.2s的时间。<strong>所以有效数据速率就是1600000bit/3.2s=500 000bps=0.5Mbps</strong></p>
-</li>
-</ol>
-
-      
-
-      
-
-          
-        
-          
-        </div>
-
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/05/06/软考试题3/" data-id="cjy4gbs2x000ko4qu3n10u4wt" class="article-share-link">分享</a>
-      
-    </footer>
-
-  
-
-  
-
-  
-
-</article>
-
-
-
-      
-        <article id="post-软考试题2" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
-
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h2 itemprop="name">
-      <a class="article-title" href="/2019/05/06/软考试题2/">软考试题2</a>
-    </h2>
-  
-
-      </header>
-    
-
-    
-      <div class="article-meta">
-        <a href="/2019/05/06/软考试题2/" class="article-date">
-  <time datetime="2019-05-06T14:55:13.000Z" itemprop="datePublished">2019-05-06</time>
-</a>
-        
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/软考/">软考</a>
-  </div>
-
-      </div>
-    
-
-    <div class="article-entry" itemprop="articleBody">
-      
-
-      
-
-      
-        <h1 id="软考试题2"><a href="#软考试题2" class="headerlink" title="软考试题2"></a>软考试题2</h1><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>用64K×8的RAM芯片和32K×16的ROM芯片设计一个256K×16的存储器，地址范围为00000H～3FFFFH，其中ROM的地址范围为10000H～1FFFFH，其余为RAM的地址。则地址线为（）根，数据线为（）根；RAM需要（）片，ROM需要（）片。<br>问题1选项<br>A 18       B 9          C 16        D 8<br>问题2选项<br>A 18            B 9             C 16            D 8<br>问题3选项<br>A 1             B 2             C 3                D 6<br>问题4选项<br>A 12            B 2             C 9               D 6</p>
-<h2 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h2><ol>
-<li><p>64Kx8表示什么？</p>
-<p>表示一个芯片的容量。其中64K表示一个芯片内地址块的数目，8表示每个地址块里面存放的比特位数。</p>
-<p>其中，1K=1024，1M=1024K。64K=64x1024=65536，即一个芯片内有65536个地址块</p>
-<p>你可以理解成，有一个大菜地（芯片），你把这个大菜地分成65536个小菜地（地址块）。每个小菜地里面都能种8颗白菜（比特位数）。一个芯片的容量就是整个大菜地里面能种的白菜数量。</p>
-<hr>
-</li>
-<li><p>64Kx8与地址线，数据线的关系？</p>
-<p>64K是一个十进制数，即$2^{16}$。</p>
-<p>地址线传递地址信息。如果用1个比特，可以表示2个地址块（地址块数目是$2^1$），即编号为0的地址块和编号为1的地址块。如果用2个比特，可以表示4个地址块（地址块数目是$2^2$），即编号为00，01，10，11的四个地址块。那么我有16个比特的话，就能表示64K个地址块。<strong>一根地址线就占一个比特位，有16根地址线就表示有16个地址比特位。</strong></p>
-<p>数据线传递数据信息。<strong>一根数据线就占一个比特位，8根数据线就占8个数据比特位。</strong></p>
-<p>这些所谓的线，通过电平的高低变化来表示0或1。只是说不同的线，传递的信息是不同的。地址线传地址信息，数据线传数据信息，控制线传控制信息。这些信息是用0和1表示出来的。</p>
-<hr>
-</li>
-<li><p>一个256K×16的存储器，由64K×8的RAM芯片和32K×16的ROM芯片组成。</p>
-<p>你可以理解成，一个超级大菜地分成2个中型菜地，一个种白菜，一个种辣椒。</p>
-<p>这两个中型菜地又分别由小菜地（RAM和ROM芯片）组成。</p>
-<hr>
-</li>
-<li><p>一个256K×16的存储器，地址范围为00000H～3FFFFH（地址编号为十六进制数）。表示有（3FFFF-00000+1）H个地址块。你想下如果有3个数，编号分别为0~3，是不是一共有4个地址块。用3-0=3是不对的，还得再+1。</p>
-<p>即这个存储器（超级大菜地）有（3FFFF-00000+1）H=40000H个地址块，每个地址块能容纳16个比特位数（种16个农作物）。</p>
-<hr>
-</li>
-<li><p>其中ROM的地址范围为10000H～1FFFFH，这是占了超级大菜地里面的一部分地址块。这部分地址块的数目是多少呢？是（1FFFF-10000+1）H=10000H个。这个十六进制数换成十进制数是64K。</p>
-<p>存储器中ROM芯片给的地址块是64K，每个地址块能容纳16个比特。所以存储器中关于ROM的总容量就是64Kx16。</p>
-<p>由于题目中说了，存储器是由32K×16的ROM芯片组成。ROM总容量已知，每个ROM芯片的容量也已知，此时问你需要多少片<strong>ROM，聪明如你，相信已经知道答案了。（64Kx16）/（32Kx16）=2</strong></p>
-<hr>
-</li>
-<li><p>ROM占了整个存储器的地址块有64K个。存储器共有256K个。那么留下来给RAM的地址块数目即是（256-64）K=192K个。RAM的总容量就是192Kx16。</p>
-<p>知道RAM的总容量，知道每片RAM芯片的容量64K×8，问你需要多少片<strong>RAM。聪明如你，相信已经知道答案了。（192Kx16）/（64Kx8）=6</strong></p>
-</li>
-</ol>
-
-      
-
-      
-
-          
-        
-          
-        </div>
-
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/05/06/软考试题2/" data-id="cjy4gbs33000ro4qu3uhtqnj6" class="article-share-link">分享</a>
-      
-    </footer>
-
-  
-
-  
-
-  
-
-</article>
-
-
-
-      
-        <article id="post-tcpdump技巧" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
-
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h2 itemprop="name">
-      <a class="article-title" href="/2019/04/30/tcpdump技巧/">tcpdump技巧</a>
-    </h2>
-  
-
-      </header>
-    
-
-    
-      <div class="article-meta">
-        <a href="/2019/04/30/tcpdump技巧/" class="article-date">
-  <time datetime="2019-04-30T15:44:49.000Z" itemprop="datePublished">2019-04-30</time>
-</a>
-        
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/linux/">linux</a>
-  </div>
-
-      </div>
-    
-
-    <div class="article-entry" itemprop="articleBody">
-      
-
-      
-
-      
-        <h1 id="tcpdump使用技巧"><a href="#tcpdump使用技巧" class="headerlink" title="tcpdump使用技巧"></a>tcpdump使用技巧</h1><p>1.监视指定网络接口的数据包</p>
-<p>   [root@www ~]# tcpdump -i eth1                          </p>
-<p>2.也可以指定ip,例如截获所有210.27.48.1 的主机收到的和发出的所有的数据包</p>
-<p>   [root@www ~]# tcpdump host 210.27.48.1       </p>
-<p>3.截获主机210.27.48.1 和主机210.27.48.2 或210.27.48.3的通信</p>
-<p>   [root@www ~]# tcpdump host 210.27.48.1 and \ (210.27.48.2 or 210.27.48.3 \ )      </p>
-<p>4.获取主机210.27.48.1除了和主机210.27.48.2之外所有主机通信的ip包</p>
-<p>   [root@www ~]# tcpdump ip host 210.27.48.1 and ! 210.27.48.2     </p>
-<p>5.截获主机webserver发送的所有数据</p>
-<p>   [root@www ~]# tcpdump -i eth0 src host webserver </p>
-<p>6.监视所有送到主机webserver的数据包       </p>
-<p>   [root@www ~]# tcpdump -i eth0 dst host webserver        </p>
-<p>7.获取主机210.27.48.1接收或发出的telnet包</p>
-<p>   [root@www ~]# tcpdump tcp port 23 and host 210.27.48.1       </p>
-<p>8.打印所有源地址或目标地址是本地主机的IP数据包</p>
-<p>   [root@www ~]# tcpdump ip and not net localnet       </p>
-<p> 9.打印长度超过576字节</p>
-<p>   [root@www ~]# tcpdump ip[2:2] &gt; 576     </p>
-<p>10.第一个n表示以IP地址的方式显示主机名，第二个N是以端口数字的形式代替服务名。</p>
-<p>   [root@www ~]# tcpdump -nn </p>
-<hr>
-<p>[root@www ~]# tcpdump tcp -i eth1 -t -s 0 -c 100 and dst port ! 22 and src net 192.168.1.0/24 -w ./target.cap<br>(1)tcp: ip icmp arp rarp 和 tcp、udp、icmp这些选项等都要放到第一个参数的位置，用来过滤数据报的类型<br>(2)-i eth1 : 只抓经过接口eth1的包<br>(3)-t : 不显示时间戳<br>(4)-s 0 : 抓取数据包时默认抓取长度为68字节。加上-S 0 后可以抓到完整的数据包<br>(5)-c 100 : 只抓取100个数据包<br>(6)dst port ! 22 : 不抓取目标端口是22的数据包<br>(7)src net 192.168.1.0/24 : 数据包的源网络地址为192.168.1.0/24<br>(8)-w ./target.cap : 保存成cap文件，方便用ethereal(即wireshark)分析</p>
-
-      
-
-      
-
-          
-        
-          
-        </div>
-
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/04/30/tcpdump技巧/" data-id="cjy4gbs210000o4quwertj5eu" class="article-share-link">分享</a>
-      
-    </footer>
-
-  
-
-  
-
-  
-
-</article>
-
-
-
-      
-        <article id="post-wireshark技巧" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
-
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h2 itemprop="name">
-      <a class="article-title" href="/2019/04/30/wireshark技巧/">wireshark技巧</a>
-    </h2>
-  
-
-      </header>
-    
-
-    
-      <div class="article-meta">
-        <a href="/2019/04/30/wireshark技巧/" class="article-date">
-  <time datetime="2019-04-30T15:40:03.000Z" itemprop="datePublished">2019-04-30</time>
-</a>
-        
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/小技巧/">小技巧</a>
-  </div>
-
-      </div>
-    
-
-    <div class="article-entry" itemprop="articleBody">
-      
-
-      
-
-      
-        <h1 id="wireshark技巧"><a href="#wireshark技巧" class="headerlink" title="wireshark技巧"></a>wireshark技巧</h1><blockquote>
-<p>资料来源：</p>
-<p><a href="https://community.emc.com/go/chinese" target="_blank" rel="noopener">1.EMC中文支持论坛</a></p>
-<p><a href="https://www.dell.com/community/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E8%AE%A8%E8%AE%BA%E5%8C%BA/%E5%A6%82%E6%9E%9C%E7%9C%8B%E4%BA%86%E8%BF%99%E4%B8%AA%E4%BD%A0%E8%BF%98%E6%98%AF%E4%B8%8D%E4%BC%9A%E7%94%A8Wireshark-%E9%82%A3%E5%B0%B1%E6%9D%A5%E6%89%BE%E6%88%91%E5%90%A7-8%E6%9C%886%E6%97%A5%E5%AE%8C%E7%BB%93/td-p/7007033/page/5" target="_blank" rel="noopener">2.如果看了这个你还是不会用Wireshark-那就来找我吧-8月6日完结</a></p>
-<p><a href="http://linux.51yip.com/search/tcpdump" target="_blank" rel="noopener">3.Linux命令手册-tcpdump</a></p>
-<p><a href="https://chegva.com/3019.html" target="_blank" rel="noopener">4.Linux上使用wireshark(tshark)抓包分析</a></p>
-<p><a href="https://chegva.com/2473.html" target="_blank" rel="noopener">5.tcpdump使用技巧</a></p>
-</blockquote>
-<h2 id="1-抓包前设置过滤条件（捕捉过滤器）"><a href="#1-抓包前设置过滤条件（捕捉过滤器）" class="headerlink" title="1.抓包前设置过滤条件（捕捉过滤器）"></a>1.抓包前设置过滤条件（捕捉过滤器）</h2><p><strong>尽量避免使用抓包过滤。即便多看几个报文，也比漏看一个报文要好。</strong>当你抓取了大量报文的时候，用显示过滤（过滤选项也更多）来重点查看某一数据流。</p>
-<h3 id="1-1-抓取指定IP地址的数据流："><a href="#1-1-抓取指定IP地址的数据流：" class="headerlink" title="1.1 抓取指定IP地址的数据流："></a>1.1 抓取指定IP地址的数据流：</h3><ol>
-<li>host 10.3.1.1：抓取发到/来自10.3.1.1的数据流</li>
-<li>host 2406:da00:ff00::6b16:f02d：抓取发到/来自IPv6地址2406:da00:ff00::6b16:f02d的数据流</li>
-<li>not host 10.3.1.1：抓取除了发到/来自10.3.1.1以外的所有数据流</li>
-<li>src host 10.3.1.1：抓取来自10.3.1.1的数据流</li>
-<li>dst host 10.3.1.1：抓取发到10.3.1.1的数据流</li>
-<li>host 10.3.1.1 or 10.3.1.2：抓取发到/来自10.3.1.1，以及与之通讯的所有数据流，与10.3.1.2，以及与之通讯的所有数据流</li>
-<li>host <a href="http://www.espn.com：抓取发到/来自所有解析为www.espn.com的IP地址的数据流" target="_blank" rel="noopener">www.espn.com：抓取发到/来自所有解析为www.espn.com的IP地址的数据流</a></li>
-</ol>
-<h3 id="1-2-抓取指定IP地址范围的数据流"><a href="#1-2-抓取指定IP地址范围的数据流" class="headerlink" title="1.2 抓取指定IP地址范围的数据流:"></a>1.2 抓取指定IP地址范围的数据流:</h3><ol>
-<li>net 10.3.0.0/16：抓取网络10.3.0.0上发到/来自所有主机的数据流(16表示长度)</li>
-<li>net 10.3.0.0 mask 255.255.0.0：与之前的过滤结果相同</li>
-<li>ip6 net 2406:da00:ff00::/64：抓取网络2406:da00:ff00:0000(IPv6)上发到/来自所有主机的数据流</li>
-<li>not dst net 10.3.0.0/16：抓取除了发到以10.3开头的IP地址以外的所有数据流</li>
-<li>not src net 10.3.0.0/16：抓取除了来自以10.3开头的IP地址以外的所有数据流</li>
-<li>ip proto &lt; protocol code &gt;：抓取ip协议字段等于&lt; protocol code &gt;值的报文。如TCP(code 6), UDP(code 17), ICMP(code 1)。</li>
-<li>ip[2:2]==&lt; number &gt;：ip报文大小</li>
-<li>ip[8]==&lt; number &gt;：TTL(Time to Live)值</li>
-<li>ip[9]==&lt; number &gt;：协议值</li>
-<li>icmp[icmptype]==&lt; identifier &gt;: 抓取 ICMP代码等于identifier的ICMP报文, 如icmp-echo 以及 icmp-request。</li>
-</ol>
-<p>方括号中第一个数字表示从<u><strong>协议头</strong></u>开始的偏移量，第二个数字表示需要观察多少位。</p>
-<p><img src="/2019/04/30/wireshark技巧/1.png" alt="image004.png"></p>
-<h3 id="1-3-抓取发到广播或多播地址的数据流"><a href="#1-3-抓取发到广播或多播地址的数据流" class="headerlink" title="1.3 抓取发到广播或多播地址的数据流:"></a>1.3 抓取发到广播或多播地址的数据流:</h3><p>只需侦听广播或多播数据流，就可以掌握网络上主机的许多信息。</p>
-<ol>
-<li>ip broadcast：抓取广播报文</li>
-<li>ip multicast：抓取多播报文</li>
-<li>dst host ff02::1：抓取到IPv6多播地址所有主机的数据流</li>
-<li>dst host ff02::2：抓取到IPv6多播地址所有路由器的数据流</li>
-</ol>
-<h3 id="1-4-抓取基于MAC地址的数据流"><a href="#1-4-抓取基于MAC地址的数据流" class="headerlink" title="1.4 抓取基于MAC地址的数据流:"></a>1.4 抓取基于MAC地址的数据流:</h3><p>当你需要抓取发到/来自某一主机的IPv4或IPv6数据流，可创建基于主机MAC地址的抓包过滤条件。</p>
-<p>应用MAC地址时，需确保与目标主机处于同一网段。</p>
-<ol>
-<li>ether host 00:08:15:00:08:15：抓取发到/来自00:08:15:00:08:15的数据流</li>
-<li>ether src 02:0A:42:23:41:AC：抓取来自02:0A:42:23:41:AC的数据流</li>
-<li>ether dst 02:0A:42:23:41:AC：抓取发到02:0A:42:23:41:AC的数据流</li>
-<li>not ether host 00:08:15:00:08:15：抓取除了发到/来自00:08:15:00:08:15以外的所有数据流</li>
-<li>ether broadcast或ether dst ff:ff:ff:ff:ff:ff：抓取广播报文</li>
-<li>ether multicast：多播报文</li>
-<li>抓取指定以太网类型的报文：ether proto 0800</li>
-<li>抓取指定VLAN：vlan &lt; vlan number &gt;</li>
-<li>抓取指定几个VLAN：vlan &lt; vlan number &gt; and vlan &lt; vlan number &gt;</li>
-</ol>
-<h3 id="1-5-抓取基于指定应用的数据流"><a href="#1-5-抓取基于指定应用的数据流" class="headerlink" title="1.5 抓取基于指定应用的数据流:"></a>1.5 抓取基于指定应用的数据流:</h3><p>你可能需要查看基于一个或几个应用的数据流。抓包过滤器语法无法识别应用名，因此需要根据端口号来定义应用。通过目标应用的TCP或UDP端口号，将不相关的报文过滤掉。</p>
-<ol>
-<li>port 53：抓取发到/来自端口53的UDP/TCP数据流（典型是DNS数据流）</li>
-<li>not port 53：抓取除了发到/来自端口53以外的UDP/TCP数据流</li>
-<li>port 80：抓取发到/来自端口80的UDP/TCP数据流（典型是HTTP数据流）</li>
-<li>udp port 67：抓取发到/来自端口67的UDP数据流（典型是DHCP据流）</li>
-<li>tcp port 21：抓取发到/来自端口21的TCP数据流（典型是FTP命令通道）</li>
-<li>portrange 1-80：抓取发到/来自端口1-80的所有UDP/TCP数据流</li>
-<li>tcp portrange 1-80：抓取发到/来自端口1-80的所有TCP数据流</li>
-</ol>
-<h3 id="1-6-抓取结合端口的数据流"><a href="#1-6-抓取结合端口的数据流" class="headerlink" title="1.6 抓取结合端口的数据流:"></a>1.6 抓取结合端口的数据流:</h3><p>当你需要抓取多个不连续端口号的数据流，将它们通过逻辑符号连接起来，如下图所示：</p>
-<ol>
-<li>port 20 or port 21：抓取发到/来自端口20或21的UDP/TCP数据流（典型是FTP数据和命令端口）</li>
-<li>host 10.3.1.1 and port 80：抓取发到/来自10.3.1.1端口80的数据流</li>
-<li>host 10.3.1.1 and not port 80：抓取发到/来自10.3.1.1除了端口80以外的数据流</li>
-<li>udp src port 68 and udp dst port 67：抓取从端口68到端口67的所有UDP数据流（典型是从DHCP客户端到DHCP服务器）</li>
-<li>udp src port 67 and udp dst port 68：抓取从端口67到端口68的所有UDP数据流（典型是从DHCP服务器到DHCP客户端）</li>
-<li>抓取TCP连接的开始（SYN）和结束（FIN）报文，配置tcp[tcpflags] &amp; (tcp-syn|tcp-fin)!=0</li>
-<li>抓取所有RST(Reset)标志位为1的TCP报文，配置tcp[tcpflags] &amp; (tcp-rst)!=0</li>
-<li>less &lt; length &gt;：抓取小于等于某一长度的报文，等同于len &lt;=&lt; length &gt;</li>
-<li>greater &lt; length &gt;：抓取大于等于某一长度的报文，等同于len &gt;=&lt; length &gt;</li>
-</ol>
-<p>SYN: 建立连接的信号</p>
-<p>FIN: 关闭连接的信号</p>
-<p>ACK: 确认接收数据的信号</p>
-<p>RST: 立即关闭连接的信号</p>
-<p>PSH: 推信号，尽快将数据转由应用处理</p>
-<ul>
-<li>tcp[13] &amp; 0x00 = 0: No flags set (null scan)</li>
-<li>tcp[13] &amp; 0x01 = 1: FIN set and ACK not set</li>
-<li>tcp[13] &amp; 0x03 = 3: SYN set and FIN set</li>
-<li>tcp[13] &amp; 0x05 = 5: RST set and FIN set</li>
-<li>tcp[13] &amp; 0x06 = 6: SYN set and RST set</li>
-<li>tcp[13] &amp; 0x08 = 8: PSH set and ACK not set</li>
-<li>tcp[13]是从<u><strong>协议头</strong></u>开始的偏移量，0,1,3,5,6,8是标识位。</li>
-</ul>
-<p><img src="/2019/04/30/wireshark技巧/2.png" alt="image005.png"></p>
-<hr>
-<h2 id="2-抓包后设置过滤条件（显示过滤器）"><a href="#2-抓包后设置过滤条件（显示过滤器）" class="headerlink" title="2.抓包后设置过滤条件（显示过滤器）"></a>2.抓包后设置过滤条件（显示过滤器）</h2><h3 id="2-1-协议过滤器"><a href="#2-1-协议过滤器" class="headerlink" title="2.1 协议过滤器"></a>2.1 协议过滤器</h3><ol>
-<li>arp：显示所有包括ARP请求和回复在内的所有ARP数据流。</li>
-<li>ip：显示内含IPv4头在内的（如ICMP目的地址不可达报文，在ICMP报文头之后返回到来方向的IPv4头）IP数据流。</li>
-<li>ipv6：显示所有IPv6数据流，包括内含IPv6报文头的IPv4报文，如6to4，Teredo，以及ISATAP数据流。</li>
-<li>tcp：显示所有基于TCP的数据流。</li>
-</ol>
-<h3 id="2-2-应用过滤器"><a href="#2-2-应用过滤器" class="headerlink" title="2.2 应用过滤器"></a>2.2 应用过滤器</h3><ol>
-<li>bootp：显示所有DHCP数据流（基于BOOTP）。</li>
-<li>dns：显示包括TCP区域传输以及基于标准UDP的DNS请求和回复在内的所有DNS数据流。</li>
-<li>tftp：显示所有TFTP（Trivial File Transfer Protocol）数据流。</li>
-<li>http：显示所有HTTP命令，回复以及数据传输报文，但不显示TCP握手报文，TCP ACK报文以及TCP结束报文。</li>
-<li>icmp：显示所有ICMP报文。</li>
-</ol>
-<h3 id="2-3-字符过滤器"><a href="#2-3-字符过滤器" class="headerlink" title="2.3 字符过滤器"></a>2.3 字符过滤器</h3><ol>
-<li>tcp.analysis.flags：显示所有包含TCP分析标识的所有报文，包括报文丢失，重传，或零窗口标识。</li>
-<li>tcp.analysis.zero_window：显示含有表明发送方的接收缓存用完标识的报文。</li>
-</ol>
-<h3 id="2-4-域过滤器"><a href="#2-4-域过滤器" class="headerlink" title="2.4 域过滤器"></a>2.4 域过滤器</h3><ol>
-<li>boot.option.hostname：显示所有包含主机名的DHCP数据流（DHCP基于BOOTP）。</li>
-<li>http:host：显示所有包含HTTP主机名字段的所有HTTP报文。此报文是客户端向网络服务器发送请求时发出的。</li>
-<li>ftp.request.command：显示所有包含命令的FTP数据流，比如USER，PASS，或RETR命令。</li>
-</ol>
-<h3 id="2-5-显示过滤器的比较运算符"><a href="#2-5-显示过滤器的比较运算符" class="headerlink" title="2.5 显示过滤器的比较运算符"></a>2.5 显示过滤器的比较运算符</h3><ol>
-<li><p>==或eq</p>
-<p>例如：ip.src == 10.2.2.2</p>
-<p>显示所有源地址为10.2.2.2的IPv4数据流</p>
-</li>
-<li><p>！=或ne</p>
-<p>例如：tcp.srcport != 80</p>
-<p>显示源端口除了80以外的所有TCP数据流</p>
-</li>
-<li><p>gt 或 &gt;</p>
-<p>例如：frame.time_relative &gt; 1</p>
-<p>显示距前一个报文到达时间相差1秒的报文</p>
-</li>
-<li><p>&lt;或lt</p>
-<p>例如：tcp.window_size &lt; 1460</p>
-<p>显示当TCP接收窗口小于1460字节时的报文</p>
-</li>
-<li><p>ge 或 &gt;=</p>
-<p>例如：dns.count.answers &gt;= 10</p>
-<p>显示包含10个以上answer的DNS响应报文</p>
-</li>
-<li><p>&lt;=或le</p>
-<p>例如：ip.ttl &lt;= 10</p>
-<p>显示IP报文中Time to Live字段小于等于10的报文</p>
-</li>
-<li><p>contains</p>
-<p>例如：http contains “GET”</p>
-<p>显示所有HTTP客户端发送给HTTP服务器的GET请求</p>
-</li>
-</ol>
-<p>对于基于TCP应用的过滤条件采用比较运算符。例如，如果想看端口80上面的HTTP数据流，使用HTTP.port==80。</p>
-<p>小贴士：</p>
-<p>运算符两边不用留空格。ip.src == 10.2.2.2与ip.src==10.2.2.2的效果是相同的。</p>
-<h3 id="2-6-举例应用"><a href="#2-6-举例应用" class="headerlink" title="2.6 举例应用"></a>2.6 举例应用</h3><h4 id="2-6-1-按照某一IP地址或主机过滤报文："><a href="#2-6-1-按照某一IP地址或主机过滤报文：" class="headerlink" title="2.6.1 按照某一IP地址或主机过滤报文："></a>2.6.1 按照某一IP地址或主机过滤报文：</h4><ul>
-<li><p>例如：ip.addr==10.3.1.1</p>
-<p>显示在IP源地址字段或IP目的地址字段包含10.3.1.1的帧。</p>
-<hr>
-</li>
-<li><p>例如：！ip.addr==10.3.1.1</p>
-<p>显示除了在IP源地址字段或IP目的地址字段包含10.3.1.1以外的帧。</p>
-<hr>
-</li>
-<li><p>例如：ipv6.addr==2406:da00:ff00::6b16:f02d</p>
-<p>显示以2406:da00:ff00::6b16:f02d为源地址或目的地址的帧。</p>
-<hr>
-</li>
-<li><p>例如：ip.src==10.3.1.1</p>
-<p>显示所有来自10.3.1.1的数据流。</p>
-<hr>
-</li>
-<li><p>例如：ip.dst==10.3.1.1</p>
-<p>显示所有发往10.3.1.1的数据流</p>
-<hr>
-</li>
-<li><p>例如：ip.host==<a href="http://www.wireshark.org" target="_blank" rel="noopener">www.wireshark.org</a></p>
-<p>显示所有解析为<a href="http://www.wireshark.org的IP" target="_blank" rel="noopener">www.wireshark.org的IP</a></p>
-<hr>
-</li>
-</ul>
-<h4 id="2-6-2-按照某一IP地址范围过滤报文："><a href="#2-6-2-按照某一IP地址范围过滤报文：" class="headerlink" title="2.6.2 按照某一IP地址范围过滤报文："></a>2.6.2 按照某一IP地址范围过滤报文：</h4><p>可以使用&gt;或&lt;比较运算符或逻辑运算符&amp;&amp;查找某一地址范围内的报文。</p>
-<ul>
-<li><p>例如：ip.addr&gt;10.3.0.1&amp;&amp;ip.addr&lt;10.3.0.5</p>
-<p>显示来自或发往10.3.0.2，10.3.0.3，10.3.0.4的数据流。</p>
-<hr>
-</li>
-<li><p>例如：(ip.addr&gt;=10.3.0.1&amp;&amp;ip.addr&lt;=10.3.0.6)&amp;&amp;!ip.addr==10.3.0.3</p>
-<p>显示来自或发往10.3.0.1，10.3.0.2，10.3.0.4，10.3.0.5，10.3.0.6的数据流，10.3.0.3排除在外。</p>
-<hr>
-</li>
-<li><p>例如：ipv6.addr&gt;=fe80::&amp;&amp;ipv6.addr&lt;fec0::</p>
-<p>显示IPv6地址从0xfe80到0xfec0开头的数据流。</p>
-<hr>
-</li>
-</ul>
-<h4 id="2-6-3-按照某一IP子网过滤报文："><a href="#2-6-3-按照某一IP子网过滤报文：" class="headerlink" title="2.6.3 按照某一IP子网过滤报文："></a>2.6.3 按照某一IP子网过滤报文：</h4><p>可以通过ip.addr字段名定义一个子网。这种格式使用IP地址后跟斜杠以及一个后缀，表明IP地址中定义的网络部分的比特数。</p>
-<ul>
-<li><p>例如：ip.addr==10.3.0.0/16</p>
-<p>显示在IP源地址或目的地址字段以10.3开头的数据流。</p>
-<hr>
-</li>
-<li><p>例如：ip.addr == 10.3.0.0/16 &amp;&amp; ！ip.addr==10.3.1.1</p>
-<p>显示除了10.3.1.1以外，在IP源地址或目的地址字段以10.3开头的数据流。</p>
-<hr>
-</li>
-<li><p>例如：!ip.addr == 10.3.0.0/16 &amp;&amp; !ip.addr==10.2.0.0/16</p>
-<p>显示所有数据流，除了在IP源地址或目的地址字段以10.3和10.2开头的数据流</p>
-<hr>
-</li>
-</ul>
-<blockquote>
-<p>注意：</p>
-<p>错误的用法导致不work：</p>
-<hr>
-<p>错误：ip.addr != 10.2.2.2</p>
-<p>显示在IP源地址或IP目的地址不包含10.2.2.2的报文。只要在源或目的IP地址不为10.2.2.2，报文就会被显示出来。这时隐含的或会导致实际上并未过滤任何报文。</p>
-<p>正确：！ip.addr == 10.2.2.2</p>
-<p>显示IP源地址和IP目的地址都不包含10.2.2.2的报文。</p>
-<hr>
-<p>错误：!tcp.flags.syn==1</p>
-<p>显示所有不含TCP SYN bit设置为1的报文。其他协议报文，必须UDP和ARP报文也符合这一过滤条件，因为它们的TCP SYN bit没有设置为1。</p>
-<p>正确：tcp.flags.syn！=1</p>
-<p>只显示包含SYN设置为0的TCP报文。</p>
-<hr>
-</blockquote>
-
-      
-
-      
-
-          
-        
-          
-        </div>
-
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/04/30/wireshark技巧/" data-id="cjy4gbs3g0012o4quskdai9vj" class="article-share-link">分享</a>
+      <a data-url="https://dilidonglong.github.io/2019/05/06/英语名词/" data-id="cjz70lirw000fuoquddnolvs7" class="article-share-link">分享</a>
       
     </footer>
 
@@ -828,7 +916,7 @@
   
     <nav class="page-nav">
       
-      <a class="extend prev" rel="prev" href="/">上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/">下一页</a>
+      <a class="extend prev" rel="prev" href="/">上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/">下一页</a>
     </nav>
   
 </section>

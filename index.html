@@ -60,6 +60,864 @@
 
     
       
+        <article id="post-grep-正则表达式-awk" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2019/08/11/grep-正则表达式-awk/">grep/正则表达式/awk/sed</a>
+    </h2>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/08/11/grep-正则表达式-awk/" class="article-date">
+  <time datetime="2019-08-11T13:30:15.000Z" itemprop="datePublished">2019-08-11</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/linux/">linux</a>
+  </div>
+
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+      
+
+      
+        <p>Linux三剑客</p>
+<p>grep适合单纯的查找或是匹配文本</p>
+<p>sed适合编辑我们查找到的文本</p>
+<p>awk对于查找到的文本，可以进行格式化处理，即输出成我们想要看到的样子</p>
+<p>正则表达式是公式。我们可以在三剑客中按（正则表达式）条件查找到我们需要的东西</p>
+<h2 id="1-grep"><a href="#1-grep" class="headerlink" title="1.grep"></a>1.<a href="http://www.zsythink.net/archives/1733" target="_blank" rel="noopener">grep</a></h2><p>grep（global search regular expression and print out the line）</p>
+<ul>
+<li>grep  “需要搜索的字符”</li>
+<li>grep  -i  “需要搜索的字符”               不区分大小写</li>
+<li>grep  -n  “需要搜索的字符”              在行首显示字符所在行号</li>
+<li>grep  –color=auto  “需要搜索的字符”           字符用颜色显示</li>
+<li>grep  –color  “需要搜索的字符”           字符用颜色显示</li>
+<li>grep  -c  “需要搜索的字符”            显示字符一共所在多少行</li>
+<li>grep  -o  “需要搜索的字符”           显示字符，在单独的一行输出</li>
+<li>grep  -Bx  “需要搜索的字符”           显示字符所在的行及其前x行</li>
+<li>grep  -Ax  “需要搜索的字符”           显示字符所在的行及其后x行</li>
+<li>grep  -Cx  “需要搜索的字符”           显示字符所在的行及其前后x行</li>
+<li>grep  -w  “需要搜索的字符”          精确显示字符所在的行，比如字符是abc，就不会显示abcd所在行</li>
+<li>grep  -v  “需要搜索的字符”           显示不包含该字符所在的行</li>
+<li>grep  -e  “需要搜索的字符”  -e  “需要搜索的字符2”            显示多个目标字符所在行</li>
+</ul>
+<hr>
+<h2 id="2-正则表达式"><a href="#2-正则表达式" class="headerlink" title="2.正则表达式"></a>2.正则表达式</h2><h3 id="2-1基本正则表达式"><a href="#2-1基本正则表达式" class="headerlink" title="2.1基本正则表达式"></a>2.1基本正则表达式</h3><p>grep  “^hello”             打印出以hello开头的行</p>
+<p>grep  “hello$”             打印出以hello结尾的行</p>
+<p>grep  “^hello$”             打印出只有hello单词的行</p>
+<p>grep  “^$”                    打印出空行，该行中有空格也不能算是一个空行</p>
+<p>grep  “\ &lt; hello”          打印出以hello作为一个单词词首的一行</p>
+<p>grep  “hello\ &gt;”          打印出以hello作为一个单词词尾的一行</p>
+<p>grep  “\ &lt; hello\ &gt;”          打印出以hello作为一个单词的一行</p>
+<p>同时可以使用\ b来表示锚定词首或词尾，即来替代\ &gt;和\ &lt;</p>
+<p>使用\ B可以表示词首或词尾不是某个单词</p>
+<hr>
+<h4 id="连续次数的匹配"><a href="#连续次数的匹配" class="headerlink" title="连续次数的匹配"></a><a href="http://www.zsythink.net/archives/1893" target="_blank" rel="noopener">连续次数的匹配</a></h4><p>grep  “a\ {3\ }”           打印出单词中有3个连续a的一行</p>
+<p>grep  “\ &lt; a\ {3\ } \ &gt;”           打印出单词中<strong>只有</strong>3个连续a的一行（以连续3个a作为一个单词）</p>
+<p>grep  “a\ {2,4\ } “           打印出单词中至少有连续2个a或最多连续4个a的一行</p>
+<p>grep  “a\ { ,4\ } “           打印出单词中最多连续4个a的一行</p>
+<p>grep  “a\ {2,\ } “           打印出单词中至少连续2个a的一行</p>
+<p>grep  “a*”                   打印出单词中有n个a的一行</p>
+<p>grep  “a.*”                   打印出单词中有a且a后面接上任意个数目及字符的行</p>
+<p>grep  “a\ ?”                  打印出单词中能匹配到0个或1个a的行（其实有2个以上的a也能匹配到，因为2个以上的a包含0个或1个a）</p>
+<p>grep  “a\ +”                  打印出单词中能匹配到至少1个a的行</p>
+<hr>
+<h4 id="常用符号"><a href="#常用符号" class="headerlink" title="常用符号"></a><a href="http://www.zsythink.net/archives/1921" target="_blank" rel="noopener">常用符号</a></h4><p>grep  “a…”           打印出单词中能匹配到a后面接上3个任意字符的行</p>
+<p>grep  “a[[:alpha:]]\ { 3\ }”            打印出单词中能匹配到a后面接上了3个任意大小写字母的行</p>
+<p>[[:alpha:]]  表示任意大小写字母<br>[[:lower:]]  表示任意小写字母<br>[[:upper:]]  表示任意大写字母<br>[[:digit:]]  表示0到9之间的任意单个数字（包括0和9）<br>[[:alnum:]]  表示任意数字或字母<br>[[:space:]]  表示任意空白字符，包括”空格”、”tab键”等。<br>[[:punct:]]  表示任意标点符号</p>
+<p>[0-9]与[[:digit:]]等效<br>[a-z]与[[:lower:]]等效<br>[A-Z]与[[:upper:]]等效<br>[a-zA-Z]与[[:alpha:]]等效<br>[a-zA-Z0-9]与[[:alnum:]]等效</p>
+<p>grep  “a[ ^[:alpha:]]\ { 3\ }”       打印出单词中能匹配到a后面接上了3个不是大小写字母的行</p>
+<p>[^ 0-9]与[ ^[:digit:]]等效<br>[ ^ a-z]与[ ^[:lower:]]等效<br>[ ^ A-Z]与[ ^[:upper:]]等效<br>[ ^ a-zA-Z]与[ ^[:alpha:]]等效<br>[ ^ a-zA-Z0-9]与[ ^[:alnum:]]等效</p>
+<p>grep  “a[efg]”       打印出单词中能匹配到a后面接上了e或f或g的行</p>
+<p>grep  “a[ ^efg]”       打印出单词中能匹配到a后面接上不是e或f或g的行</p>
+<p>同时还有简短格式，但是并非所有正则表达式解析器都可以识别。使用的时候可以尝试加上-P参数<br>\d 表示任意单个0到9的数字<br>\D 表示任意单个非数字字符<br>\t 表示匹配单个横向制表符（相当于一个tab键）<br>\s表示匹配单个空白字符，包括”空格”，”tab制表符”等<br>\S表示匹配单个非空白字符</p>
+<hr>
+<h4 id="分组及向后引用"><a href="#分组及向后引用" class="headerlink" title="分组及向后引用"></a><a href="http://www.zsythink.net/archives/1952" target="_blank" rel="noopener">分组及向后引用</a></h4><p>grep  “\ (hello\ ) \ {2\ }”                 以hello为一个组（第一个分组），打印出单词中能匹配到2次hello的行</p>
+<p>grep  “\ (hello\ ) word \1”             以hello为一个组，打印出有hello word hello的行。其中\1表示第一个分组</p>
+<hr>
+<h4 id="转义符"><a href="#转义符" class="headerlink" title="转义符"></a><a href="http://www.zsythink.net/archives/1977" target="_blank" rel="noopener">转义符</a></h4><p>grep  “a\ .\ .”                     打印出单词中能匹配到a..的行</p>
+<p>grep  “a\ <em>\ </em>“                     打印出单词中能匹配到a**的行</p>
+<p>grep  ‘a\ \ \ \ ‘                     打印出单词中能匹配到a\ \的行，注意此时使用单引号</p>
+<hr>
+<h3 id="2-2扩展正则表达式"><a href="#2-2扩展正则表达式" class="headerlink" title="2.2扩展正则表达式"></a>2.2<a href="http://www.zsythink.net/archives/1999" target="_blank" rel="noopener">扩展正则表达式</a></h3><p>使用扩展正则表达式时，要加上-E参数</p>
+<p>在扩展正则表达式中，有|这个符号，按住“shift键”和“\键”就可以打出</p>
+<p>grep  -E  “(com|net)$”     打印出以com或net结尾的行</p>
+<p>在基本正则表达式中需要加\，但是扩展中不需要的如下：</p>
+<p>?  表示匹配其前面的字符0或1次</p>
+<p>+  表示匹配其前面的字符至少1次，或者连续多次，连续次数上不封顶。</p>
+<p>{n} 表示前面的字符连续出现n次，将会被匹配到。</p>
+<p>{x,y} 表示之前的字符至少连续出现x次，最多连续出现y次，都能被匹配到，换句话说，只要之前的字符连续出现的次数在x与y之间，即可被匹配到。</p>
+<p>{,n} 表示之前的字符连续出现至多n次，最少0次，都会被匹配到。</p>
+<p>{n,}表示之前的字符连续出现至少n次，才会被匹配到。</p>
+<p>分组与后向引用<br>( ) 表示分组，我们可以将其中的内容当做一个整体，分组可以嵌套。<br>(ab) 表示将ab当做一个整体去处理。<br>\1 表示引用整个表达式中第1个分组中的正则匹配到的结果。<br>\2 表示引用整个表达式中第2个分组中的正则匹配到的结果。</p>
+<hr>
+<h2 id="3-awk"><a href="#3-awk" class="headerlink" title="3.awk"></a>3.awk</h2><blockquote>
+<p>awk的基本语法结构</p>
+<p>awk  [options]  ‘Pattern  {Action}’  file1,file2 </p>
+<p>如果是对命令执行awk操作而不是文件，那么可以使用命令+管道符（|）+awk</p>
+</blockquote>
+<h3 id="3-1基础入门"><a href="#3-1基础入门" class="headerlink" title="3.1基础入门"></a><a href="http://www.zsythink.net/archives/1336" target="_blank" rel="noopener">3.1基础入门</a></h3><p>df  |awk  ‘{print  $5}’     表示输出df信息的第五列</p>
+<p>df  |awk  ‘{print  $4,$5}’     表示输出df信息的第四和第五列</p>
+<ul>
+<li><p>除了输出文本或命令输出信息中的列，我们也可以自己添加信息，只需在””中添加即可</p>
+<p>awk  ‘{print  “anychar:”$4,”anychar2”$5}’  file1</p>
+</li>
+<li><p>如果写成如下格式，那么输出的就不是第五列，而是输出$5</p>
+<p>df  |awk  ‘{print  “$5”}’ </p>
+</li>
+</ul>
+<p>Pattern中文含义是模式，特殊的2种模式BEGIN和END</p>
+<ul>
+<li><p>在执行文件1（file1）前，先执行BEGIN的内容，即先把aaa输出，然后再对文件1做处理，处理方式就是后面写的动作</p>
+<p>awk  ‘BEGIN{print  “aaa”}  {print  “anychar:”$4,”anychar2”$5}’  file1</p>
+</li>
+<li><p>在执行完对文件1（file1）的操作后，再在结尾执行END的内容，即输出aaa</p>
+<p>awk  ‘{print  “anychar:”$4,”anychar2”$5}  END{print  “aaa”}’  file1</p>
+</li>
+</ul>
+<h3 id="3-2分隔符"><a href="#3-2分隔符" class="headerlink" title="3.2分隔符"></a><a href="http://www.zsythink.net/archives/1357" target="_blank" rel="noopener">3.2分隔符</a></h3><h4 id="3-2-1输入分割符"><a href="#3-2-1输入分割符" class="headerlink" title="3.2.1输入分割符"></a>3.2.1输入分割符</h4><p>文本输入的时候，默认是以空格作为分割符号的，但是我们可以手工指定在文本中的一行，该以什么符号作为区分一列的分割符</p>
+<p> awk  -F#  ‘{print  $4,$5}’  file1            通过-F参数，来指定#作为输入分割符</p>
+<p> awk  -v  FS=’#’  ‘{print  $4,$5}’  file1    通过-v参数，来修改系统内置的输入分割符变量，效果同上</p>
+<h4 id="3-2-2输出分割符"><a href="#3-2-2输出分割符" class="headerlink" title="3.2.2输出分割符"></a>3.2.2输出分割符</h4><p>文本输出的时候，默认也是以空格作为分割符号的，但是我们可以指定其他的符号来连接不同的列</p>
+<p>awk  -v  OFS=’++++’  ‘{print  $4,$5}’  file1    通过-v参数，来修改系统内置的输出分割符变量</p>
+<p>注：输出分割时，用“，”来区分。如果是想把两列连在一起，可以写成以下形式</p>
+<p>awk   ‘{print  $4$5}’  file1</p>
+<h3 id="3-3awk变量"><a href="#3-3awk变量" class="headerlink" title="3.3awk变量"></a>3.3awk变量</h3><h4 id="3-3-1内置变量"><a href="#3-3-1内置变量" class="headerlink" title="3.3.1内置变量"></a>3.3.1内置变量</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">名称</th>
+<th style="text-align:center">代码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">输入分割符</td>
+<td style="text-align:center">FS</td>
+</tr>
+<tr>
+<td style="text-align:center">输出分隔符</td>
+<td style="text-align:center">OFS</td>
+</tr>
+<tr>
+<td style="text-align:center">输入记录分隔符</td>
+<td style="text-align:center">RS</td>
+</tr>
+<tr>
+<td style="text-align:center">输出记录分割符</td>
+<td style="text-align:center">ORS</td>
+</tr>
+<tr>
+<td style="text-align:center">当前行被分割成了几列</td>
+<td style="text-align:center">NF</td>
+</tr>
+<tr>
+<td style="text-align:center">行号</td>
+<td style="text-align:center">NR</td>
+</tr>
+<tr>
+<td style="text-align:center">各文件分别记录行号</td>
+<td style="text-align:center">FNR</td>
+</tr>
+<tr>
+<td style="text-align:center">当前文件名</td>
+<td style="text-align:center">FILENAME</td>
+</tr>
+<tr>
+<td style="text-align:center">命令行参数的个数</td>
+<td style="text-align:center">ARGC</td>
+</tr>
+<tr>
+<td style="text-align:center">保存的是命令行所给的各参数</td>
+<td style="text-align:center">ARGV</td>
+</tr>
+</tbody>
+</table>
+<p>awk   ‘{print  NR,NF}’  file1         表示输出文件1中的行号及该行的列数</p>
+<p>FS和OFS都是以每行各个字符间隔为单位</p>
+<p>RS和ORS是来判断以什么条件来作为换行，默认情况下，系统认为是回车即换行</p>
+<h4 id="3-3-2自定义变量"><a href="#3-3-2自定义变量" class="headerlink" title="3.3.2自定义变量"></a>3.3.2自定义变量</h4><p>awk  -v  变量名称=”变量值”</p>
+<p>eg： awk  -v  mychar=”hahaha”   ‘BEGIN｛print  mychar｝’</p>
+<p>or： awk  -v   ‘BEGIN｛mychar=”hahaha” ; print  mychar｝’</p>
+<h3 id="3-4格式化"><a href="#3-4格式化" class="headerlink" title="3.4格式化"></a><a href="http://www.zsythink.net/archives/1421" target="_blank" rel="noopener">3.4格式化</a></h3><p><img src="/2019/08/11/grep-正则表达式-awk/1.png" alt="1551853553486"></p>
+<h3 id="3-5模式"><a href="#3-5模式" class="headerlink" title="3.5模式"></a><a href="http://www.zsythink.net/archives/1426" target="_blank" rel="noopener">3.5模式</a></h3><p><img src="/2019/08/11/grep-正则表达式-awk/2.png" alt="1551853672703"></p>
+<p>使用正则表达式</p>
+<p>awk  ‘/正则表达式/ {print $0}’  file1</p>
+<p><img src="/2019/08/11/grep-正则表达式-awk/3.png" alt="1551853884184"></p>
+<p><img src="/2019/08/11/grep-正则表达式-awk/4.png" alt="1551854001928"></p>
+<h3 id="3-6动作"><a href="#3-6动作" class="headerlink" title="3.6动作"></a><a href="http://www.zsythink.net/archives/2046" target="_blank" rel="noopener">3.6动作</a></h3><p><img src="/2019/08/11/grep-正则表达式-awk/5.png" alt="1551854206133"></p>
+<p><img src="/2019/08/11/grep-正则表达式-awk/6.png" alt="1551854262131"></p>
+<hr>
+<h2 id="4-sed"><a href="#4-sed" class="headerlink" title="4.sed"></a>4.sed</h2><blockquote>
+<p>awk的基本语法结构</p>
+<p>awk  [options]  ‘动作’</p>
+</blockquote>
+<h3 id="4-1新增与删除"><a href="#4-1新增与删除" class="headerlink" title="4.1新增与删除"></a>4.1新增与删除</h3><p>sed  ‘sed  2,5d’             其中d表示删除，意味删除2到第5行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">[root@vultr ~]<span class="comment"># nl /etc/passwd</span></span><br><span class="line">     1	root:x:0:0:root:/root:/bin/bash</span><br><span class="line">     2	bin:x:1:1:bin:/bin:/sbin/nologin</span><br><span class="line">     3	daemon:x:2:2:daemon:/sbin:/sbin/nologin</span><br><span class="line">     4	adm:x:3:4:adm:/var/adm:/sbin/nologin</span><br><span class="line">     5	lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin</span><br><span class="line">     6	sync:x:5:0:sync:/sbin:/bin/sync</span><br><span class="line">     7	shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown</span><br><span class="line">     8	halt:x:7:0:halt:/sbin:/sbin/halt</span><br><span class="line">     9	mail:x:8:12:mail:/var/spool/mail:/sbin/nologin</span><br><span class="line">    10	operator:x:11:0:operator:/root:/sbin/nologin</span><br><span class="line">    11	games:x:12:100:games:/usr/games:/sbin/nologin</span><br><span class="line">    12	ftp:x:14:50:FTP User:/var/ftp:/sbin/nologin</span><br><span class="line">    13	nobody:x:99:99:Nobody:/:/sbin/nologin</span><br><span class="line">    14	systemd-network:x:192:192:systemd Network Management:/:/sbin/nologin</span><br><span class="line">    15	dbus:x:81:81:System message bus:/:/sbin/nologin</span><br><span class="line">    16	polkitd:x:999:998:User <span class="keyword">for</span> polkitd:/:/sbin/nologin</span><br><span class="line">    17	ntp:x:38:38::/etc/ntp:/sbin/nologin</span><br><span class="line">    18	sshd:x:74:74:Privilege-separated SSH:/var/empty/sshd:/sbin/nologin</span><br><span class="line">    19	postfix:x:89:89::/var/spool/postfix:/sbin/nologin</span><br><span class="line">    20	chrony:x:998:996::/var/lib/chrony:/sbin/nologin</span><br><span class="line">    21	tcpdump:x:72:72::/:/sbin/nologin</span><br><span class="line">[root@vultr ~]<span class="comment"># </span></span><br><span class="line">[root@vultr ~]<span class="comment"># nl /etc/passwd | sed '2,20d'</span></span><br><span class="line">     1	root:x:0:0:root:/root:/bin/bash</span><br><span class="line">    21	tcpdump:x:72:72::/:/sbin/nologin</span><br></pre></td></tr></table></figure>
+<p>sed  ‘2a  字符串’，在第2行后面插入一字符串，i表示在第n行前插入字符串</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">[root@vultr ~]<span class="comment"># nl /etc/passwd | sed '2,20d' |sed '1a nihaoa'</span></span><br><span class="line">     1	root:x:0:0:root:/root:/bin/bash</span><br><span class="line">nihaoa</span><br><span class="line">    21	tcpdump:x:72:72::/:/sbin/nologin</span><br><span class="line">[root@vultr ~]<span class="comment"># </span></span><br><span class="line">[root@vultr ~]<span class="comment"># </span></span><br><span class="line">[root@vultr ~]<span class="comment"># nl /etc/passwd | sed '2,20d' |sed '1i nihaoa'</span></span><br><span class="line">nihaoa</span><br><span class="line">     1	root:x:0:0:root:/root:/bin/bash</span><br><span class="line">    21	tcpdump:x:72:72::/:/sbin/nologin</span><br><span class="line">[root@vultr ~]<span class="comment"># </span></span><br><span class="line">[root@vultr ~]<span class="comment"># </span></span><br><span class="line">[root@vultr ~]<span class="comment"># nl /etc/passwd | sed '2,20d' |sed '2i nihaoa'</span></span><br><span class="line">     1	root:x:0:0:root:/root:/bin/bash</span><br><span class="line">nihaoa</span><br><span class="line">    21	tcpdump:x:72:72::/:/sbin/nologin</span><br><span class="line">[root@vultr ~]<span class="comment"># </span></span><br><span class="line">[root@vultr ~]<span class="comment"># </span></span><br><span class="line">[root@vultr ~]<span class="comment"># nl /etc/passwd | sed '2,20d' |sed '20i nihaoa'</span></span><br><span class="line">     1	root:x:0:0:root:/root:/bin/bash</span><br><span class="line">    21	tcpdump:x:72:72::/:/sbin/nologin</span><br><span class="line">[root@vultr ~]<span class="comment">#</span></span><br></pre></td></tr></table></figure>
+<p>想要增加多行，可以先输入\，然后回车，就会跳转到下一行。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[root@vultr ~]<span class="comment"># nl /etc/passwd | sed '2,19d' |sed '2a nihaoa \&gt;zaijian'</span></span><br><span class="line">     1	root:x:0:0:root:/root:/bin/bash</span><br><span class="line">    20	chrony:x:998:996::/var/lib/chrony:/sbin/nologin</span><br><span class="line">nihaoa &gt;zaijian</span><br><span class="line">    21	tcpdump:x:72:72::/:/sbin/nologin</span><br><span class="line">[root@vultr ~]<span class="comment"># </span></span><br><span class="line">[root@vultr ~]<span class="comment"># nl /etc/passwd | sed '2,19d' |sed '2a nihaoa \</span></span><br><span class="line">&gt; zaijian<span class="string">'</span></span><br><span class="line"><span class="string">     1	root:x:0:0:root:/root:/bin/bash</span></span><br><span class="line"><span class="string">    20	chrony:x:998:996::/var/lib/chrony:/sbin/nologin</span></span><br><span class="line"><span class="string">nihaoa </span></span><br><span class="line"><span class="string">zaijian</span></span><br><span class="line"><span class="string">    21	tcpdump:x:72:72::/:/sbin/nologin</span></span><br><span class="line"><span class="string">[root@vultr ~]#</span></span><br></pre></td></tr></table></figure>
+<h3 id="4-2替代"><a href="#4-2替代" class="headerlink" title="4.2替代"></a>4.2替代</h3><p>sed  ‘2,19c  字符串’，c表示从2到19行被该字符串替代掉</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@vultr ~]<span class="comment"># nl /etc/passwd | sed '2,19c 2 to 19 no show'</span></span><br><span class="line">     1	root:x:0:0:root:/root:/bin/bash</span><br><span class="line">2 to 19 no show</span><br><span class="line">    20	chrony:x:998:996::/var/lib/chrony:/sbin/nologin</span><br><span class="line">    21	tcpdump:x:72:72::/:/sbin/nologin</span><br><span class="line">[root@vultr ~]<span class="comment">#</span></span><br></pre></td></tr></table></figure>
+<p>sed  -n  ‘2,4p’，表示显示第2到第4行，-n参数需要加上</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">[root@vultr ~]<span class="comment"># nl /etc/passwd | sed '2,4p'</span></span><br><span class="line">     1	root:x:0:0:root:/root:/bin/bash</span><br><span class="line">     2	bin:x:1:1:bin:/bin:/sbin/nologin</span><br><span class="line">     2	bin:x:1:1:bin:/bin:/sbin/nologin</span><br><span class="line">     3	daemon:x:2:2:daemon:/sbin:/sbin/nologin</span><br><span class="line">     3	daemon:x:2:2:daemon:/sbin:/sbin/nologin</span><br><span class="line">     4	adm:x:3:4:adm:/var/adm:/sbin/nologin</span><br><span class="line">     4	adm:x:3:4:adm:/var/adm:/sbin/nologin</span><br><span class="line">     5	lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin</span><br><span class="line">     6	sync:x:5:0:sync:/sbin:/bin/sync</span><br><span class="line">     7	shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown</span><br><span class="line">     8	halt:x:7:0:halt:/sbin:/sbin/halt</span><br><span class="line">     9	mail:x:8:12:mail:/var/spool/mail:/sbin/nologin</span><br><span class="line">    10	operator:x:11:0:operator:/root:/sbin/nologin</span><br><span class="line">    11	games:x:12:100:games:/usr/games:/sbin/nologin</span><br><span class="line">    12	ftp:x:14:50:FTP User:/var/ftp:/sbin/nologin</span><br><span class="line">    13	nobody:x:99:99:Nobody:/:/sbin/nologin</span><br><span class="line">    14	systemd-network:x:192:192:systemd Network Management:/:/sbin/nologin</span><br><span class="line">    15	dbus:x:81:81:System message bus:/:/sbin/nologin</span><br><span class="line">    16	polkitd:x:999:998:User <span class="keyword">for</span> polkitd:/:/sbin/nologin</span><br><span class="line">    17	ntp:x:38:38::/etc/ntp:/sbin/nologin</span><br><span class="line">    18	sshd:x:74:74:Privilege-separated SSH:/var/empty/sshd:/sbin/nologin</span><br><span class="line">    19	postfix:x:89:89::/var/spool/postfix:/sbin/nologin</span><br><span class="line">    20	chrony:x:998:996::/var/lib/chrony:/sbin/nologin</span><br><span class="line">    21	tcpdump:x:72:72::/:/sbin/nologin</span><br><span class="line">[root@vultr ~]<span class="comment"># </span></span><br><span class="line">[root@vultr ~]<span class="comment"># nl /etc/passwd | sed -n '2,4p'</span></span><br><span class="line">     2	bin:x:1:1:bin:/bin:/sbin/nologin</span><br><span class="line">     3	daemon:x:2:2:daemon:/sbin:/sbin/nologin</span><br><span class="line">     4	adm:x:3:4:adm:/var/adm:/sbin/nologin</span><br></pre></td></tr></table></figure>
+<p>sed  ‘s/需要被替代的字符串/替换后的字符串/g’</p>
+<p><img src="/2019/08/11/grep-正则表达式-awk/7.png" alt="1552289061967"></p>
+<h3 id="4-3直接在文本中做修改操作"><a href="#4-3直接在文本中做修改操作" class="headerlink" title="4.3直接在文本中做修改操作"></a>4.3直接在文本中做修改操作</h3><p><img src="/2019/08/11/grep-正则表达式-awk/8.png" alt="1552289476341"></p>
+
+      
+
+      
+
+          
+        
+          
+        </div>
+
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dilidonglong.github.io/2019/08/11/grep-正则表达式-awk/" data-id="cjz70lit5001auoquh90onlhd" class="article-share-link">分享</a>
+      
+    </footer>
+
+  
+
+  
+
+  
+
+</article>
+
+
+
+      
+        <article id="post-grep-正则表达式-awk-sed" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2019/08/11/grep-正则表达式-awk-sed/">grep/正则表达式/awk/sed</a>
+    </h2>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/08/11/grep-正则表达式-awk-sed/" class="article-date">
+  <time datetime="2019-08-11T13:30:15.000Z" itemprop="datePublished">2019-08-11</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/linux/">linux</a>
+  </div>
+
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+      
+
+      
+        <p>Linux三剑客</p>
+<p>grep适合单纯的查找或是匹配文本</p>
+<p>sed适合编辑我们查找到的文本</p>
+<p>awk对于查找到的文本，可以进行格式化处理，即输出成我们想要看到的样子</p>
+<p>正则表达式是公式。我们可以在三剑客中按（正则表达式）条件查找到我们需要的东西</p>
+<h2 id="1-grep"><a href="#1-grep" class="headerlink" title="1.grep"></a>1.<a href="http://www.zsythink.net/archives/1733" target="_blank" rel="noopener">grep</a></h2><p>grep（global search regular expression and print out the line）</p>
+<ul>
+<li>grep  “需要搜索的字符”</li>
+<li>grep  -i  “需要搜索的字符”               不区分大小写</li>
+<li>grep  -n  “需要搜索的字符”              在行首显示字符所在行号</li>
+<li>grep  –color=auto  “需要搜索的字符”           字符用颜色显示</li>
+<li>grep  –color  “需要搜索的字符”           字符用颜色显示</li>
+<li>grep  -c  “需要搜索的字符”            显示字符一共所在多少行</li>
+<li>grep  -o  “需要搜索的字符”           显示字符，在单独的一行输出</li>
+<li>grep  -Bx  “需要搜索的字符”           显示字符所在的行及其前x行</li>
+<li>grep  -Ax  “需要搜索的字符”           显示字符所在的行及其后x行</li>
+<li>grep  -Cx  “需要搜索的字符”           显示字符所在的行及其前后x行</li>
+<li>grep  -w  “需要搜索的字符”          精确显示字符所在的行，比如字符是abc，就不会显示abcd所在行</li>
+<li>grep  -v  “需要搜索的字符”           显示不包含该字符所在的行</li>
+<li>grep  -e  “需要搜索的字符”  -e  “需要搜索的字符2”            显示多个目标字符所在行</li>
+</ul>
+<hr>
+<h2 id="2-正则表达式"><a href="#2-正则表达式" class="headerlink" title="2.正则表达式"></a>2.正则表达式</h2><h3 id="2-1基本正则表达式"><a href="#2-1基本正则表达式" class="headerlink" title="2.1基本正则表达式"></a>2.1基本正则表达式</h3><p>grep  “^hello”             打印出以hello开头的行</p>
+<p>grep  “hello$”             打印出以hello结尾的行</p>
+<p>grep  “^hello$”             打印出只有hello单词的行</p>
+<p>grep  “^$”                    打印出空行，该行中有空格也不能算是一个空行</p>
+<p>grep  “\ &lt; hello”          打印出以hello作为一个单词词首的一行</p>
+<p>grep  “hello\ &gt;”          打印出以hello作为一个单词词尾的一行</p>
+<p>grep  “\ &lt; hello\ &gt;”          打印出以hello作为一个单词的一行</p>
+<p>同时可以使用\ b来表示锚定词首或词尾，即来替代\ &gt;和\ &lt;</p>
+<p>使用\ B可以表示词首或词尾不是某个单词</p>
+<hr>
+<h4 id="连续次数的匹配"><a href="#连续次数的匹配" class="headerlink" title="连续次数的匹配"></a><a href="http://www.zsythink.net/archives/1893" target="_blank" rel="noopener">连续次数的匹配</a></h4><p>grep  “a\ {3\ }”           打印出单词中有3个连续a的一行</p>
+<p>grep  “\ &lt; a\ {3\ } \ &gt;”           打印出单词中<strong>只有</strong>3个连续a的一行（以连续3个a作为一个单词）</p>
+<p>grep  “a\ {2,4\ } “           打印出单词中至少有连续2个a或最多连续4个a的一行</p>
+<p>grep  “a\ { ,4\ } “           打印出单词中最多连续4个a的一行</p>
+<p>grep  “a\ {2,\ } “           打印出单词中至少连续2个a的一行</p>
+<p>grep  “a*”                   打印出单词中有n个a的一行</p>
+<p>grep  “a.*”                   打印出单词中有a且a后面接上任意个数目及字符的行</p>
+<p>grep  “a\ ?”                  打印出单词中能匹配到0个或1个a的行（其实有2个以上的a也能匹配到，因为2个以上的a包含0个或1个a）</p>
+<p>grep  “a\ +”                  打印出单词中能匹配到至少1个a的行</p>
+<hr>
+<h4 id="常用符号"><a href="#常用符号" class="headerlink" title="常用符号"></a><a href="http://www.zsythink.net/archives/1921" target="_blank" rel="noopener">常用符号</a></h4><p>grep  “a…”           打印出单词中能匹配到a后面接上3个任意字符的行</p>
+<p>grep  “a[[:alpha:]]\ { 3\ }”            打印出单词中能匹配到a后面接上了3个任意大小写字母的行</p>
+<p>[[:alpha:]]  表示任意大小写字母<br>[[:lower:]]  表示任意小写字母<br>[[:upper:]]  表示任意大写字母<br>[[:digit:]]  表示0到9之间的任意单个数字（包括0和9）<br>[[:alnum:]]  表示任意数字或字母<br>[[:space:]]  表示任意空白字符，包括”空格”、”tab键”等。<br>[[:punct:]]  表示任意标点符号</p>
+<p>[0-9]与[[:digit:]]等效<br>[a-z]与[[:lower:]]等效<br>[A-Z]与[[:upper:]]等效<br>[a-zA-Z]与[[:alpha:]]等效<br>[a-zA-Z0-9]与[[:alnum:]]等效</p>
+<p>grep  “a[ ^[:alpha:]]\ { 3\ }”       打印出单词中能匹配到a后面接上了3个不是大小写字母的行</p>
+<p>[^ 0-9]与[ ^[:digit:]]等效<br>[ ^ a-z]与[ ^[:lower:]]等效<br>[ ^ A-Z]与[ ^[:upper:]]等效<br>[ ^ a-zA-Z]与[ ^[:alpha:]]等效<br>[ ^ a-zA-Z0-9]与[ ^[:alnum:]]等效</p>
+<p>grep  “a[efg]”       打印出单词中能匹配到a后面接上了e或f或g的行</p>
+<p>grep  “a[ ^efg]”       打印出单词中能匹配到a后面接上不是e或f或g的行</p>
+<p>同时还有简短格式，但是并非所有正则表达式解析器都可以识别。使用的时候可以尝试加上-P参数<br>\d 表示任意单个0到9的数字<br>\D 表示任意单个非数字字符<br>\t 表示匹配单个横向制表符（相当于一个tab键）<br>\s表示匹配单个空白字符，包括”空格”，”tab制表符”等<br>\S表示匹配单个非空白字符</p>
+<hr>
+<h4 id="分组及向后引用"><a href="#分组及向后引用" class="headerlink" title="分组及向后引用"></a><a href="http://www.zsythink.net/archives/1952" target="_blank" rel="noopener">分组及向后引用</a></h4><p>grep  “\ (hello\ ) \ {2\ }”                 以hello为一个组（第一个分组），打印出单词中能匹配到2次hello的行</p>
+<p>grep  “\ (hello\ ) word \1”             以hello为一个组，打印出有hello word hello的行。其中\1表示第一个分组</p>
+<hr>
+<h4 id="转义符"><a href="#转义符" class="headerlink" title="转义符"></a><a href="http://www.zsythink.net/archives/1977" target="_blank" rel="noopener">转义符</a></h4><p>grep  “a\ .\ .”                     打印出单词中能匹配到a..的行</p>
+<p>grep  “a\ <em>\ </em>“                     打印出单词中能匹配到a**的行</p>
+<p>grep  ‘a\ \ \ \ ‘                     打印出单词中能匹配到a\ \的行，注意此时使用单引号</p>
+<hr>
+<h3 id="2-2扩展正则表达式"><a href="#2-2扩展正则表达式" class="headerlink" title="2.2扩展正则表达式"></a>2.2<a href="http://www.zsythink.net/archives/1999" target="_blank" rel="noopener">扩展正则表达式</a></h3><p>使用扩展正则表达式时，要加上-E参数</p>
+<p>在扩展正则表达式中，有|这个符号，按住“shift键”和“\键”就可以打出</p>
+<p>grep  -E  “(com|net)$”     打印出以com或net结尾的行</p>
+<p>在基本正则表达式中需要加\，但是扩展中不需要的如下：</p>
+<p>?  表示匹配其前面的字符0或1次</p>
+<p>+  表示匹配其前面的字符至少1次，或者连续多次，连续次数上不封顶。</p>
+<p>{n} 表示前面的字符连续出现n次，将会被匹配到。</p>
+<p>{x,y} 表示之前的字符至少连续出现x次，最多连续出现y次，都能被匹配到，换句话说，只要之前的字符连续出现的次数在x与y之间，即可被匹配到。</p>
+<p>{,n} 表示之前的字符连续出现至多n次，最少0次，都会被匹配到。</p>
+<p>{n,}表示之前的字符连续出现至少n次，才会被匹配到。</p>
+<p>分组与后向引用<br>( ) 表示分组，我们可以将其中的内容当做一个整体，分组可以嵌套。<br>(ab) 表示将ab当做一个整体去处理。<br>\1 表示引用整个表达式中第1个分组中的正则匹配到的结果。<br>\2 表示引用整个表达式中第2个分组中的正则匹配到的结果。</p>
+<hr>
+<h2 id="3-awk"><a href="#3-awk" class="headerlink" title="3.awk"></a>3.awk</h2><blockquote>
+<p>awk的基本语法结构</p>
+<p>awk  [options]  ‘Pattern  {Action}’  file1,file2 </p>
+<p>如果是对命令执行awk操作而不是文件，那么可以使用命令+管道符（|）+awk</p>
+</blockquote>
+<h3 id="3-1基础入门"><a href="#3-1基础入门" class="headerlink" title="3.1基础入门"></a><a href="http://www.zsythink.net/archives/1336" target="_blank" rel="noopener">3.1基础入门</a></h3><p>df  |awk  ‘{print  $5}’     表示输出df信息的第五列</p>
+<p>df  |awk  ‘{print  $4,$5}’     表示输出df信息的第四和第五列</p>
+<ul>
+<li><p>除了输出文本或命令输出信息中的列，我们也可以自己添加信息，只需在””中添加即可</p>
+<p>awk  ‘{print  “anychar:”$4,”anychar2”$5}’  file1</p>
+</li>
+<li><p>如果写成如下格式，那么输出的就不是第五列，而是输出$5</p>
+<p>df  |awk  ‘{print  “$5”}’ </p>
+</li>
+</ul>
+<p>Pattern中文含义是模式，特殊的2种模式BEGIN和END</p>
+<ul>
+<li><p>在执行文件1（file1）前，先执行BEGIN的内容，即先把aaa输出，然后再对文件1做处理，处理方式就是后面写的动作</p>
+<p>awk  ‘BEGIN{print  “aaa”}  {print  “anychar:”$4,”anychar2”$5}’  file1</p>
+</li>
+<li><p>在执行完对文件1（file1）的操作后，再在结尾执行END的内容，即输出aaa</p>
+<p>awk  ‘{print  “anychar:”$4,”anychar2”$5}  END{print  “aaa”}’  file1</p>
+</li>
+</ul>
+<h3 id="3-2分隔符"><a href="#3-2分隔符" class="headerlink" title="3.2分隔符"></a><a href="http://www.zsythink.net/archives/1357" target="_blank" rel="noopener">3.2分隔符</a></h3><h4 id="3-2-1输入分割符"><a href="#3-2-1输入分割符" class="headerlink" title="3.2.1输入分割符"></a>3.2.1输入分割符</h4><p>文本输入的时候，默认是以空格作为分割符号的，但是我们可以手工指定在文本中的一行，该以什么符号作为区分一列的分割符</p>
+<p> awk  -F#  ‘{print  $4,$5}’  file1            通过-F参数，来指定#作为输入分割符</p>
+<p> awk  -v  FS=’#’  ‘{print  $4,$5}’  file1    通过-v参数，来修改系统内置的输入分割符变量，效果同上</p>
+<h4 id="3-2-2输出分割符"><a href="#3-2-2输出分割符" class="headerlink" title="3.2.2输出分割符"></a>3.2.2输出分割符</h4><p>文本输出的时候，默认也是以空格作为分割符号的，但是我们可以指定其他的符号来连接不同的列</p>
+<p>awk  -v  OFS=’++++’  ‘{print  $4,$5}’  file1    通过-v参数，来修改系统内置的输出分割符变量</p>
+<p>注：输出分割时，用“，”来区分。如果是想把两列连在一起，可以写成以下形式</p>
+<p>awk   ‘{print  $4$5}’  file1</p>
+<h3 id="3-3awk变量"><a href="#3-3awk变量" class="headerlink" title="3.3awk变量"></a>3.3awk变量</h3><h4 id="3-3-1内置变量"><a href="#3-3-1内置变量" class="headerlink" title="3.3.1内置变量"></a>3.3.1内置变量</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">名称</th>
+<th style="text-align:center">代码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">输入分割符</td>
+<td style="text-align:center">FS</td>
+</tr>
+<tr>
+<td style="text-align:center">输出分隔符</td>
+<td style="text-align:center">OFS</td>
+</tr>
+<tr>
+<td style="text-align:center">输入记录分隔符</td>
+<td style="text-align:center">RS</td>
+</tr>
+<tr>
+<td style="text-align:center">输出记录分割符</td>
+<td style="text-align:center">ORS</td>
+</tr>
+<tr>
+<td style="text-align:center">当前行被分割成了几列</td>
+<td style="text-align:center">NF</td>
+</tr>
+<tr>
+<td style="text-align:center">行号</td>
+<td style="text-align:center">NR</td>
+</tr>
+<tr>
+<td style="text-align:center">各文件分别记录行号</td>
+<td style="text-align:center">FNR</td>
+</tr>
+<tr>
+<td style="text-align:center">当前文件名</td>
+<td style="text-align:center">FILENAME</td>
+</tr>
+<tr>
+<td style="text-align:center">命令行参数的个数</td>
+<td style="text-align:center">ARGC</td>
+</tr>
+<tr>
+<td style="text-align:center">保存的是命令行所给的各参数</td>
+<td style="text-align:center">ARGV</td>
+</tr>
+</tbody>
+</table>
+<p>awk   ‘{print  NR,NF}’  file1         表示输出文件1中的行号及该行的列数</p>
+<p>FS和OFS都是以每行各个字符间隔为单位</p>
+<p>RS和ORS是来判断以什么条件来作为换行，默认情况下，系统认为是回车即换行</p>
+<h4 id="3-3-2自定义变量"><a href="#3-3-2自定义变量" class="headerlink" title="3.3.2自定义变量"></a>3.3.2自定义变量</h4><p>awk  -v  变量名称=”变量值”</p>
+<p>eg： awk  -v  mychar=”hahaha”   ‘BEGIN｛print  mychar｝’</p>
+<p>or： awk  -v   ‘BEGIN｛mychar=”hahaha” ; print  mychar｝’</p>
+<h3 id="3-4格式化"><a href="#3-4格式化" class="headerlink" title="3.4格式化"></a><a href="http://www.zsythink.net/archives/1421" target="_blank" rel="noopener">3.4格式化</a></h3><p><img src="/2019/08/11/grep-正则表达式-awk-sed/Users\优积谷\AppData\Roaming\Typora\typora-user-images\1551853553486.png" alt="1551853553486"></p>
+<p><img src="/2019/08/11/grep-正则表达式-awk-sed/Users\优积谷\AppData\Roaming\Typora\typora-user-images\1551853567638.png" alt="1551853567638"></p>
+<p><img src="/2019/08/11/grep-正则表达式-awk-sed/Users\优积谷\AppData\Roaming\Typora\typora-user-images\1551853600287.png" alt="1551853600287"></p>
+<h3 id="3-5模式"><a href="#3-5模式" class="headerlink" title="3.5模式"></a><a href="http://www.zsythink.net/archives/1426" target="_blank" rel="noopener">3.5模式</a></h3><p><img src="/2019/08/11/grep-正则表达式-awk-sed/Users\优积谷\AppData\Roaming\Typora\typora-user-images\1551853672703.png" alt="1551853672703"></p>
+<p><img src="/2019/08/11/grep-正则表达式-awk-sed/Users\优积谷\AppData\Roaming\Typora\typora-user-images\1551853685374.png" alt="1551853685374"></p>
+<p>使用正则表达式</p>
+<p>awk  ‘/正则表达式/ {print $0}’  file1</p>
+<p><img src="/2019/08/11/grep-正则表达式-awk-sed/Users\优积谷\AppData\Roaming\Typora\typora-user-images\1551853884184.png" alt="1551853884184"></p>
+<p><img src="/2019/08/11/grep-正则表达式-awk-sed/Users\优积谷\AppData\Roaming\Typora\typora-user-images\1551854001928.png" alt="1551854001928"></p>
+<p><img src="/2019/08/11/grep-正则表达式-awk-sed/Users\优积谷\AppData\Roaming\Typora\typora-user-images\1551854046085.png" alt="1551854046085"></p>
+<h3 id="3-6动作"><a href="#3-6动作" class="headerlink" title="3.6动作"></a><a href="http://www.zsythink.net/archives/2046" target="_blank" rel="noopener">3.6动作</a></h3><p><img src="/2019/08/11/grep-正则表达式-awk-sed/Users\优积谷\AppData\Roaming\Typora\typora-user-images\1551854206133.png" alt="1551854206133"></p>
+<p><img src="/2019/08/11/grep-正则表达式-awk-sed/Users\优积谷\AppData\Roaming\Typora\typora-user-images\1551854262131.png" alt="1551854262131"></p>
+<hr>
+<h2 id="4-sed"><a href="#4-sed" class="headerlink" title="4.sed"></a>4.sed</h2><blockquote>
+<p>awk的基本语法结构</p>
+<p>awk  [options]  ‘动作’</p>
+</blockquote>
+<h3 id="4-1新增与删除"><a href="#4-1新增与删除" class="headerlink" title="4.1新增与删除"></a>4.1新增与删除</h3><p>sed  ‘sed  2,5d’             其中d表示删除，意味删除2到第5行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">[root@vultr ~]<span class="comment"># nl /etc/passwd</span></span><br><span class="line">     1	root:x:0:0:root:/root:/bin/bash</span><br><span class="line">     2	bin:x:1:1:bin:/bin:/sbin/nologin</span><br><span class="line">     3	daemon:x:2:2:daemon:/sbin:/sbin/nologin</span><br><span class="line">     4	adm:x:3:4:adm:/var/adm:/sbin/nologin</span><br><span class="line">     5	lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin</span><br><span class="line">     6	sync:x:5:0:sync:/sbin:/bin/sync</span><br><span class="line">     7	shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown</span><br><span class="line">     8	halt:x:7:0:halt:/sbin:/sbin/halt</span><br><span class="line">     9	mail:x:8:12:mail:/var/spool/mail:/sbin/nologin</span><br><span class="line">    10	operator:x:11:0:operator:/root:/sbin/nologin</span><br><span class="line">    11	games:x:12:100:games:/usr/games:/sbin/nologin</span><br><span class="line">    12	ftp:x:14:50:FTP User:/var/ftp:/sbin/nologin</span><br><span class="line">    13	nobody:x:99:99:Nobody:/:/sbin/nologin</span><br><span class="line">    14	systemd-network:x:192:192:systemd Network Management:/:/sbin/nologin</span><br><span class="line">    15	dbus:x:81:81:System message bus:/:/sbin/nologin</span><br><span class="line">    16	polkitd:x:999:998:User <span class="keyword">for</span> polkitd:/:/sbin/nologin</span><br><span class="line">    17	ntp:x:38:38::/etc/ntp:/sbin/nologin</span><br><span class="line">    18	sshd:x:74:74:Privilege-separated SSH:/var/empty/sshd:/sbin/nologin</span><br><span class="line">    19	postfix:x:89:89::/var/spool/postfix:/sbin/nologin</span><br><span class="line">    20	chrony:x:998:996::/var/lib/chrony:/sbin/nologin</span><br><span class="line">    21	tcpdump:x:72:72::/:/sbin/nologin</span><br><span class="line">[root@vultr ~]<span class="comment"># </span></span><br><span class="line">[root@vultr ~]<span class="comment"># nl /etc/passwd | sed '2,20d'</span></span><br><span class="line">     1	root:x:0:0:root:/root:/bin/bash</span><br><span class="line">    21	tcpdump:x:72:72::/:/sbin/nologin</span><br></pre></td></tr></table></figure>
+<p>sed  ‘2a  字符串’，在第2行后面插入一字符串，i表示在第n行前插入字符串</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">[root@vultr ~]<span class="comment"># nl /etc/passwd | sed '2,20d' |sed '1a nihaoa'</span></span><br><span class="line">     1	root:x:0:0:root:/root:/bin/bash</span><br><span class="line">nihaoa</span><br><span class="line">    21	tcpdump:x:72:72::/:/sbin/nologin</span><br><span class="line">[root@vultr ~]<span class="comment"># </span></span><br><span class="line">[root@vultr ~]<span class="comment"># </span></span><br><span class="line">[root@vultr ~]<span class="comment"># nl /etc/passwd | sed '2,20d' |sed '1i nihaoa'</span></span><br><span class="line">nihaoa</span><br><span class="line">     1	root:x:0:0:root:/root:/bin/bash</span><br><span class="line">    21	tcpdump:x:72:72::/:/sbin/nologin</span><br><span class="line">[root@vultr ~]<span class="comment"># </span></span><br><span class="line">[root@vultr ~]<span class="comment"># </span></span><br><span class="line">[root@vultr ~]<span class="comment"># nl /etc/passwd | sed '2,20d' |sed '2i nihaoa'</span></span><br><span class="line">     1	root:x:0:0:root:/root:/bin/bash</span><br><span class="line">nihaoa</span><br><span class="line">    21	tcpdump:x:72:72::/:/sbin/nologin</span><br><span class="line">[root@vultr ~]<span class="comment"># </span></span><br><span class="line">[root@vultr ~]<span class="comment"># </span></span><br><span class="line">[root@vultr ~]<span class="comment"># nl /etc/passwd | sed '2,20d' |sed '20i nihaoa'</span></span><br><span class="line">     1	root:x:0:0:root:/root:/bin/bash</span><br><span class="line">    21	tcpdump:x:72:72::/:/sbin/nologin</span><br><span class="line">[root@vultr ~]<span class="comment">#</span></span><br></pre></td></tr></table></figure>
+<p>想要增加多行，可以先输入\，然后回车，就会跳转到下一行。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[root@vultr ~]<span class="comment"># nl /etc/passwd | sed '2,19d' |sed '2a nihaoa \&gt;zaijian'</span></span><br><span class="line">     1	root:x:0:0:root:/root:/bin/bash</span><br><span class="line">    20	chrony:x:998:996::/var/lib/chrony:/sbin/nologin</span><br><span class="line">nihaoa &gt;zaijian</span><br><span class="line">    21	tcpdump:x:72:72::/:/sbin/nologin</span><br><span class="line">[root@vultr ~]<span class="comment"># </span></span><br><span class="line">[root@vultr ~]<span class="comment"># nl /etc/passwd | sed '2,19d' |sed '2a nihaoa \</span></span><br><span class="line">&gt; zaijian<span class="string">'</span></span><br><span class="line"><span class="string">     1	root:x:0:0:root:/root:/bin/bash</span></span><br><span class="line"><span class="string">    20	chrony:x:998:996::/var/lib/chrony:/sbin/nologin</span></span><br><span class="line"><span class="string">nihaoa </span></span><br><span class="line"><span class="string">zaijian</span></span><br><span class="line"><span class="string">    21	tcpdump:x:72:72::/:/sbin/nologin</span></span><br><span class="line"><span class="string">[root@vultr ~]#</span></span><br></pre></td></tr></table></figure>
+<h3 id="4-2替代"><a href="#4-2替代" class="headerlink" title="4.2替代"></a>4.2替代</h3><p>sed  ‘2,19c  字符串’，c表示从2到19行被该字符串替代掉</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@vultr ~]<span class="comment"># nl /etc/passwd | sed '2,19c 2 to 19 no show'</span></span><br><span class="line">     1	root:x:0:0:root:/root:/bin/bash</span><br><span class="line">2 to 19 no show</span><br><span class="line">    20	chrony:x:998:996::/var/lib/chrony:/sbin/nologin</span><br><span class="line">    21	tcpdump:x:72:72::/:/sbin/nologin</span><br><span class="line">[root@vultr ~]<span class="comment">#</span></span><br></pre></td></tr></table></figure>
+<p>sed  -n  ‘2,4p’，表示显示第2到第4行，-n参数需要加上</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">[root@vultr ~]<span class="comment"># nl /etc/passwd | sed '2,4p'</span></span><br><span class="line">     1	root:x:0:0:root:/root:/bin/bash</span><br><span class="line">     2	bin:x:1:1:bin:/bin:/sbin/nologin</span><br><span class="line">     2	bin:x:1:1:bin:/bin:/sbin/nologin</span><br><span class="line">     3	daemon:x:2:2:daemon:/sbin:/sbin/nologin</span><br><span class="line">     3	daemon:x:2:2:daemon:/sbin:/sbin/nologin</span><br><span class="line">     4	adm:x:3:4:adm:/var/adm:/sbin/nologin</span><br><span class="line">     4	adm:x:3:4:adm:/var/adm:/sbin/nologin</span><br><span class="line">     5	lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin</span><br><span class="line">     6	sync:x:5:0:sync:/sbin:/bin/sync</span><br><span class="line">     7	shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown</span><br><span class="line">     8	halt:x:7:0:halt:/sbin:/sbin/halt</span><br><span class="line">     9	mail:x:8:12:mail:/var/spool/mail:/sbin/nologin</span><br><span class="line">    10	operator:x:11:0:operator:/root:/sbin/nologin</span><br><span class="line">    11	games:x:12:100:games:/usr/games:/sbin/nologin</span><br><span class="line">    12	ftp:x:14:50:FTP User:/var/ftp:/sbin/nologin</span><br><span class="line">    13	nobody:x:99:99:Nobody:/:/sbin/nologin</span><br><span class="line">    14	systemd-network:x:192:192:systemd Network Management:/:/sbin/nologin</span><br><span class="line">    15	dbus:x:81:81:System message bus:/:/sbin/nologin</span><br><span class="line">    16	polkitd:x:999:998:User <span class="keyword">for</span> polkitd:/:/sbin/nologin</span><br><span class="line">    17	ntp:x:38:38::/etc/ntp:/sbin/nologin</span><br><span class="line">    18	sshd:x:74:74:Privilege-separated SSH:/var/empty/sshd:/sbin/nologin</span><br><span class="line">    19	postfix:x:89:89::/var/spool/postfix:/sbin/nologin</span><br><span class="line">    20	chrony:x:998:996::/var/lib/chrony:/sbin/nologin</span><br><span class="line">    21	tcpdump:x:72:72::/:/sbin/nologin</span><br><span class="line">[root@vultr ~]<span class="comment"># </span></span><br><span class="line">[root@vultr ~]<span class="comment"># nl /etc/passwd | sed -n '2,4p'</span></span><br><span class="line">     2	bin:x:1:1:bin:/bin:/sbin/nologin</span><br><span class="line">     3	daemon:x:2:2:daemon:/sbin:/sbin/nologin</span><br><span class="line">     4	adm:x:3:4:adm:/var/adm:/sbin/nologin</span><br></pre></td></tr></table></figure>
+<p>sed  ‘s/需要被替代的字符串/替换后的字符串/g’</p>
+<p><img src="/2019/08/11/grep-正则表达式-awk-sed/Users\优积谷\AppData\Roaming\Typora\typora-user-images\1552289061967.png" alt="1552289061967"></p>
+<h3 id="4-3直接在文本中做修改操作"><a href="#4-3直接在文本中做修改操作" class="headerlink" title="4.3直接在文本中做修改操作"></a>4.3直接在文本中做修改操作</h3><p><img src="/2019/08/11/grep-正则表达式-awk-sed/Users\优积谷\AppData\Roaming\Typora\typora-user-images\1552289476341.png" alt="1552289476341"></p>
+
+      
+
+      
+
+          
+        
+          
+        </div>
+
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dilidonglong.github.io/2019/08/11/grep-正则表达式-awk-sed/" data-id="cjz70lit30019uoquo39iu2nd" class="article-share-link">分享</a>
+      
+    </footer>
+
+  
+
+  
+
+  
+
+</article>
+
+
+
+      
+        <article id="post-iptables笔记" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2019/08/11/iptables笔记/">iptables笔记</a>
+    </h2>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/08/11/iptables笔记/" class="article-date">
+  <time datetime="2019-08-11T13:25:59.000Z" itemprop="datePublished">2019-08-11</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/linux/">linux</a>
+  </div>
+
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+      
+
+      
+        <h1 id="iptables笔记"><a href="#iptables笔记" class="headerlink" title="iptables笔记"></a>iptables笔记</h1><blockquote>
+<p><a href="http://www.zsythink.net/archives/category/%E8%BF%90%E7%BB%B4%E7%9B%B8%E5%85%B3/iptables/" target="_blank" rel="noopener">朱双印博客-iptables规则</a></p>
+</blockquote>
+<p>数据经过防火墙流程图</p>
+<p><img src="/2019/08/11/iptables笔记/1.png" alt="1550890197135"></p>
+<hr>
+<h2 id="1-查找规则"><a href="#1-查找规则" class="headerlink" title="1.查找规则"></a>1.查找规则</h2><blockquote>
+<ul>
+<li>iptables  -t  表名  -L</li>
+<li>iptables  -t  表名  -L  链名                    #-L显示链名下的表名规则</li>
+<li>iptables  -t  表名  -vL  链名                  #-v显示详细信息</li>
+<li>iptables  -t  表名  -nvL  链名               #-n不进行地址解析</li>
+<li>iptables  -t  表名  -xnvL  链名             #-x显示精确计数值</li>
+<li>iptables  –line  -t  表名  -xnvL  链名             #–line在规则前加上序列号</li>
+</ul>
+</blockquote>
+<h2 id="2-添加规则"><a href="#2-添加规则" class="headerlink" title="2.添加规则"></a>2.添加规则</h2><blockquote>
+<ul>
+<li>iptables  -t  表名  -A  链名  匹配条件  -j  动作</li>
+</ul>
+<p><code>iptables -t filter -A INPUT -s 192.168.1.1 -j DROP</code>   #-A插入到规则最后</p>
+<ul>
+<li>iptables  -t  表名  -I  链名  匹配条件  -j  动作</li>
+</ul>
+<p><code>iptables -t filter -I INPUT -s 192.168.1.1 -j ACCEPT</code>  #-I插入到规则开头</p>
+<ul>
+<li>iptables  -t  表名  -I  链名  规则序号  匹配条件  -j  动作</li>
+</ul>
+<p><code>iptables -t filter -I INPUT 5 -s 192.168.1.1 -j REJECT</code>  #在第五行规则中插入</p>
+<ul>
+<li>iptables  -t  表名  -P  链名  动作 </li>
+</ul>
+<p><code>iptables -t filter -P INPUT REJECT</code>           #设置INPUT链中filter表的默认规则</p>
+</blockquote>
+<h2 id="3-删除规则"><a href="#3-删除规则" class="headerlink" title="3.删除规则"></a>3.删除规则</h2><blockquote>
+<ul>
+<li>按规则序号删除<br>iptables  -t  表名  -D  链名  规则序号 </li>
+</ul>
+<p><code>iptables -t filter -D INPUT 5</code>     </p>
+<ul>
+<li>按匹配条件与动作删除</li>
+</ul>
+<p>iptables  -t  表名  -D  链名  匹配条件  -j  匹配动作 </p>
+<p><code>iptables -t filter -D INPUT -s 192.168.1.1 -j ACCEPT</code>     </p>
+<ul>
+<li>删除某个链下指定表的所有规则</li>
+</ul>
+<p>iptables  -t  表名  -F  链名  </p>
+<p><code>iptables -t filter -F INPUT</code>     </p>
+<ul>
+<li>删除所有链下指定表的所有规则</li>
+</ul>
+<p>iptables  -t  表名  -F </p>
+<p><code>iptables -t filter -F</code>   </p>
+</blockquote>
+<h2 id="4-修改规则"><a href="#4-修改规则" class="headerlink" title="4.修改规则"></a>4.修改规则</h2><p>如果要修改规则，必须要指明原规则中的匹配条件（或者理解为只能修改动作）</p>
+<blockquote>
+<p>iptables  -t  表名  -R  链名  规则序号  规则原始匹配条件  -j  动作</p>
+<p><code>iptables -t filter -R INPUT 3 -S 192.168.1.1 -J ACCEPT</code></p>
+<p>另外一种方式是，先删除规则。再在原来的位置添加规则   </p>
+</blockquote>
+<h2 id="5-保存规则"><a href="#5-保存规则" class="headerlink" title="5.保存规则"></a>5.保存规则</h2><p><img src="/2019/08/11/iptables笔记/Users\优积谷\AppData\Roaming\Typora\typora-user-images\1550893264062.png" alt="1550893264062"></p>
+<h2 id="6-匹配条件"><a href="#6-匹配条件" class="headerlink" title="6.匹配条件"></a>6.匹配条件</h2><h3 id="6-1基本匹配条件"><a href="#6-1基本匹配条件" class="headerlink" title="6.1基本匹配条件"></a>6.1基本匹配条件</h3><ul>
+<li>-s用于匹配源IP地址。可以指定多个IP地址，多个IP地址间用“，”号隔开；也可以指定IP网段</li>
+</ul>
+<p><code>iptables -t filter -I INPUT -s 192.168.1.111,192.168.1.118 -j DROP</code></p>
+<p><code>iptables -t filter -I INPUT -s 192.168.1.0/24 -j ACCEPT</code></p>
+<p><code>iptables -t filter -I INPUT ! -s 192.168.1.0/24 -j ACCEPT</code></p>
+<hr>
+<ul>
+<li>-d用于匹配目的IP地址。可以指定多个IP地址，多个IP地址间用“，”号隔开；也可以指定IP网段</li>
+</ul>
+<p><code>iptables -t filter -I OUTPUT -d 192.168.1.111,192.168.1.118 -j DROP</code></p>
+<p><code>iptables -t filter -I INPUT -d 192.168.1.0/24 -j ACCEPT</code></p>
+<p><code>iptables -t filter -I INPUT ! -d 192.168.1.0/24 -j ACCEPT</code></p>
+<hr>
+<ul>
+<li>-p用于匹配协议类型，常见的匹配类型有TCP、UDP、ICMP、ESP、AH等</li>
+</ul>
+<p><code>iptables -t filter -I INPUT -p tcp -s 192.168.1.146 -j ACCEPT</code></p>
+<p><code>iptables -t filter -I INPUT ! -p udp -s 192.168.1.146 -j ACCEPT</code></p>
+<hr>
+<ul>
+<li>-i表示从哪个网卡接口流入本机，不能用于output链和postrouting链</li>
+<li>-o表示从哪个网卡接口流出本机，不能用于prerouting链和input链</li>
+</ul>
+<h3 id="6-2扩展匹配条件-如果协议和扩展模块一致，扩展模块可省略"><a href="#6-2扩展匹配条件-如果协议和扩展模块一致，扩展模块可省略" class="headerlink" title="6.2扩展匹配条件(如果协议和扩展模块一致，扩展模块可省略)"></a>6.2扩展匹配条件(如果协议和扩展模块一致，扩展模块可省略)</h3><p>TCP扩展模块：</p>
+<ul>
+<li>-p tcp -m tcp –sport，用于匹配协议源端口，可以用冒号”:”指定一个连续的端口范围(udp类似)</li>
+<li>-p tcp -m tcp –dport，用于匹配协议目的端口，可以用冒号”:”指定一个连续的端口范围（udp类似）</li>
+</ul>
+<p><code>iptables -t filter -I OUTPUT -d 192.168.1.146 -p tcp -m tcp --sport 22 -j REJECT</code></p>
+<p><code>iptables -t filter -I INPUT -s 192.168.1.146 -p tcp -m tcp --dport 22:25 -j REJECT</code></p>
+<p><code>iptables -t filter -I INPUT -s 192.168.1.146 -p tcp -m tcp --dport :22 -j REJECT</code></p>
+<p><code>iptables -t filter -I INPUT -s 192.168.1.146 -p tcp -m tcp --dport 80: -j REJECT</code></p>
+<p><code>iptables -t filter -I OUTPUT -d 192.168.1.146 -p tcp -m tcp ! --sport 22 -j ACCEPT</code></p>
+<ul>
+<li>–tcp-flags用于匹配tcp头部中的标志位</li>
+</ul>
+<p><code>iptables -t filter -I INPUT -p tcp -m tcp --dport 22 --tcp-flags SYN,ACK,FIN,RST,URG,PSH SYN -j REJECT</code></p>
+<p><code>iptables -t filter -I OUTPUT -p tcp -m tcp --sport 22 --tcp-flags SYN,ACK,FIN,RST,URG,PSH SYN,ACK -j REJECT</code></p>
+<p><code>iptables -t filter -I INPUT -p tcp -m tcp --dport 22 --tcp-flags ALL SYN -j REJECT</code></p>
+<p><code>iptables -t filter -I OUTPUT -p tcp -m tcp --sport 22 --tcp-flags ALL SYN,ACK -j REJECT</code></p>
+<ul>
+<li>–syn,相当于使用了“–tcp-flags SYN,ACK,FIN,RST SYN”</li>
+</ul>
+<p><code>iptables -t filter -I INPUT -p tcp -m tcp --dport 22 --syn -j REJECT</code></p>
+<hr>
+<p>multiport扩展模块：</p>
+<ul>
+<li>-p tcp -m multiport –sports，用于匹配协议源端口，可以用逗号”,”指定多个离散端口</li>
+<li>-p tcp -m multiport –dports，用于匹配协议目的端口，可以用逗号”,”指定多个离散端口</li>
+</ul>
+<p><code>iptables -t filter -I OUTPUT -d 192.168.1.146 -p udp -m multiport --sports 137,138 -j REJECT</code></p>
+<p><code>iptables -t filter -I INPUT -s 192.168.1.146 -p tcp -m multiport --dports 22,80 -j REJECT</code></p>
+<p><code>iptables -t filter -I INPUT -s 192.168.1.146 -p tcp -m multiport ! --dports 22,80 -j REJECT</code></p>
+<p><code>iptables -t filter -I INPUT -s 192.168.1.146 -p tcp -m multiport --dports 80:88 -j REJECT</code></p>
+<p><code>iptables -t filter -I INPUT -s 192.168.1.146 -p tcp -m multiport --dports 22,80:88 -j REJECT</code></p>
+<hr>
+<p><a href="http://www.zsythink.net/archives/1588" target="_blank" rel="noopener">icmp扩展模块（略）</a></p>
+<p><a href="http://www.zsythink.net/archives/1597" target="_blank" rel="noopener">state扩展模块（略，但是概念重要）</a></p>
+<h2 id="7-匹配动作"><a href="#7-匹配动作" class="headerlink" title="7.匹配动作"></a>7.匹配动作</h2><ul>
+<li>动作SNAT，进行源地址转换(公网是固定IP)</li>
+</ul>
+<p><code>iptables -t nat -A POSTROUTING -s 10.1.0.0/16 -j SNAT --to-source 公网IP</code></p>
+<ul>
+<li>动作MASQUERADE，进行源地址转换（公网是动态IP）</li>
+</ul>
+<p><code>iptables -t nat -A POSTROUTING -s 10.1.0.0/16 -o eth0 -j MASQUERADE</code></p>
+<ul>
+<li>动作DNAT，进行目的地址转换</li>
+</ul>
+<p><code>iptables -t nat -I PREROUTING -d 公网IP -p tcp --dport 公网端口 -j DNAT --to-destination 私网IP:端口号</code></p>
+<p><code>iptables -t nat -I PREROUTING -d 公网IP -p tcp --dport 8080 -j DNAT --to-destination 10.1.0.1:80</code></p>
+<p><code>iptables -t nat -A POSTROUTING -s 10.1.0.0/16 -j SNAT --to-source 公网IP</code></p>
+<ul>
+<li>动作REDIRECT，进行本机端口重定向</li>
+</ul>
+<p><code>iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080</code></p>
+
+      
+
+      
+
+          
+        
+          
+        </div>
+
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dilidonglong.github.io/2019/08/11/iptables笔记/" data-id="cjz70lir10003uoqudn2vl0t9" class="article-share-link">分享</a>
+      
+    </footer>
+
+  
+
+  
+
+  
+
+</article>
+
+
+
+      
+        <article id="post-新东方赵丽托福英语词汇8000-01" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2019/07/18/新东方赵丽托福英语词汇8000-01/">新东方赵丽托福英语词汇8000-01</a>
+    </h2>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/07/18/新东方赵丽托福英语词汇8000-01/" class="article-date">
+  <time datetime="2019-07-18T14:53:40.000Z" itemprop="datePublished">2019-07-18</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/英语/">英语</a>
+  </div>
+
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+      
+
+      
+        <h1 id="新东方赵丽托福英语词汇8000-01"><a href="#新东方赵丽托福英语词汇8000-01" class="headerlink" title="新东方赵丽托福英语词汇8000-01"></a>新东方赵丽托福英语词汇8000-01</h1><p>共30词</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">compel</th>
+<th style="text-align:center">repel</th>
+<th style="text-align:center">insidious</th>
+<th style="text-align:center">assist</th>
+<th style="text-align:center">timid</th>
+<th style="text-align:center">toxic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>compulsive</strong></td>
+<td style="text-align:center"><strong>repulsive</strong></td>
+<td style="text-align:center"><strong>preside</strong></td>
+<td style="text-align:center"><strong>resist</strong></td>
+<td style="text-align:center"><strong>intimidate</strong></td>
+<td style="text-align:center"><strong>intoxicate</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>compulsion</strong></td>
+<td style="text-align:center"><strong>repulsion</strong></td>
+<td style="text-align:center"><strong>resident</strong></td>
+<td style="text-align:center"><strong>insist</strong></td>
+<td style="text-align:center"><strong>Fawn</strong></td>
+<td style="text-align:center"><strong>Pawn</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>expel</strong></td>
+<td style="text-align:center"><strong>impel</strong></td>
+<td style="text-align:center"><strong>Vigor</strong></td>
+<td style="text-align:center"><strong>persist</strong></td>
+<td style="text-align:center"><strong>Spawn</strong></td>
+<td style="text-align:center"><strong>Brawn</strong></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>propel</strong></td>
+<td style="text-align:center"><strong>dispel</strong></td>
+<td style="text-align:center"><strong>invigorate</strong></td>
+<td style="text-align:center"><strong>Lawn</strong></td>
+<td style="text-align:center"><strong>Yawn</strong></td>
+<td style="text-align:center"><strong>Dawn</strong></td>
+</tr>
+</tbody>
+</table>
+<h2 id="4-词根词缀法"><a href="#4-词根词缀法" class="headerlink" title="4.词根词缀法"></a>4.词根词缀法</h2><p>词根:(本义) body</p>
+<p>前缀:改变含义不变词性  anti(反)+body(体)-抗体</p>
+<p>后缀:改变词性,不变含义 pass       passable</p>
+<p><br></p>
+<ol>
+<li><p>词性转换库:</p>
+<p>pel表示推（verb）—pulsive（形容词）—pulsion（名词）</p>
+<p>compel （com共同+pel）</p>
+<blockquote>
+<p>verb:强迫，迫使</p>
+<p>The law can compel fathers to make regular payments for their children.<br>这项法律可强制父亲定期支付子女的费用。</p>
+</blockquote>
+<blockquote>
+<p>compulsive( adjective ):难以制止的；难控制的</p>
+<p>compulsive eating/spending/gambling<br>强迫性进食╱消费；上瘾的赌博</p>
+<p>The programme made compulsive viewing.<br>这节目引人入胜，收看起来欲罢不能。</p>
+</blockquote>
+<blockquote>
+<p>compulsion（noun）:强迫；强制</p>
+<p>compulsion(on sb) to do sth</p>
+<p>There are no compulsions on students to attend classes.<br>没有强求学生上课。</p>
+</blockquote>
+<p><br></p>
+<p>repel(re向后+pel)</p>
+<blockquote>
+<p>verb:击退；驱逐</p>
+<p>Troops repelled an attempt to infiltrate the south of the island.<br>部队挫败了对该岛南部的潜入企图。</p>
+</blockquote>
+<p><br></p>
+<p> expel (ex老大+pel)</p>
+<blockquote>
+<p>verb:把…开除（或除名）;驱逐出境;排出；喷出</p>
+<p>1.She was expelled from school at 15.<br>她 15 岁时被学校开除了。</p>
+<p>2.Foreign journalists are being expelled.<br>外国记者被驱逐出境。</p>
+</blockquote>
+<p><br></p>
+<p>impel (im内心深处+pel)</p>
+<blockquote>
+<p>verb:迫使(激励)</p>
+<p>He felt impelled to investigate further.<br>他觉得有必要作进一步调查。</p>
+</blockquote>
+<p><br></p>
+<p>propel (pro向前+pel)</p>
+<blockquote>
+<p>verb:推动；驱动；推进</p>
+<p>He succeeded in propelling the ball across the line.<br>他成功地把球带过线。</p>
+<p>Fury propelled her into action.<br>怒火驱使她行动起来。</p>
+</blockquote>
+<p><br></p>
+<p>dispel(dis分开+pel)</p>
+<blockquote>
+<p>verb:驱散，消除（尤指感觉或信仰）</p>
+<p>His speech dispelled any fears about his health.<br>他的发言消除了人们对他身体健康的担心。</p>
+</blockquote>
+</li>
+</ol>
+
+      
+
+      
+
+          
+        
+          
+        </div>
+
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dilidonglong.github.io/2019/07/18/新东方赵丽托福英语词汇8000-01/" data-id="cjz70liru000cuoquvup0vdo8" class="article-share-link">分享</a>
+      
+    </footer>
+
+  
+
+  
+
+  
+
+</article>
+
+
+
+      
         <article id="post-新东方赵丽托福英语词汇8000-00" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
@@ -254,648 +1112,7 @@
 
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/07/15/新东方赵丽托福英语词汇8000-00/" data-id="cjy4gbs290002o4quaqc4892c" class="article-share-link">分享</a>
-      
-    </footer>
-
-  
-
-  
-
-  
-
-</article>
-
-
-
-      
-        <article id="post-远程桌面访问不了" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
-
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h2 itemprop="name">
-      <a class="article-title" href="/2019/07/07/远程桌面访问不了/">远程桌面访问不了</a>
-    </h2>
-  
-
-      </header>
-    
-
-    
-      <div class="article-meta">
-        <a href="/2019/07/07/远程桌面访问不了/" class="article-date">
-  <time datetime="2019-07-07T08:08:47.000Z" itemprop="datePublished">2019-07-07</time>
-</a>
-        
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/实战/">实战</a>
-  </div>
-
-      </div>
-    
-
-    <div class="article-entry" itemprop="articleBody">
-      
-
-      
-
-      
-        <h1 id="远程桌面访问不了"><a href="#远程桌面访问不了" class="headerlink" title="远程桌面访问不了"></a>远程桌面访问不了</h1><p><strong>问题：总部PC去访问分支的服务器3389桌面，会出现不定时中断的问题</strong></p>
-<ol>
-<li><p>10.0.2.132为PC 10.16.2.200为远程桌面的服务器</p>
-</li>
-<li><p>拓扑环境</p>
-<p><img src="/2019/07/07/远程桌面访问不了/13.png" alt="1"></p>
-</li>
-</ol>
-<p>总部有三层环境，AC透明模式部署，分支二层环境，就一个网段</p>
-<ol start="3">
-<li>数据包是总部访问分支访问不了的时候抓取的数据包，要求通过数据包，分析问题原因。</li>
-</ol>
-<hr>
-<p><strong>排查思路：</strong></p>
-<ol>
-<li><p>只抓取了分支vpn上eth0口的包和总部vpn设备eth0上的包（建议是分支电脑和总部服务器都抓取，抓不了也没    办法）</p>
-</li>
-<li><p>因为是终端pc访问服务器的时候经常断开。所以先看在终端侧的数据包，也即是查看zbssleth0这个包</p>
-<blockquote>
-<ol>
-<li>打开之后，先点击<strong>Statistics</strong>，选中<strong>conversation</strong></li>
-</ol>
-<p><img src="/2019/07/07/远程桌面访问不了/1.jpg" alt="1"></p>
-<ol start="2">
-<li>出现下图界面，选中<strong>TCP</strong>，看到存在三个连接。说明应该是测试过3次。其中注意到字节数Bytes， 第二个连接有112kB，比其他连接传输的数据都多，那我们就先来看这个连接。</li>
-</ol>
-<p><img src="/2019/07/07/远程桌面访问不了/2.jpg" alt="1"></p>
-<ol start="3">
-<li>怎么看呢？右键该连接后，照下图操作</li>
-</ol>
-<p><img src="/2019/07/07/远程桌面访问不了/3.jpg" alt="1"></p>
-<ol start="4">
-<li>wireshark自动过滤该连接，显示如下界面</li>
-</ol>
-<p><img src="/2019/07/07/远程桌面访问不了/4.jpg" alt="1"></p>
-<ol start="5">
-<li>我们可以点开专家分析来看看，是否存在什么问题。点开之后，记得把<strong>Limit to Display ﬁlter</strong> 给勾上，这样才会显示在wireshark过滤后展示页面的信息。</li>
-</ol>
-<p><img src="/2019/07/07/远程桌面访问不了/5.jpg" alt="1"></p>
-<p><img src="/2019/07/07/远程桌面访问不了/6.jpg" alt="1"></p>
-<ol start="6">
-<li>由于不涉及访问卡慢的问题，所以此时我们没必要看重传等信息。重点应该关注是什么导致的连接  断开。此时，明显能看到告警信息中，存在RST包，那我们就可以看下304号包与306号包。</li>
-</ol>
-<p><img src="/2019/07/07/远程桌面访问不了/7.jpg" alt="1"></p>
-<ol start="7">
-<li>找到304号包与306包后，发现后面就再也没有数据了，说明此时连接是中断了。明明数据传的好好   的，怎么突然客户端10.0.2.132就发送一个RST包呢。此时需要注意的是，我们的数据包是在总部vpn设备上eth0口抓的，也就是说这个流量是从内部传过来的。结合着总部的拓扑情况，出现中断，  可能存在2种情况。要么是客户端自己的问题，要么就是有啥子设备替客户端发送了这个RST包。</li>
-</ol>
-<p><img src="/2019/07/07/远程桌面访问不了/8.jpg" alt="1"></p>
-<ol start="8">
-<li><p>一个直接的办法就是在客户端上抓包。看下客户端有没有发出这个RST包。如果没有，结合着网络拓  扑，那基本就可以确定是AC发了这个RST包了（第一个，客户环境比较简单；第二个，谁叫AC是行  为管控呢）。如果客户端上的抓包有这个RST，那就是客户端的问题。</p>
-</li>
-<li><p>如果客户说，我电脑上不能安装其他软件（不管为啥，你就当死活不允许好了）。那就是说，我们  不能在客户端上抓包。那好，我们就只能在现有的数据包中获取蛛丝马迹了。</p>
-</li>
-<li><p>此时，我们还有一个方法判断是不是由客户端发出的这个RST包，那就是通过IP.ID这个参数。</p>
-</li>
-<li><p>IP.ID是什么鬼？那我们要知道数据包是如何封装的，如下图所示。如果看不懂，请参考<a href="https://wizardforcel.gitbooks.io/network-basic/content/0.html" target="_blank" rel="noopener">网络基本功</a>。IP.ID是IP数据报头中的一个字段。表明了一个数据包的身份，比如一个数据内容过大，被传输的时候就要对这个数据进行切割，即进行分片。当接收方收到这些分片后，需要把这些分片组装起来，那接收方每次收这么多的数据包，它咋知道哪些分片是从同一个数据内容中出来的呢？就要靠IP.ID了，通过IP.ID就可以把这些分片组装起来，还原成最初始的大块数据。就像你玩乐高玩具，乐  高里面这么多零件，如果这些零件中混入了其他玩具的零件。那你想把这个乐高玩具组装起来肯定需要一个标识来进行识别哪些零件是同属于一个乐高模型的。</p>
-<p><img src="/2019/07/07/远程桌面访问不了/9.jpg" alt="1"></p>
-</li>
-<li><p>上述还只是告诉了你，啥是IP.ID。那回到问题中来，你还需要知道的一个点就是，如果是一个设备   去发数据包，那么他的IP.ID增长是线性的。即一般来说，同一台设备发出第一个包，如果IP.ID是1，   第二个包就是2。就算不符合这规律，那数值起码也不会差太多。</p>
-</li>
-<li><p>我们再来看下wireshark，299号包的IP.ID=18970。302号包的IP.ID=18971。而304号包的IP.ID=22566。那RST包和之前的两个包，这数值也差的太多了啊，所以基本能判断这个包不是客户端发出的。</p>
-<p><img src="/2019/07/07/远程桌面访问不了/10.jpg" alt="1"></p>
-</li>
-</ol>
-<p> <img src="/2019/07/07/远程桌面访问不了/11.jpg" alt="1"></p>
-<p> <img src="/2019/07/07/远程桌面访问不了/12.jpg" alt="1"></p>
-</blockquote>
-</li>
-</ol>
-
-      
-
-      
-
-          
-        
-          
-        </div>
-
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/07/07/远程桌面访问不了/" data-id="cjy4gbs2y000mo4qu0abej4ja" class="article-share-link">分享</a>
-      
-    </footer>
-
-  
-
-  
-
-  
-
-</article>
-
-
-
-      
-        <article id="post-视频会议卡顿" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
-
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h2 itemprop="name">
-      <a class="article-title" href="/2019/06/13/视频会议卡顿/">视频会议卡顿</a>
-    </h2>
-  
-
-      </header>
-    
-
-    
-      <div class="article-meta">
-        <a href="/2019/06/13/视频会议卡顿/" class="article-date">
-  <time datetime="2019-06-13T14:29:26.000Z" itemprop="datePublished">2019-06-13</time>
-</a>
-        
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/实战/">实战</a>
-  </div>
-
-      </div>
-    
-
-    <div class="article-entry" itemprop="articleBody">
-      
-
-      
-
-      
-        <h1 id="视频会议卡顿——用wireshark定位问题"><a href="#视频会议卡顿——用wireshark定位问题" class="headerlink" title="视频会议卡顿——用wireshark定位问题"></a>视频会议卡顿——用wireshark定位问题</h1><p><strong>基础知识</strong>（TCP和UDP的比较）</p>
-<p>TCP报文和UDP报文如下</p>
-<p><img src="/2019/06/13/视频会议卡顿/1.png" alt="1551317757941"></p>
-<p>在报文头部中，我们可以知道，TCP除了源目端口，还会有seq号，ack号，6个标志位以及一个接受窗口字段。而UDP报文头部只有源目端口，长度和校验和字段。UDP报文头部8字节，TCP的最短报文头部20字节，UDP报文头部连TCP头部长度的一半都不到，想复杂也复杂不起来。</p>
-<p>我们知道TCP是需要建立连接后才会开始传输数据的，而UDP不用。TCP就像打电话，必须先拨通对方手机，然后才互相交流，如果对方没有听清，那自己就可以把话语重复一遍，确保对方接收无误。UDP就像发短信，我给一个人发送短信后，第一不会知道对方是否有收到；即便对方收到后，我也不知道信息发给对方有没有出错。</p>
-<p>在TCP中，假设有很长一段数据要发送，假设有4380（1460*3）字节的数据。我们知道在以太网中，以太网帧的数据部分最大长度是1500字节，假设TCP和IP头部各占20字节，那么一个TCP段的数据就是1460字节，超过这个字节就要分段。所以这4380个字节就要分成3个包去发送。这3个包就类似于下表，假设第一个包的seq号是0，那么下一个包的seq号就是1460（上一个包的seq号+长度）。</p>
-<table>
-<thead>
-<tr>
-<th>包号</th>
-<th>seq号</th>
-<th>lenth长度</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>0</td>
-<td>1460</td>
-</tr>
-<tr>
-<td>2</td>
-<td>1460</td>
-<td>1460</td>
-</tr>
-<tr>
-<td>3</td>
-<td>2920</td>
-<td>1460</td>
-</tr>
-</tbody>
-</table>
-<p>正常情况下，接收方要收到这3个包。假设第二个包在传输过程中丢失了，接收方只能收到seq号是0（长度是1460字节）和seq号是2920（1460字节）的包，那他就清楚1460的这个包在路上丢失了，就可以要发送方重传第二个包。</p>
-<p>对于UDP而言，它没有建立连接的机制，同时也没有流控和差错控制机制。那它要发送数据出去，如果数据部分超过了最大的数据长度1472字节（以太网帧的数据部分最大长度是1500字节，IP头部20字节，UDP头部8字节），就要靠下层的IP来分片。分片要如何组装起来，在之前的文章中提到过，涉及的就是ip.id和片偏移。</p>
-<p>如果数据部分没有超过UDP中的最大数据长度，就不会被分片，那么每个报文的ip.id也就是不一样的。</p>
-<p>也就是说在UDP中，发送方发送一个小数据出去，接收方收到就收到了，没收到那我也不知道，也不会重传。</p>
-<p>而发送方要是发送一个大数据（超过UDP最大数据长度，会有多个分片），如果有一个分片丢失，那么接收方按ip.id和片偏移无法组装起来，那么就会向发送方发送消息，让发送方重传。此时的重传不会像TCP一样，只发送丢弃的那个包，而是要把之前这个包的所有分片全部重传。</p>
-<hr>
-<p><strong>客户问题</strong></p>
-<p>左边是分支，右边是总部。分支的视频服务器上看总部端的画面很流程，但是在总部的视频服务器上看分支端的画面则特别卡。</p>
-<p><strong>客户拓扑</strong></p>
-<p><img src="/2019/06/13/视频会议卡顿/2.png" alt="1551317757941"></p>
-<p><strong>问题分析</strong></p>
-<ol>
-<li><p>视频会议和语音通话基本都是使用UDP协议。同时数据字节不会很大，一般不会超过最大UDP数据报文长度，那么每个数据包ip.id的值是不一样的。不会出现设备收到分片组装不起来的情况。</p>
-</li>
-<li><p>分支的视频服务器看总部的画面正常，说明总部给分支传的UDP数据流是没有丢包的。</p>
-</li>
-<li><p>总部的视频服务器看分支画面有卡顿，说明分支给总部传的UDP数据流可能存在丢包。</p>
-</li>
-<li><p>总部和分支之间互传数据是互不干扰的。因为不是TCP下，建立连接后的两端数据互传。</p>
-</li>
-<li><p>两台设备上都做了策略路由，视频服务器的流量都走了联通线路。（其实最开始的情况是，分支到总部的数据往电信线路传了，总部往分支的数据就走了联通，存在总部看分支画面丢包的情况。怀疑是线路问题，就调整了策略，让数据都走了联通，但是问题还是存在。）</p>
-</li>
-<li><p>查看两端的控制台配置，策略都是正常的。出现丢包的时候，经过设备的流量都不大，cpu利用率也不高。</p>
-</li>
-<li><p>于是在客户两端都开启视频服务器的情况下，抓包分析。</p>
-</li>
-</ol>
-<p><img src="/2019/06/13/视频会议卡顿/3.png" alt="1551317757941"></p>
-<ol start="8">
-<li>先看分支的内网口（eth0）的抓包情况。</li>
-</ol>
-<p><img src="/2019/06/13/视频会议卡顿/4.png" alt="1551317757941"></p>
-<ol start="9">
-<li>由于是总部看分支，画面存在卡顿。那我们主要关注的就是分支视频服务器172.17.160.8给总部视频服务器10.16.121.250这个方向的流量</li>
-</ol>
-<p><img src="/2019/06/13/视频会议卡顿/5.png" alt="1551317757941"></p>
-<p>选择B到A这个方向。选择完后，主界面就会自动给你过滤出分支视频服务器给总部视频服务器这个方向的流量</p>
-<p><img src="/2019/06/13/视频会议卡顿/6.png" alt="1551317757941"></p>
-<p><img src="/2019/06/13/视频会议卡顿/7.png" alt="1551317757941"></p>
-<ol start="10">
-<li><p>由于画面存在卡顿，很可能的原因是丢包。UDP不像TCP那样，有所谓的seq号。在TCP中，哪个包丢了，我可以通过seq号把丢的包找到，但UDP不行。那有没有什么办法可以让UDP像TCP一样，能给这些数据包按顺序编个号吗？哪个UDP包丢了，我可以通过这个编号识别到。</p>
-</li>
-<li><p>是可以的。那就是把UDP的数据包编码为RTP的数据包，对RTP协议感兴趣的同学可以看这篇文章<a href="https://www.jianshu.com/p/631273bc9847?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=weibo" target="_blank" rel="noopener">实时传输协议RTP/RTCP</a></p>
-</li>
-</ol>
-<p><img src="/2019/06/13/视频会议卡顿/8.png" alt="1551317757941"></p>
-<p>我们来看下把UDP包编码成RTP包在wireshark中是啥样的。</p>
-<p><img src="/2019/06/13/视频会议卡顿/9.png" alt="1551317757941"></p>
-<p><img src="/2019/06/13/视频会议卡顿/10.png" alt="1551317757941"></p>
-<p>上图看到，其实所谓的编码，是把UDP包中的数据部分变成了RTP数据报文，RTP数据报文中存在seq号。</p>
-<ol start="12">
-<li>我们在<strong>会话统计</strong>中可以看到分支给总部传数据的时候，建立了6个连接。其中前2个连接的数据量相对大一些。</li>
-</ol>
-<p><img src="/2019/06/13/视频会议卡顿/11.png" alt="1551317757941"></p>
-<p>为什么前2个连接，传输的数据多些呢？</p>
-<p><img src="/2019/06/13/视频会议卡顿/12.png" alt="1551317757941"></p>
-<p><img src="/2019/06/13/视频会议卡顿/13.png" alt="1551317757941"></p>
-<ol start="13">
-<li>我们先选择第一个连接，即端口49152到端口2326的。把这个连接使用的UDP协议编码为RTP协议</li>
-</ol>
-<p><img src="/2019/06/13/视频会议卡顿/14.png" alt="1551317757941"></p>
-<p><img src="/2019/06/13/视频会议卡顿/15.png" alt="1551317757941"></p>
-<ol start="14">
-<li>编码之后，此时wireshark界面如图所示</li>
-</ol>
-<p><img src="/2019/06/13/视频会议卡顿/16.png" alt="1551317757941"></p>
-<ol start="15">
-<li>接下来，我们打开RTP流分析。可以看到面板已经给我们统计出有2个丢包了，你还能分析出是丢了哪两个包。</li>
-</ol>
-<p><img src="/2019/06/13/视频会议卡顿/17.png" alt="1551317757941"></p>
-<p><img src="/2019/06/13/视频会议卡顿/18.png" alt="1551317757941"></p>
-<p><img src="/2019/06/13/视频会议卡顿/19.png" alt="1551317757941"></p>
-<p> <strong>16.由于是打开的分支eth0接口的抓包，所以此时就可以说明，丢包是丢在了内网</strong></p>
-<ol start="17">
-<li>按照同样的方法，我们还要查看下在公网链路上是否存在丢包，以及在总部内网是否存在丢包。</li>
-</ol>
-<p><img src="/2019/06/13/视频会议卡顿/2.png" alt="1551317757941"></p>
-<ol start="18">
-<li><p>因为分支内网存在丢包，所以在查看公网链路上的数据包时（即fzeth3和zbeth2），如果公网数据包中，丢包的序列号和在fzeth0数据包内的一致，说明公网是没有丢包的。如果除去内网中丢包的序列号，还有其他序列号丢失，说明公网链路也有问题。</p>
-</li>
-<li><p>从fzeth3的数据包中，可以看到丢了2个，也是seq=34591和seq=34637丢包了。和内网抓包fzeth0丢包情况一致。而在总部设备的2个口抓包情况也是一样的，就不赘述了。查看方法和上述一致。</p>
-</li>
-</ol>
-<p><img src="/2019/06/13/视频会议卡顿/20.png" alt="1551317757941"></p>
-<ol start="20">
-<li><p>定位了问题后，可以判断分支内网存在丢包。那么有条件的话就可以在分支视频服务器及交换机上抓包对比查看。</p>
-</li>
-<li><p>最后定位出的问题是交换机网口有问题，换一个交换机问题就解决了。</p>
-</li>
-</ol>
-
-      
-
-      
-
-          
-        
-          
-        </div>
-
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/06/13/视频会议卡顿/" data-id="cjy4gbs2q000bo4que1bwg82n" class="article-share-link">分享</a>
-      
-    </footer>
-
-  
-
-  
-
-  
-
-</article>
-
-
-
-      
-        <article id="post-并行-串行-异步传输" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
-
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h2 itemprop="name">
-      <a class="article-title" href="/2019/06/12/并行-串行-异步传输/">并行/串行/异步传输</a>
-    </h2>
-  
-
-      </header>
-    
-
-    
-      <div class="article-meta">
-        <a href="/2019/06/12/并行-串行-异步传输/" class="article-date">
-  <time datetime="2019-06-12T14:45:28.000Z" itemprop="datePublished">2019-06-12</time>
-</a>
-        
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/收录文章/">收录文章</a>
-  </div>
-
-      </div>
-    
-
-    <div class="article-entry" itemprop="articleBody">
-      
-
-      
-
-      
-        <h1 id="【转载】什么是并行传输、串行传输、异步传输？"><a href="#【转载】什么是并行传输、串行传输、异步传输？" class="headerlink" title="【转载】什么是并行传输、串行传输、异步传输？"></a>【转载】什么是并行传输、串行传输、异步传输？</h1><blockquote>
-<p>文章收录自互联网，著作权归原作者所有，若有冒犯请联系我删除。</p>
-<p>商业转载请联系作者获得授权，非商业转载请注明出处。</p>
-<p>本人转载只作个人学习及后续查阅使用</p>
-<p>该篇文档作者：航空航天迷</p>
-<p>原文链接：<a href="https://www.zhihu.com/question/29033993" target="_blank" rel="noopener">什么是并行传输、串行传输、异步传输？</a></p>
-<p>来源：知乎</p>
-</blockquote>
-<hr>
-<p><img src="/2019/06/12/并行-串行-异步传输/1.jpg" alt="img"></p>
-<p>传输可以分为<strong>串行传输</strong>和<strong>并行传输。</strong></p>
-<p><strong>串行传输</strong>可分为<strong>异步传输、同步传输</strong>和<strong>等时传输</strong>。</p>
-<p>下图2是<strong>并行传输</strong>的示意图：</p>
-<p><img src="/2019/06/12/并行-串行-异步传输/2.jpg" alt="img"></p>
-<p>在<strong>并行传输</strong>中，使用多根并行的数据线一次同时传输多个比特。</p>
-<p>例如在图2中，共有8根数据线，一次同时传输8个比特，每个比特占用一根数据线。</p>
-<p>下图3是<strong>串行传输</strong>的示意图：</p>
-<p><img src="/2019/06/12/并行-串行-异步传输/3.jpg" alt="img"></p>
-<p>在<strong>串行传输</strong>中，使用一根数据线传输数据，一次传输1个比特，多个比特需要一个接一个依次传输。</p>
-<p>下面简单介绍一下<strong>串行传输</strong>与<strong>并行传输</strong>的发展历史，从而了解他们俩各自的优缺点，以及发展趋势。</p>
-<p>最早的计算机（电子管计算机和晶体管计算机），其各个接口，例如输入接口、输出接口和存储器接口等，一般采用串行接口，以<strong>串行传输</strong>的方式传输数据。</p>
-<p>下图4为电子管计算机ENIAC</p>
-<p><img src="/2019/06/12/并行-串行-异步传输/4.jpg" alt="img"></p>
-<p>电子管计算机ENIAC诞生于美国宾夕法尼亚大学。重30多吨，占地约170平方米，装有约18000只电子管。</p>
-<p>下图5为电子管计算机中使用的电子管</p>
-<p><img src="/2019/06/12/并行-串行-异步传输/5.jpg" alt="img"></p>
-<p>图5中小玻璃瓶状的东西就是电子管，电子管的体积比较大  下图6为晶体管计算机TRADIC</p>
-<p><img src="/2019/06/12/并行-串行-异步传输/6.jpg" alt="img"></p>
-<p>1954年，贝尔实验室使用800只晶体管组装了世界上第一台晶体管计算机TRADIC。相比电子管，晶体管体积小、重量轻、寿命长、发热少、功耗低，大大改进了计算机中的电子线路的结构，大幅度提高了运算速度。  下图7为晶体管计算机TRADIC中使用的晶体管</p>
-<p><img src="/2019/06/12/并行-串行-异步传输/7.jpg" alt="img"></p>
-<p>电子管计算机和晶体管计算机以<strong>串行传输</strong>的方式传输数据，其原因是当时各个部件都是分立的部件，而不是像今天这样使用集成电路设计。如果采用并行线路的话，元件的数量和占用的空间将成倍增长。比如，一个8比特并行线路的元件数量是串行线路的元件数量的8倍（因为需要为每根线路配置一套接收元件）。另外，元件的数量成倍增长的话，耗电量也会大幅增加。  集成电路技术出现后，大量元件可以集成到一个小小的芯片上，<strong>并行传输</strong>变得方便而便宜。不论是8比特、16比特还是更高比特位数的并行线路，只需要一个并行接口芯片就可以处理，而且并行接口芯片只比串行接口芯片贵一点。</p>
-<p>除了方便便宜外，在相同的工作频率下<strong>并行传输</strong>的传输速度是<strong>串行传输</strong>的数倍，迎合了人们对速度的追求，所以硬盘、打印机等设备开始使用<strong>并行传输</strong>以提高传输速度。PATA（Parallel Advanced Technology Attachment，并行高级技术附件）接口、并口（Parallel Port）和PCI（Peripheral Component Interconnect，外设部件互连）接口成为流行的并行接口。</p>
-<p>下图8为电脑主板上的PATA接口（<strong>并行传输</strong>），用于连接硬盘和光驱</p>
-<p><img src="/2019/06/12/并行-串行-异步传输/8.jpg" alt="img"></p>
-<p>下图9为用于PATA接口的连接线缆</p>
-<p><img src="/2019/06/12/并行-串行-异步传输/9.jpg" alt="img"></p>
-<p>下图10中的编号2为电脑上的并口（<strong>并行传输</strong>），用于连接打印机、扫描仪等</p>
-<p><img src="/2019/06/12/并行-串行-异步传输/10.jpg" alt="img"></p>
-<p>下图11为电脑主板上的PCI接口（<strong>并行传输</strong>），用于插接外置网卡、声卡、显卡和调制解调器卡等）</p>
-<p><img src="/2019/06/12/并行-串行-异步传输/11.jpg" alt="img"></p>
-<p>下图12为采用PCI接口的显卡</p>
-<p><img src="/2019/06/12/并行-串行-异步传输/12.jpg" alt="img"></p>
-<p>图12中的显卡使用时是插入图11中的PCI接口（插槽）中。</p>
-<p>在相同的工作频率下<strong>并行传输</strong>的传输速度是<strong>串行传输</strong>的数倍，但并行线路有一些难以克服的缺点，导致依靠并行线路的<strong>并行传输</strong>无法用于长距离通信。计算机与外界的长距离通信，例如与网络中的另外一台计算机进行通信时，只能使用<strong>串行传输</strong>。</p>
-<p>在计算机内部，如今<strong>串行传输</strong>也显示出了它的优势，有取代<strong>并行传输</strong>的趋势。</p>
-<p>例如，</p>
-<p>SATA接口取代PATA接口；</p>
-<p>USB接口取代并口；</p>
-<p>PCI Express接口取代PCI接口。</p>
-<p>为什么<strong>串行传输</strong>有取代<strong>并行传输</strong>的趋势呢？</p>
-<p>与<strong>串行传输</strong>相比，<strong>并行传输</strong>的缺点是：</p>
-<p>一、线路的成本高</p>
-<p><strong>并行传输</strong>如果每个时钟节拍发送16个比特，则需要16根数据线（另外还需要多根控制线）。</p>
-<p><img src="/2019/06/12/并行-串行-异步传输/13.jpg" alt="img"></p>
-<p>PATA（<strong>并行传输</strong>）连接线缆包含40根导线（16根数据线，24根用于接地和进行控制）；</p>
-<p>SATA（<strong>串行传输</strong>）连接线缆包含7根导线（4数据线+3接地线）。</p>
-<p>如果是长距离通信，<strong>并行传输</strong>的线路成本是<strong>串行传输</strong>的若干倍。</p>
-<p>另外，只有一对传输线时，<strong>串行传输</strong>也可以实现双向通信，所以可以直接利用现有的电话线路进行数据传输；而<strong>并行传输</strong>要多根并行的传输线，没有现有的线路可以利用，要另外专门铺设线路，成本高。</p>
-<p>二、体积大</p>
-<p>并行接口占用空间大，对应线缆占用空间也大。</p>
-<p><img src="/2019/06/12/并行-串行-异步传输/14.jpg" alt="img"></p>
-<p>如图14所示，PATA的接口与连接线缆的尺寸大大于SATA的接口与连接线缆的尺寸</p>
-<p>如果是长距离通信，要求使用比较粗的信号线，以便降低信号的衰减，<strong>并行传输</strong>需要使用多根较粗的信号线捆扎在一起组成通信线缆，占很大空间。</p>
-<p>即使是计算机内部通信，<strong>并行传输</strong>的线缆所占用的空间也比<strong>串行传输</strong>的线缆所占用的空间大很多。</p>
-<p>并行接口的尺寸比串行接口的尺寸大很多，则不利于设备的小型化。例如，在手机和穿戴式设备等领域，希望零件的尺寸越小越好。</p>
-<p>三、信号线之间的干扰大，不能用于长距离传输</p>
-<p>并排的信号线在进行高速传输时，会在每条信号线的周围产生微弱的电磁场，出现串音干扰，进而影响到其它信号线中的数据传输。传输距离越长，串音干扰越严重。</p>
-<p><img src="/2019/06/12/并行-串行-异步传输/15.jpg" alt="img"></p>
-<p>所以，PATA线缆的长度不能超过0.4米，而SATA线缆可以达到1米。</p>
-<p>四、<strong>并行传输</strong>具有同步问题</p>
-<p><img src="/2019/06/12/并行-串行-异步传输/16.jpg" alt="img"></p>
-<p><strong>并行传输</strong>中，如果并行的线路之间的物理性质不一致，例如长度上有细微差别，会导致并行线路中传输的比特不是同时到达接收方，接收器接收数据时容易出错。</p>
-<p>五、传输频率低</p>
-<p>在<strong>并行传输</strong>中，如果传输频率高的话，数据线之间会产生很大的干扰，造成数据出错，即使为数据线添加屏蔽层，也不能保证屏蔽掉高频率产生的干扰。所以，<strong>并行传输</strong>的最高传输频率有一定限制。</p>
-<p>PATA接口的最高传输频率为33MHz，这个几乎已经达到了并行接口的极限。</p>
-<p><strong>串行传输</strong>每次只传输一个比特，但是它的传输频率可以非常高，达到10GHz，是33MHz的300倍。相当于<strong>并行传输</strong>每发送1次，<strong>串行传输</strong>可以发送300次。<strong>并行传输</strong>每次发送300比特，才能赶上<strong>串行传输</strong>的速度，但是每次发送300比特，就需要300根并行的数据线，这是不现实的。</p>
-<p>因为<strong>并行传输</strong>和<strong>串行传输</strong>各自的这些优缺点，导致<strong>并行传输</strong>仅仅用于短距离传输，而长距离传输则采用<strong>串行传输</strong>；同时，在短距离传输中，<strong>串行传输</strong>也在逐步取代<strong>并行传输</strong>。</p>
-<p>什么是<strong>异步传输</strong>呢？</p>
-<p><img src="/2019/06/12/并行-串行-异步传输/17.jpg" alt="img"></p>
-<p>计算机的键盘与主机之间的数据传输就是<strong>异步传输</strong>。</p>
-<p>在键盘上按下一个字母键、数字键或特殊字符键，键盘就需要向主机发送一个对应的长度为8比特的ASCII字符，这个8比特的ASCII字符就是需要发送的数据，大小为1个字节。</p>
-<p><img src="/2019/06/12/并行-串行-异步传输/18.jpg" alt="img"></p>
-<p>如上图所示：例如，当用户按下小写字母键“k”，键盘需要向主机发送字符“01101011”</p>
-<p>用户可能在任意时刻按键盘，所以键盘向主机发送数据的时间不是固定的，也不会事先约好，任何时刻都有可能发送。</p>
-<p>主机事先并不知道键盘什么时候会给自己发送数据，只能静静地等待，一旦发现键盘向自己发送数据，则马上接收。</p>
-<p>主机如何发现键盘开始向自己发送数据了呢？</p>
-<p><img src="/2019/06/12/并行-串行-异步传输/19.jpg" alt="img"></p>
-<p>当键盘不需要向主机发送有效数据时，也就是键盘处于空闲（idle）时，键盘会连续不断地向主机发送比特“1”，告诉主机自己处于空闲状态。比特“1”用正电平表示，也就是键盘一直向主机发送正电平，表示当前没有有效数据发送给主机。</p>
-<p>当键盘被按下，键盘需要向主机发送数据时，键盘会先在数据前添加比特“0”，组成新字符，再发送。</p>
-<p><img src="/2019/06/12/并行-串行-异步传输/20.jpg" alt="img"></p>
-<p>例如，如上图所示，发送数据“01101011”之前，先在“01101011”的前面添加“0”，组成新字符“011010110”</p>
-<p>比特“0”可以用零电平表示。 </p>
-<p><img src="/2019/06/12/并行-串行-异步传输/21.jpg" alt="img"></p>
-<p>如上图所示，键盘处于空闲时，主机接收的一直是比特“1”（正电平），当主机突然接收到比特“0”（零电平）时，马上反应过来，键盘在向自己发送有效数据，则主机开始接收“0”后面的有效数据，这个“0”相当于这个新字符的起始位（start bit）。</p>
-<p>主机开始接收有效数据后，怎么才能知道有效数据接收完了要停下来呢？</p>
-<p>为了解决这个问题，键盘和主机事先约定好：</p>
-<ol>
-<li>每次发送的有效数据为1个字节，即8个比特</li>
-</ol>
-<p><img src="/2019/06/12/并行-串行-异步传输/22.jpg" alt="img"></p>
-<ol start="2">
-<li><p>数据的传输速率（例如1000比特/秒）</p>
-</li>
-<li><p>键盘在有效数据前面添加起始位（比特0），以通知主机，数据开始发送</p>
-</li>
-</ol>
-<p><img src="/2019/06/12/并行-串行-异步传输/23.jpg" alt="img"></p>
-<ol start="4">
-<li>键盘在有效数据后面添加停止位（比特1），以通知主机，数据发送结束</li>
-</ol>
-<p><img src="/2019/06/12/并行-串行-异步传输/24.jpg" alt="img"></p>
-<p>下图显示的是：键盘根据和主机的约定，发送给主机的数据和对应的信号。 </p>
-<p><img src="/2019/06/12/并行-串行-异步传输/25.jpg" alt="img"></p>
-<p>当按键“k”被按下时，键盘实际上发送的是“起始位”+k对应的ASCII码+“停止位”。</p>
-<p>键盘发送信号的过程：</p>
-<p>键盘在空闲时，连续地发送正电平给主机，表示当前没有有效数据发送给主机。</p>
-<p>当按键“k”被按下时，键盘发送“起始位”+k对应的ASCII码+“停止位”这3者所对应的信号。然后紧跟着继续发送正电平，表示又处于空闲状态。</p>
-<p>主机接收信号的过程：</p>
-<p>主机开始接收到的一直是正电平，表示当前没有有效数据发送给主机。</p>
-<p>主机接收到起始位比特“0”（零电平）后，开始接收比特“0”后面的有效数据。</p>
-<p>根据约定，有效数据为1个字节，共8个比特；数据的传输速率例如为1000比特/秒，也就是每毫秒传输1个比特，则8个比特的传输时间为8毫秒。</p>
-<p>所以主机根据自己的时钟，在起始位比特“0”后面的8毫秒内接收有效数据。</p>
-<p>具体的接收方式（举例说明）是：</p>
-<p><img src="/2019/06/12/并行-串行-异步传输/26.jpg" alt="img"></p>
-<p>主机在起始位后面的0.5毫秒、1.5毫秒、2.5毫秒、3.5毫秒、4.5毫秒、5.5毫秒、6.5毫秒、7.5毫秒分别对信号进行采样，也就是在每个比特的正中间进行采样，以获得这8比特的有效数据。</p>
-<p>根据约定，8比特的有效数据后面跟着的是停止位。</p>
-<p>如果主机在第8.5毫秒接收到比特“1”（停止位），则主机可以确定数据的发送确实结束了，则结束有效数据的接收，并接受所接收的数据。</p>
-<p>如果主机在第8.5毫秒接收到的不是比特“1”（停止位），则主机判断传输过程中发生错误，就放弃所接收到的数据。</p>
-<p>无论接受还是放弃所接收到的数据，主机都不会向键盘进行反馈。</p>
-<p>键盘向主机发送数据后，就撒手不管了，不会等待主机的确认或其他任何反馈。</p>
-<p>在停止位之后，主机接收到的是表示空闲的正电平，继续等待键盘发送数据。</p>
-
-      
-
-      
-
-          
-        
-          
-        </div>
-
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/06/12/并行-串行-异步传输/" data-id="cjy4gbs3j0014o4qu89rphf4b" class="article-share-link">分享</a>
-      
-    </footer>
-
-  
-
-  
-
-  
-
-</article>
-
-
-
-      
-        <article id="post-访问X友软件卡顿" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
-
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h2 itemprop="name">
-      <a class="article-title" href="/2019/06/11/访问X友软件卡顿/">访问X友软件卡顿</a>
-    </h2>
-  
-
-      </header>
-    
-
-    
-      <div class="article-meta">
-        <a href="/2019/06/11/访问X友软件卡顿/" class="article-date">
-  <time datetime="2019-06-11T14:23:27.000Z" itemprop="datePublished">2019-06-11</time>
-</a>
-        
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/实战/">实战</a>
-  </div>
-
-      </div>
-    
-
-    <div class="article-entry" itemprop="articleBody">
-      
-
-      
-
-      
-        <h1 id="2017年应用访问卡慢分析"><a href="#2017年应用访问卡慢分析" class="headerlink" title="2017年应用访问卡慢分析"></a>2017年应用访问卡慢分析</h1><h2 id="1-基本情况："><a href="#1-基本情况：" class="headerlink" title="1.基本情况："></a>1.基本情况：</h2><p>客户环境现象：</p>
-<p>总部和分支使用sangfor vpn对接，分支内网电脑ping总部内网服务器，没有丢包，没有延时。但是在分支使用X友客户端访问总部的X友服务器会出现卡顿（即打开客户端后，有些内容显示出来的等待时间较长）</p>
-<p>为了排错，客户那边基本没有其他流量在跑。</p>
-<hr>
-<p>客户内网拓扑：</p>
-<p>总部和分部通过woc做vpn对接（没开加速），其中eth0口是内网口，pppoe和wan（eth2）口是外网口。分支woc的wan口（pppoe）地址是100.64.7.184，eth0（lan口）地址是10.37.11.254，lan口下连一台测试电脑10.37.11.180。总部单臂部署，X友服务器是10.37.1.77。分支pc通过X友软件和总部的X友服务器做数据交互。</p>
-<p><img src="/2019/06/11/访问X友软件卡顿/1.png" alt="1"></p>
-<h2 id="2-排错操作："><a href="#2-排错操作：" class="headerlink" title="2.排错操作："></a>2.排错操作：</h2><ol>
-<li><p>在分支客户端电脑开始访问X友前，在分支woc和总部woc的eth0口，vpntun口，wan口写下抓包命令。写完之后执行命令，之后再用电脑正式访问X友。看到现象后，等待几秒再停止所有接口的抓包。</p>
-<p><img src="/2019/06/11/访问X友软件卡顿/2.png" alt="2"></p>
-</li>
-<li><p>其实在抓到上述6份比较漂亮的包之前，我还重复上述操作过几次。虽然时间比较久了，但是我看到自己有导出csv的后缀文件，估计是我那时候想通过比较几个文件中的ip.id来判断访问应用的时候是否存在丢包。估计那时候我没看出啥东西来，就纯浪费时间去了。</p>
-<p><img src="/2019/06/11/访问X友软件卡顿/3.png" alt="3"></p>
-</li>
-<li><p>后来听说X友这种应用访问卡慢，是因为小包交互过多导致的。就试着打开了一个包fenzhieth0.pcap，然后输入过滤条件，来看下200字节以下的包有多少。emmmm一看占比57.6%呢，小包很多了很多了</p>
-<p><img src="/2019/06/11/访问X友软件卡顿/4.png" alt="4"></p>
-</li>
-<li><p>于是脑补出理由，打电话给渠道。举个例子，访问X友打开软件要传输15000字节的数据，公网延时是20-30ms，比如小包只传100字节，那这15000字节的数据就要传输150次，时间上就是20ms*150，这样访问就会出现卡顿的情况。如果是用ftp等测试，每次传输是1000字节的话，就是传输15次，所以访问ftp服务器的时候你就不会觉得卡。所以这是X友那边发包机制的问题，和我们设备没有关系</p>
-</li>
-<li><p>渠道觉得好有道理，然后就信了，之后他去和客户解释就再也没找我了。工单关闭</p>
-</li>
-</ol>
-<hr>
-<h2 id="3-上述排错错在哪"><a href="#3-上述排错错在哪" class="headerlink" title="3.上述排错错在哪"></a>3.上述排错错在哪</h2><ol>
-<li><p>自己想当然的瞎JB乱讲，同时基础概念不清晰，或者说是完全没有概念</p>
-</li>
-<li><p>在TCP中，发送方和接收方都会存在一个发送窗口和接受窗口。发送窗口表示我发送方一口气能发送多少数据，接收窗口表示我接收方还能接收多少数据放在缓存区中。发送方要尽量保证多发数据，同时也得保证接收方能接收的过来，不至于数据发生溢出。MSS是一个数据段的数据最大长度，那么发送窗口和MSS存在啥关系呢。刚刚说道，发送窗口表示我发送方一口气能发送多少数据，那么MSS的值就确定了，我要一口气发这么多数据要发出多少个包。举个例子来说，我发送方一口气能发送1000个字节，但是一个数据段的MSS是100字节，那么我一口气就能发10个包出去。</p>
-</li>
-<li><p>给渠道说的理由，看上去好像没问题。其实概念就没弄清。给渠道的说法表明，我的数据包是一个一个发出的，但是实际上TCP中不是这么传输数据的</p>
-</li>
-</ol>
-<hr>
-<h2 id="4-重新整理排错思路"><a href="#4-重新整理排错思路" class="headerlink" title="4.重新整理排错思路"></a>4.重新整理排错思路</h2><ol>
-<li><p>访问一个应用卡慢，分两种情况。一个是网络问题，一个是设备性能问题。</p>
-</li>
-<li><p>ping测试是在网络层的测试。客户环境中ping测试不丢包不延时，基本上可以判断网络是没啥问题的</p>
-</li>
-<li><p>之前做了这么一个操作，把pcap文件导出成csv文件，想通过比较各个csv文件中是否存在丢包。但是没有看是什么东西来，而且上述操作比较耗时间。要知道的是，如果数据包丢失，就会导致重传或是有重复ACK。那我们是不是可以通过wireshark工具来自动分析下</p>
-</li>
-<li><p>先通过过滤条件，把测试电脑与服务器的互访流量给过滤处理</p>
-<p><img src="/2019/06/11/访问X友软件卡顿/5.png" alt="5"></p>
-</li>
-<li><p>然后在把文件重新保存一份</p>
-<p><img src="/2019/06/11/访问X友软件卡顿/6.png" alt="6"></p>
-</li>
-<li><p>先打开fenzhieth0这个包。过滤出客户端和服务器双向交互的流量</p>
-</li>
-<li><p>随机选择一个包，然后右键点击<strong>Follow</strong>—&gt;<strong>tcp stream</strong>，过滤出一个tcp连接的互访流量</p>
-<p><img src="/2019/06/11/访问X友软件卡顿/7.png" alt="7"></p>
-</li>
-<li><p>然后点击<strong>统计</strong> <strong>statistics</strong>—&gt;<strong>TCP Stream Graphs</strong>—&gt;<strong>time sequence</strong> <strong>（stevens）</strong>，可以看到该连接，一个方向上的seq号增长情况</p>
-<p><img src="/2019/06/11/访问X友软件卡顿/8.png" alt="8"></p>
-</li>
-<li><p>可以看到弹出下框，也就意味着。在该连接中，服务器到用户客户端方向的数据流增长过程中，有5s左右是卡住了。那我们通过Stevens图，可以找到卡住的2个点，包号分别是467号包与819号包</p>
-<p><img src="/2019/06/11/访问X友软件卡顿/9.png" alt="9"></p>
-</li>
-<li><p>可以看到下图，服务器在等待客户端发送816号包。而816号包的发出，是在468号包发出之后耗时近6s。</p>
-<p><img src="/2019/06/11/访问X友软件卡顿/10.png" alt="10"></p>
-</li>
-<li><p>后续又按上述操作，观察了其他的几个tcp连接，以及zongbueth0口的抓包情况。都是一模一样的，总会有几秒卡住</p>
-</li>
-<li><p>也就意味着，这是180这台客户端的问题</p>
-</li>
-<li><p>为什么会出现这种情况，这就是X友厂商应该去分析的了。因为这个是X友应用层层面的问题</p>
-</li>
-</ol>
-<hr>
-<h2 id="5-联想"><a href="#5-联想" class="headerlink" title="5.联想"></a>5.联想</h2><ul>
-<li>为什么和我们设备无关了？ </li>
-</ul>
-<p>​       ——因为在woc的eth0口抓包，发现上图中468号包发出之后，隔了近6s才收到了816号包。我们设备都没做封装啥的操作呢，只是单纯接收包而已</p>
-<ul>
-<li>用woc开启加速后，会有效果吗？</li>
-</ul>
-<p>​        ——个人认为不会，因为woc开启后，是分支的woc设备和分支内网电脑做交互。把woc设备当做是总部的服务器，那内网客户端和woc交互数据的时候，依旧会出现上面这种情况，因为这种情况是在客户端电脑上发生的。要想解决，就得从客户端上看是什么原因导致了这6s的延时发包。</p>
-
-      
-
-      
-
-          
-        
-          
-        </div>
-
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/06/11/访问X友软件卡顿/" data-id="cjy4gbs2v000ho4qu797xlclz" class="article-share-link">分享</a>
+      <a data-url="https://dilidonglong.github.io/2019/07/15/新东方赵丽托福英语词汇8000-00/" data-id="cjz70liri0009uoqu6izqcdup" class="article-share-link">分享</a>
       
     </footer>
 
@@ -915,7 +1132,7 @@
   
     <nav class="page-nav">
       
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">下一页</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">下一页</a>
     </nav>
   
 </section>
