@@ -219,18 +219,14 @@
 <h4 id="3-3-2自定义变量"><a href="#3-3-2自定义变量" class="headerlink" title="3.3.2自定义变量"></a>3.3.2自定义变量</h4><p>awk  -v  变量名称=”变量值”</p>
 <p>eg： awk  -v  mychar=”hahaha”   ‘BEGIN｛print  mychar｝’</p>
 <p>or： awk  -v   ‘BEGIN｛mychar=”hahaha” ; print  mychar｝’</p>
-<h3 id="3-4格式化"><a href="#3-4格式化" class="headerlink" title="3.4格式化"></a><a href="http://www.zsythink.net/archives/1421" target="_blank" rel="noopener">3.4格式化</a></h3><p><img src="/2019/08/11/grep-正则表达式-awk-sed/Users\优积谷\AppData\Roaming\Typora\typora-user-images\1551853553486.png" alt="1551853553486"></p>
-<p><img src="/2019/08/11/grep-正则表达式-awk-sed/Users\优积谷\AppData\Roaming\Typora\typora-user-images\1551853567638.png" alt="1551853567638"></p>
-<p><img src="/2019/08/11/grep-正则表达式-awk-sed/Users\优积谷\AppData\Roaming\Typora\typora-user-images\1551853600287.png" alt="1551853600287"></p>
-<h3 id="3-5模式"><a href="#3-5模式" class="headerlink" title="3.5模式"></a><a href="http://www.zsythink.net/archives/1426" target="_blank" rel="noopener">3.5模式</a></h3><p><img src="/2019/08/11/grep-正则表达式-awk-sed/Users\优积谷\AppData\Roaming\Typora\typora-user-images\1551853672703.png" alt="1551853672703"></p>
-<p><img src="/2019/08/11/grep-正则表达式-awk-sed/Users\优积谷\AppData\Roaming\Typora\typora-user-images\1551853685374.png" alt="1551853685374"></p>
+<h3 id="3-4格式化"><a href="#3-4格式化" class="headerlink" title="3.4格式化"></a><a href="http://www.zsythink.net/archives/1421" target="_blank" rel="noopener">3.4格式化</a></h3><p><img src="/2019/08/11/grep-正则表达式-awk-sed/1.png" alt="1551853553486"></p>
+<h3 id="3-5模式"><a href="#3-5模式" class="headerlink" title="3.5模式"></a><a href="http://www.zsythink.net/archives/1426" target="_blank" rel="noopener">3.5模式</a></h3><p><img src="/2019/08/11/grep-正则表达式-awk-sed/2.png" alt="1551853672703"></p>
 <p>使用正则表达式</p>
 <p>awk  ‘/正则表达式/ {print $0}’  file1</p>
-<p><img src="/2019/08/11/grep-正则表达式-awk-sed/Users\优积谷\AppData\Roaming\Typora\typora-user-images\1551853884184.png" alt="1551853884184"></p>
-<p><img src="/2019/08/11/grep-正则表达式-awk-sed/Users\优积谷\AppData\Roaming\Typora\typora-user-images\1551854001928.png" alt="1551854001928"></p>
-<p><img src="/2019/08/11/grep-正则表达式-awk-sed/Users\优积谷\AppData\Roaming\Typora\typora-user-images\1551854046085.png" alt="1551854046085"></p>
-<h3 id="3-6动作"><a href="#3-6动作" class="headerlink" title="3.6动作"></a><a href="http://www.zsythink.net/archives/2046" target="_blank" rel="noopener">3.6动作</a></h3><p><img src="/2019/08/11/grep-正则表达式-awk-sed/Users\优积谷\AppData\Roaming\Typora\typora-user-images\1551854206133.png" alt="1551854206133"></p>
-<p><img src="/2019/08/11/grep-正则表达式-awk-sed/Users\优积谷\AppData\Roaming\Typora\typora-user-images\1551854262131.png" alt="1551854262131"></p>
+<p><img src="/2019/08/11/grep-正则表达式-awk-sed/3.png" alt="1551853884184"></p>
+<p><img src="/2019/08/11/grep-正则表达式-awk-sed/4.png" alt="1551854001928"></p>
+<h3 id="3-6动作"><a href="#3-6动作" class="headerlink" title="3.6动作"></a><a href="http://www.zsythink.net/archives/2046" target="_blank" rel="noopener">3.6动作</a></h3><p><img src="/2019/08/11/grep-正则表达式-awk-sed/5.png" alt="1551854206133"></p>
+<p><img src="/2019/08/11/grep-正则表达式-awk-sed/6.png" alt="1551854262131"></p>
 <hr>
 <h2 id="4-sed"><a href="#4-sed" class="headerlink" title="4.sed"></a>4.sed</h2><blockquote>
 <p>awk的基本语法结构</p>
@@ -247,8 +243,8 @@
 <p>sed  -n  ‘2,4p’，表示显示第2到第4行，-n参数需要加上</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">[root@vultr ~]<span class="comment"># nl /etc/passwd | sed '2,4p'</span></span><br><span class="line">     1	root:x:0:0:root:/root:/bin/bash</span><br><span class="line">     2	bin:x:1:1:bin:/bin:/sbin/nologin</span><br><span class="line">     2	bin:x:1:1:bin:/bin:/sbin/nologin</span><br><span class="line">     3	daemon:x:2:2:daemon:/sbin:/sbin/nologin</span><br><span class="line">     3	daemon:x:2:2:daemon:/sbin:/sbin/nologin</span><br><span class="line">     4	adm:x:3:4:adm:/var/adm:/sbin/nologin</span><br><span class="line">     4	adm:x:3:4:adm:/var/adm:/sbin/nologin</span><br><span class="line">     5	lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin</span><br><span class="line">     6	sync:x:5:0:sync:/sbin:/bin/sync</span><br><span class="line">     7	shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown</span><br><span class="line">     8	halt:x:7:0:halt:/sbin:/sbin/halt</span><br><span class="line">     9	mail:x:8:12:mail:/var/spool/mail:/sbin/nologin</span><br><span class="line">    10	operator:x:11:0:operator:/root:/sbin/nologin</span><br><span class="line">    11	games:x:12:100:games:/usr/games:/sbin/nologin</span><br><span class="line">    12	ftp:x:14:50:FTP User:/var/ftp:/sbin/nologin</span><br><span class="line">    13	nobody:x:99:99:Nobody:/:/sbin/nologin</span><br><span class="line">    14	systemd-network:x:192:192:systemd Network Management:/:/sbin/nologin</span><br><span class="line">    15	dbus:x:81:81:System message bus:/:/sbin/nologin</span><br><span class="line">    16	polkitd:x:999:998:User <span class="keyword">for</span> polkitd:/:/sbin/nologin</span><br><span class="line">    17	ntp:x:38:38::/etc/ntp:/sbin/nologin</span><br><span class="line">    18	sshd:x:74:74:Privilege-separated SSH:/var/empty/sshd:/sbin/nologin</span><br><span class="line">    19	postfix:x:89:89::/var/spool/postfix:/sbin/nologin</span><br><span class="line">    20	chrony:x:998:996::/var/lib/chrony:/sbin/nologin</span><br><span class="line">    21	tcpdump:x:72:72::/:/sbin/nologin</span><br><span class="line">[root@vultr ~]<span class="comment"># </span></span><br><span class="line">[root@vultr ~]<span class="comment"># nl /etc/passwd | sed -n '2,4p'</span></span><br><span class="line">     2	bin:x:1:1:bin:/bin:/sbin/nologin</span><br><span class="line">     3	daemon:x:2:2:daemon:/sbin:/sbin/nologin</span><br><span class="line">     4	adm:x:3:4:adm:/var/adm:/sbin/nologin</span><br></pre></td></tr></table></figure>
 <p>sed  ‘s/需要被替代的字符串/替换后的字符串/g’</p>
-<p><img src="/2019/08/11/grep-正则表达式-awk-sed/Users\优积谷\AppData\Roaming\Typora\typora-user-images\1552289061967.png" alt="1552289061967"></p>
-<h3 id="4-3直接在文本中做修改操作"><a href="#4-3直接在文本中做修改操作" class="headerlink" title="4.3直接在文本中做修改操作"></a>4.3直接在文本中做修改操作</h3><p><img src="/2019/08/11/grep-正则表达式-awk-sed/Users\优积谷\AppData\Roaming\Typora\typora-user-images\1552289476341.png" alt="1552289476341"></p>
+<p><img src="/2019/08/11/grep-正则表达式-awk-sed/7.png" alt="1552289061967"></p>
+<h3 id="4-3直接在文本中做修改操作"><a href="#4-3直接在文本中做修改操作" class="headerlink" title="4.3直接在文本中做修改操作"></a>4.3直接在文本中做修改操作</h3><p><img src="/2019/08/11/grep-正则表达式-awk-sed/8.png" alt="1552289476341"></p>
 
       
 
@@ -270,15 +266,6 @@
   
     
   <nav class="article-nav">
-    
-      <a href="/2019/08/11/grep-正则表达式-awk/" class="article-nav-link">
-        <strong class="article-nav-caption">前一篇</strong>
-        <div class="article-nav-title">
-          
-            grep/正则表达式/awk/sed
-          
-        </div>
-      </a>
     
     
       <a href="/2019/08/11/iptables笔记/" class="article-nav-link">
