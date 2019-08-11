@@ -60,6 +60,576 @@
 
     
       
+        <article id="post-markdown语法" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2019/08/11/markdown语法/">markdown语法</a>
+    </h2>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/08/11/markdown语法/" class="article-date">
+  <time datetime="2019-08-11T14:09:25.000Z" itemprop="datePublished">2019-08-11</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/小技巧/">小技巧</a>
+  </div>
+
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+      
+
+      
+        <h1 id="插入数学公式"><a href="#插入数学公式" class="headerlink" title="插入数学公式"></a>插入数学公式</h1><p>在Markdown中插入数学公式的语法是<code>$数学公式$</code>和<code>$$数学公式$$</code>。</p>
+<p><strong>行内公式</strong>是可以让公式在文中与文字或其他东西混编，不独占一行。</p>
+<ul>
+<li><p><strong>示例</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">质能方程$E = mc^2$</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>显示</strong></p>
+<blockquote>
+<p>质能方程$E=mc^2$</p>
+</blockquote>
+</li>
+</ul>
+<p><strong>独立公式</strong>使公式单独占一行，不与文中其他文字等混编。</p>
+<ul>
+<li><p><strong>示例</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">质能方程$$E = mc^2$$</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>显示</strong></p>
+<blockquote>
+<p>质能方程</p>
+<p>$$E=mc^2$$</p>
+</blockquote>
+</li>
+</ul>
+<h1 id="普通公式"><a href="#普通公式" class="headerlink" title="普通公式"></a>普通公式</h1><p>普通的加减乘除数学公式的输入方法与平常的书写一样。</p>
+<ul>
+<li><p><strong>示例</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$$x = 100 * y + z - 10 / 33 + 10$$</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>显示</strong></p>
+<blockquote>
+<p>$$x=100∗y+z−10/33+10$$</p>
+</blockquote>
+</li>
+</ul>
+<h1 id="上下标"><a href="#上下标" class="headerlink" title="上下标"></a>上下标</h1><p>使用<code>^</code>来表示上标，<code>_</code>来表示下标，同时如果上下标的内容多于一个字符，可以使用<code>{}</code>来将这些内容括起来当做一个整体。<br>与此同时，上下标是可以嵌套的。</p>
+<ul>
+<li><p><strong>示例</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$$x = a_&#123;1&#125;^n + a_&#123;2&#125;^n + a_&#123;3&#125;^n$$</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>显示</strong></p>
+<blockquote>
+<p>$$x = a_{1}^n + a_{2}^n + a_{3}^n$$</p>
+</blockquote>
+</li>
+</ul>
+<p>如果希望左右两边都能有上下标，可以使用<code>\sideset</code>语法</p>
+<ul>
+<li><p><strong>示例</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$$\sideset&#123;^1_2&#125;&#123;^3_4&#125;A$$</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>显示</strong></p>
+<blockquote>
+<p>$$\sideset{^1_2}{^3_4}A$$</p>
+</blockquote>
+</li>
+</ul>
+<h1 id="括号"><a href="#括号" class="headerlink" title="括号"></a>括号</h1><p><code>()</code>，<code>[]</code>和<code>|</code>都表示它们自己，但是<code>{}</code>因为有特殊作用因此当需要显示大括号时一般使用<code>\lbrace \rbrace</code>来表示。</p>
+<ul>
+<li><p><strong>示例</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$$f(x, y) = 100 * \lbrace[(x + y) * 3] - 5\rbrace$$</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>显示</strong></p>
+<blockquote>
+<p>$$f(x, y) = 100 <em> \lbrace[(x + y) </em> 3] - 5\rbrace$$</p>
+</blockquote>
+</li>
+</ul>
+<h1 id="分数"><a href="#分数" class="headerlink" title="分数"></a>分数</h1><p>分数使用<code>\frac{分母}{分子}</code>这样的语法，不过推荐使用<code>\cfrac</code>来代替<code>\frac</code>，显示公式不会太挤。</p>
+<ul>
+<li><p><strong>示例</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$$\frac&#123;1&#125;&#123;3&#125; 与 \cfrac&#123;1&#125;&#123;3&#125;$$</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>显示</strong></p>
+<blockquote>
+<p>$$\frac{1}{3} 与 \cfrac{1}{3}$$</p>
+</blockquote>
+</li>
+</ul>
+<h1 id="开方"><a href="#开方" class="headerlink" title="开方"></a>开方</h1><p>开方使用<code>\sqrt[次数]{被开方数}</code>这样的语法</p>
+<ul>
+<li><p><strong>示例</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$$\sqrt[3]&#123;X&#125;$$</span><br><span class="line">$$\sqrt&#123;5 - x&#125;$$</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>显示</strong></p>
+<blockquote>
+<p>$$\sqrt[3]{X}$$<br>$$\sqrt{5 - x}$$</p>
+</blockquote>
+</li>
+</ul>
+<h1 id="希腊字母"><a href="#希腊字母" class="headerlink" title="希腊字母"></a>希腊字母</h1><p>见下表</p>
+<table>
+<thead>
+<tr>
+<th>代码</th>
+<th>大写</th>
+<th>代码</th>
+<th>小写</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>A</code></td>
+<td>A</td>
+<td><code>\alpha</code></td>
+<td>α</td>
+</tr>
+<tr>
+<td><code>B</code></td>
+<td>B</td>
+<td><code>\beta</code></td>
+<td>β</td>
+</tr>
+<tr>
+<td><code>\Gamma</code></td>
+<td>Γ</td>
+<td><code>\gamma</code></td>
+<td>γ</td>
+</tr>
+<tr>
+<td><code>\Delta</code></td>
+<td>Δ</td>
+<td><code>\delta</code></td>
+<td>δ</td>
+</tr>
+<tr>
+<td><code>E</code></td>
+<td>E</td>
+<td><code>\epsilon</code></td>
+<td>ϵ</td>
+</tr>
+<tr>
+<td><code>Z</code></td>
+<td>Z</td>
+<td><code>\zeta</code></td>
+<td>ζ</td>
+</tr>
+<tr>
+<td><code>H</code></td>
+<td>H</td>
+<td><code>\eta</code></td>
+<td>η</td>
+</tr>
+<tr>
+<td><code>\Theta</code></td>
+<td>Θ</td>
+<td><code>\theta</code></td>
+<td>θ</td>
+</tr>
+<tr>
+<td><code>I</code></td>
+<td>I</td>
+<td><code>\iota</code></td>
+<td>ι</td>
+</tr>
+<tr>
+<td><code>K</code></td>
+<td>K</td>
+<td><code>\kappa</code></td>
+<td>κ</td>
+</tr>
+<tr>
+<td><code>\Lambda</code></td>
+<td>Λ</td>
+<td><code>\lambda</code></td>
+<td>λ</td>
+</tr>
+<tr>
+<td><code>M</code></td>
+<td>M</td>
+<td><code>\mu</code></td>
+<td>μ</td>
+</tr>
+<tr>
+<td><code>N</code></td>
+<td>N</td>
+<td><code>\nu</code></td>
+<td>ν</td>
+</tr>
+<tr>
+<td><code>\Xi</code></td>
+<td>Ξ</td>
+<td><code>\xi</code></td>
+<td>ξ</td>
+</tr>
+<tr>
+<td><code>O</code></td>
+<td>O</td>
+<td><code>\omicron</code></td>
+<td>ο</td>
+</tr>
+<tr>
+<td><code>\Pi</code></td>
+<td>Π</td>
+<td><code>\pi</code></td>
+<td>π</td>
+</tr>
+<tr>
+<td><code>P</code></td>
+<td>P</td>
+<td><code>\rho</code></td>
+<td>ρ</td>
+</tr>
+<tr>
+<td><code>\Sigma</code></td>
+<td>Σ</td>
+<td><code>\sigma</code></td>
+<td>σ</td>
+</tr>
+<tr>
+<td><code>T</code></td>
+<td>T</td>
+<td><code>\tau</code></td>
+<td>τ</td>
+</tr>
+<tr>
+<td><code>\Upsilon</code></td>
+<td>Υ</td>
+<td><code>\upsilon</code></td>
+<td>υ</td>
+</tr>
+<tr>
+<td><code>\Phi</code></td>
+<td>Φ</td>
+<td><code>\phi</code></td>
+<td>ϕ</td>
+</tr>
+<tr>
+<td><code>X</code></td>
+<td>X</td>
+<td><code>\chi</code></td>
+<td>χ</td>
+</tr>
+<tr>
+<td><code>\Psi</code></td>
+<td>Ψ</td>
+<td><code>\psi</code></td>
+<td>ψ</td>
+</tr>
+<tr>
+<td><code>\Omega</code></td>
+<td>Ω</td>
+<td><code>\omega</code></td>
+<td>ω</td>
+</tr>
+</tbody>
+</table>
+<h1 id="其他字符"><a href="#其他字符" class="headerlink" title="其他字符"></a>其他字符</h1><h2 id="关系运算符"><a href="#关系运算符" class="headerlink" title="关系运算符"></a>关系运算符</h2><table>
+<thead>
+<tr>
+<th>符号</th>
+<th>代码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>±</td>
+<td><code>\pm</code></td>
+</tr>
+<tr>
+<td>×</td>
+<td><code>\times</code></td>
+</tr>
+<tr>
+<td>÷</td>
+<td><code>\div</code></td>
+</tr>
+<tr>
+<td>∣</td>
+<td><code>\mid</code></td>
+</tr>
+<tr>
+<td>∤</td>
+<td><code>\nmid</code></td>
+</tr>
+<tr>
+<td>⋅</td>
+<td><code>\cdot</code></td>
+</tr>
+<tr>
+<td>∘</td>
+<td><code>\circ</code></td>
+</tr>
+<tr>
+<td>∗</td>
+<td><code>\ast</code></td>
+</tr>
+<tr>
+<td>⨀</td>
+<td><code>\bigodot</code></td>
+</tr>
+<tr>
+<td>⨂</td>
+<td><code>\bigotimes</code></td>
+</tr>
+<tr>
+<td>⨁</td>
+<td><code>\bigoplus</code></td>
+</tr>
+<tr>
+<td>≤</td>
+<td><code>\leq</code></td>
+</tr>
+<tr>
+<td>≥</td>
+<td><code>\geq</code></td>
+</tr>
+<tr>
+<td>≠</td>
+<td><code>\neq</code></td>
+</tr>
+<tr>
+<td>≈</td>
+<td><code>\approx</code></td>
+</tr>
+<tr>
+<td>≡</td>
+<td><code>\equiv</code></td>
+</tr>
+<tr>
+<td>∑</td>
+<td><code>\sum</code></td>
+</tr>
+<tr>
+<td>∏</td>
+<td><code>\prod</code></td>
+</tr>
+<tr>
+<td>∐</td>
+<td><code>\coprod</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="集合运算符"><a href="#集合运算符" class="headerlink" title="集合运算符"></a>集合运算符</h2><table>
+<thead>
+<tr>
+<th>符号</th>
+<th>代码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>∅</td>
+<td><code>\emptyset</code></td>
+</tr>
+<tr>
+<td>∈</td>
+<td><code>\in</code></td>
+</tr>
+<tr>
+<td>∉</td>
+<td><code>\notin</code></td>
+</tr>
+<tr>
+<td>⊂</td>
+<td><code>\subset</code></td>
+</tr>
+<tr>
+<td>⊃</td>
+<td><code>\supset</code></td>
+</tr>
+<tr>
+<td>⊆</td>
+<td><code>\subseteq</code></td>
+</tr>
+<tr>
+<td>⊇</td>
+<td><code>\supseteq</code></td>
+</tr>
+<tr>
+<td>⋂</td>
+<td><code>\bigcap</code></td>
+</tr>
+<tr>
+<td>⋃</td>
+<td><code>\bigcup</code></td>
+</tr>
+<tr>
+<td>⋁</td>
+<td><code>\bigvee</code></td>
+</tr>
+<tr>
+<td>⋀</td>
+<td><code>\bigwedge</code></td>
+</tr>
+<tr>
+<td>⨄</td>
+<td><code>\biguplus</code></td>
+</tr>
+<tr>
+<td>⨆</td>
+<td><code>\bigsqcup</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="对数运算符"><a href="#对数运算符" class="headerlink" title="对数运算符"></a>对数运算符</h2><table>
+<thead>
+<tr>
+<th>符号</th>
+<th>代码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>log</td>
+<td><code>\log</code></td>
+</tr>
+<tr>
+<td>lg</td>
+<td><code>\lg</code></td>
+</tr>
+<tr>
+<td>ln</td>
+<td><code>\ln</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="三角运算符"><a href="#三角运算符" class="headerlink" title="三角运算符"></a>三角运算符</h2><table>
+<thead>
+<tr>
+<th>符号</th>
+<th>代码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>⊥</td>
+<td><code>\bot</code></td>
+</tr>
+<tr>
+<td>∠</td>
+<td><code>\angle</code></td>
+</tr>
+<tr>
+<td>sin</td>
+<td><code>\sin</code></td>
+</tr>
+<tr>
+<td>cos</td>
+<td><code>\cos</code></td>
+</tr>
+<tr>
+<td>tan</td>
+<td><code>\tan</code></td>
+</tr>
+<tr>
+<td>cot</td>
+<td><code>\cot</code></td>
+</tr>
+<tr>
+<td>sec</td>
+<td><code>\sec</code></td>
+</tr>
+<tr>
+<td>csc</td>
+<td><code>\csc</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="微积分运算符"><a href="#微积分运算符" class="headerlink" title="微积分运算符"></a>微积分运算符</h2><table>
+<thead>
+<tr>
+<th>符号</th>
+<th>代码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>′</td>
+<td><code>\prime</code></td>
+</tr>
+<tr>
+<td>∫</td>
+<td><code>\int</code></td>
+</tr>
+<tr>
+<td>∬</td>
+<td><code>\iint</code></td>
+</tr>
+<tr>
+<td>∭</td>
+<td><code>\iiint</code></td>
+</tr>
+<tr>
+<td>∬∬</td>
+<td><code>\iiiint</code></td>
+</tr>
+<tr>
+<td>∮</td>
+<td><code>\oint</code></td>
+</tr>
+<tr>
+<td>lim</td>
+<td><code>\lim</code></td>
+</tr>
+<tr>
+<td>∞</td>
+<td><code>\infty</code></td>
+</tr>
+<tr>
+<td>∇</td>
+<td><code>\nabla</code></td>
+</tr>
+<tr>
+<td>d</td>
+<td><code>\mathrm{d}</code></td>
+</tr>
+</tbody>
+</table>
+
+      
+
+      
+
+          
+        
+          
+        </div>
+
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dilidonglong.github.io/2019/08/11/markdown语法/" data-id="cjz71ovo70002r0quv7mmgy71" class="article-share-link">分享</a>
+      
+    </footer>
+
+  
+
+  
+
+  
+
+</article>
+
+
+
+      
         <article id="post-grep-正则表达式-awk-sed" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
@@ -290,7 +860,7 @@
 
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/08/11/grep-正则表达式-awk-sed/" data-id="cjz70lit30019uoquo39iu2nd" class="article-share-link">分享</a>
+      <a data-url="https://dilidonglong.github.io/2019/08/11/grep-正则表达式-awk-sed/" data-id="cjz71ovq3001cr0quc8d5a1pr" class="article-share-link">分享</a>
       
     </footer>
 
@@ -490,7 +1060,7 @@
 
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/08/11/iptables笔记/" data-id="cjz70lir10003uoqudn2vl0t9" class="article-share-link">分享</a>
+      <a data-url="https://dilidonglong.github.io/2019/08/11/iptables笔记/" data-id="cjz71ovnh0000r0quteri59jp" class="article-share-link">分享</a>
       
     </footer>
 
@@ -654,7 +1224,7 @@
 
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/07/18/新东方赵丽托福英语词汇8000-01/" data-id="cjz70liru000cuoquvup0vdo8" class="article-share-link">分享</a>
+      <a data-url="https://dilidonglong.github.io/2019/07/18/新东方赵丽托福英语词汇8000-01/" data-id="cjz71ovop000br0qumczoso7g" class="article-share-link">分享</a>
       
     </footer>
 
@@ -863,137 +1433,7 @@
 
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/07/15/新东方赵丽托福英语词汇8000-00/" data-id="cjz70liri0009uoqu6izqcdup" class="article-share-link">分享</a>
-      
-    </footer>
-
-  
-
-  
-
-  
-
-</article>
-
-
-
-      
-        <article id="post-远程桌面访问不了" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
-
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h2 itemprop="name">
-      <a class="article-title" href="/2019/07/07/远程桌面访问不了/">远程桌面访问不了</a>
-    </h2>
-  
-
-      </header>
-    
-
-    
-      <div class="article-meta">
-        <a href="/2019/07/07/远程桌面访问不了/" class="article-date">
-  <time datetime="2019-07-07T08:08:47.000Z" itemprop="datePublished">2019-07-07</time>
-</a>
-        
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/实战/">实战</a>
-  </div>
-
-      </div>
-    
-
-    <div class="article-entry" itemprop="articleBody">
-      
-
-      
-
-      
-        <h1 id="远程桌面访问不了"><a href="#远程桌面访问不了" class="headerlink" title="远程桌面访问不了"></a>远程桌面访问不了</h1><p><strong>问题：总部PC去访问分支的服务器3389桌面，会出现不定时中断的问题</strong></p>
-<ol>
-<li><p>10.0.2.132为PC 10.16.2.200为远程桌面的服务器</p>
-</li>
-<li><p>拓扑环境</p>
-<p><img src="/2019/07/07/远程桌面访问不了/13.png" alt="1"></p>
-</li>
-</ol>
-<p>总部有三层环境，AC透明模式部署，分支二层环境，就一个网段</p>
-<ol start="3">
-<li>数据包是总部访问分支访问不了的时候抓取的数据包，要求通过数据包，分析问题原因。</li>
-</ol>
-<hr>
-<p><strong>排查思路：</strong></p>
-<ol>
-<li><p>只抓取了分支vpn上eth0口的包和总部vpn设备eth0上的包（建议是分支电脑和总部服务器都抓取，抓不了也没    办法）</p>
-</li>
-<li><p>因为是终端pc访问服务器的时候经常断开。所以先看在终端侧的数据包，也即是查看zbssleth0这个包</p>
-<blockquote>
-<ol>
-<li>打开之后，先点击<strong>Statistics</strong>，选中<strong>conversation</strong></li>
-</ol>
-<p><img src="/2019/07/07/远程桌面访问不了/1.jpg" alt="1"></p>
-<ol start="2">
-<li>出现下图界面，选中<strong>TCP</strong>，看到存在三个连接。说明应该是测试过3次。其中注意到字节数Bytes， 第二个连接有112kB，比其他连接传输的数据都多，那我们就先来看这个连接。</li>
-</ol>
-<p><img src="/2019/07/07/远程桌面访问不了/2.jpg" alt="1"></p>
-<ol start="3">
-<li>怎么看呢？右键该连接后，照下图操作</li>
-</ol>
-<p><img src="/2019/07/07/远程桌面访问不了/3.jpg" alt="1"></p>
-<ol start="4">
-<li>wireshark自动过滤该连接，显示如下界面</li>
-</ol>
-<p><img src="/2019/07/07/远程桌面访问不了/4.jpg" alt="1"></p>
-<ol start="5">
-<li>我们可以点开专家分析来看看，是否存在什么问题。点开之后，记得把<strong>Limit to Display ﬁlter</strong> 给勾上，这样才会显示在wireshark过滤后展示页面的信息。</li>
-</ol>
-<p><img src="/2019/07/07/远程桌面访问不了/5.jpg" alt="1"></p>
-<p><img src="/2019/07/07/远程桌面访问不了/6.jpg" alt="1"></p>
-<ol start="6">
-<li>由于不涉及访问卡慢的问题，所以此时我们没必要看重传等信息。重点应该关注是什么导致的连接  断开。此时，明显能看到告警信息中，存在RST包，那我们就可以看下304号包与306号包。</li>
-</ol>
-<p><img src="/2019/07/07/远程桌面访问不了/7.jpg" alt="1"></p>
-<ol start="7">
-<li>找到304号包与306包后，发现后面就再也没有数据了，说明此时连接是中断了。明明数据传的好好   的，怎么突然客户端10.0.2.132就发送一个RST包呢。此时需要注意的是，我们的数据包是在总部vpn设备上eth0口抓的，也就是说这个流量是从内部传过来的。结合着总部的拓扑情况，出现中断，  可能存在2种情况。要么是客户端自己的问题，要么就是有啥子设备替客户端发送了这个RST包。</li>
-</ol>
-<p><img src="/2019/07/07/远程桌面访问不了/8.jpg" alt="1"></p>
-<ol start="8">
-<li><p>一个直接的办法就是在客户端上抓包。看下客户端有没有发出这个RST包。如果没有，结合着网络拓  扑，那基本就可以确定是AC发了这个RST包了（第一个，客户环境比较简单；第二个，谁叫AC是行  为管控呢）。如果客户端上的抓包有这个RST，那就是客户端的问题。</p>
-</li>
-<li><p>如果客户说，我电脑上不能安装其他软件（不管为啥，你就当死活不允许好了）。那就是说，我们  不能在客户端上抓包。那好，我们就只能在现有的数据包中获取蛛丝马迹了。</p>
-</li>
-<li><p>此时，我们还有一个方法判断是不是由客户端发出的这个RST包，那就是通过IP.ID这个参数。</p>
-</li>
-<li><p>IP.ID是什么鬼？那我们要知道数据包是如何封装的，如下图所示。如果看不懂，请参考<a href="https://wizardforcel.gitbooks.io/network-basic/content/0.html" target="_blank" rel="noopener">网络基本功</a>。IP.ID是IP数据报头中的一个字段。表明了一个数据包的身份，比如一个数据内容过大，被传输的时候就要对这个数据进行切割，即进行分片。当接收方收到这些分片后，需要把这些分片组装起来，那接收方每次收这么多的数据包，它咋知道哪些分片是从同一个数据内容中出来的呢？就要靠IP.ID了，通过IP.ID就可以把这些分片组装起来，还原成最初始的大块数据。就像你玩乐高玩具，乐  高里面这么多零件，如果这些零件中混入了其他玩具的零件。那你想把这个乐高玩具组装起来肯定需要一个标识来进行识别哪些零件是同属于一个乐高模型的。</p>
-<p><img src="/2019/07/07/远程桌面访问不了/9.jpg" alt="1"></p>
-</li>
-<li><p>上述还只是告诉了你，啥是IP.ID。那回到问题中来，你还需要知道的一个点就是，如果是一个设备   去发数据包，那么他的IP.ID增长是线性的。即一般来说，同一台设备发出第一个包，如果IP.ID是1，   第二个包就是2。就算不符合这规律，那数值起码也不会差太多。</p>
-</li>
-<li><p>我们再来看下wireshark，299号包的IP.ID=18970。302号包的IP.ID=18971。而304号包的IP.ID=22566。那RST包和之前的两个包，这数值也差的太多了啊，所以基本能判断这个包不是客户端发出的。</p>
-<p><img src="/2019/07/07/远程桌面访问不了/10.jpg" alt="1"></p>
-</li>
-</ol>
-<p> <img src="/2019/07/07/远程桌面访问不了/11.jpg" alt="1"></p>
-<p> <img src="/2019/07/07/远程桌面访问不了/12.jpg" alt="1"></p>
-</blockquote>
-</li>
-</ol>
-
-      
-
-      
-
-          
-        
-          
-        </div>
-
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/07/07/远程桌面访问不了/" data-id="cjz70lit20018uoqu1stwdedj" class="article-share-link">分享</a>
+      <a data-url="https://dilidonglong.github.io/2019/07/15/新东方赵丽托福英语词汇8000-00/" data-id="cjz71ovon0009r0qudehjkefy" class="article-share-link">分享</a>
       
     </footer>
 
@@ -1013,7 +1453,7 @@
   
     <nav class="page-nav">
       
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">下一页</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">下一页</a>
     </nav>
   
 </section>

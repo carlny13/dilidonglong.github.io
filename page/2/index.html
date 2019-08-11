@@ -60,6 +60,136 @@
 
     
       
+        <article id="post-远程桌面访问不了" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2019/07/07/远程桌面访问不了/">远程桌面访问不了</a>
+    </h2>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/07/07/远程桌面访问不了/" class="article-date">
+  <time datetime="2019-07-07T08:08:47.000Z" itemprop="datePublished">2019-07-07</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/实战/">实战</a>
+  </div>
+
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+      
+
+      
+        <h1 id="远程桌面访问不了"><a href="#远程桌面访问不了" class="headerlink" title="远程桌面访问不了"></a>远程桌面访问不了</h1><p><strong>问题：总部PC去访问分支的服务器3389桌面，会出现不定时中断的问题</strong></p>
+<ol>
+<li><p>10.0.2.132为PC 10.16.2.200为远程桌面的服务器</p>
+</li>
+<li><p>拓扑环境</p>
+<p><img src="/2019/07/07/远程桌面访问不了/13.png" alt="1"></p>
+</li>
+</ol>
+<p>总部有三层环境，AC透明模式部署，分支二层环境，就一个网段</p>
+<ol start="3">
+<li>数据包是总部访问分支访问不了的时候抓取的数据包，要求通过数据包，分析问题原因。</li>
+</ol>
+<hr>
+<p><strong>排查思路：</strong></p>
+<ol>
+<li><p>只抓取了分支vpn上eth0口的包和总部vpn设备eth0上的包（建议是分支电脑和总部服务器都抓取，抓不了也没    办法）</p>
+</li>
+<li><p>因为是终端pc访问服务器的时候经常断开。所以先看在终端侧的数据包，也即是查看zbssleth0这个包</p>
+<blockquote>
+<ol>
+<li>打开之后，先点击<strong>Statistics</strong>，选中<strong>conversation</strong></li>
+</ol>
+<p><img src="/2019/07/07/远程桌面访问不了/1.jpg" alt="1"></p>
+<ol start="2">
+<li>出现下图界面，选中<strong>TCP</strong>，看到存在三个连接。说明应该是测试过3次。其中注意到字节数Bytes， 第二个连接有112kB，比其他连接传输的数据都多，那我们就先来看这个连接。</li>
+</ol>
+<p><img src="/2019/07/07/远程桌面访问不了/2.jpg" alt="1"></p>
+<ol start="3">
+<li>怎么看呢？右键该连接后，照下图操作</li>
+</ol>
+<p><img src="/2019/07/07/远程桌面访问不了/3.jpg" alt="1"></p>
+<ol start="4">
+<li>wireshark自动过滤该连接，显示如下界面</li>
+</ol>
+<p><img src="/2019/07/07/远程桌面访问不了/4.jpg" alt="1"></p>
+<ol start="5">
+<li>我们可以点开专家分析来看看，是否存在什么问题。点开之后，记得把<strong>Limit to Display ﬁlter</strong> 给勾上，这样才会显示在wireshark过滤后展示页面的信息。</li>
+</ol>
+<p><img src="/2019/07/07/远程桌面访问不了/5.jpg" alt="1"></p>
+<p><img src="/2019/07/07/远程桌面访问不了/6.jpg" alt="1"></p>
+<ol start="6">
+<li>由于不涉及访问卡慢的问题，所以此时我们没必要看重传等信息。重点应该关注是什么导致的连接  断开。此时，明显能看到告警信息中，存在RST包，那我们就可以看下304号包与306号包。</li>
+</ol>
+<p><img src="/2019/07/07/远程桌面访问不了/7.jpg" alt="1"></p>
+<ol start="7">
+<li>找到304号包与306包后，发现后面就再也没有数据了，说明此时连接是中断了。明明数据传的好好   的，怎么突然客户端10.0.2.132就发送一个RST包呢。此时需要注意的是，我们的数据包是在总部vpn设备上eth0口抓的，也就是说这个流量是从内部传过来的。结合着总部的拓扑情况，出现中断，  可能存在2种情况。要么是客户端自己的问题，要么就是有啥子设备替客户端发送了这个RST包。</li>
+</ol>
+<p><img src="/2019/07/07/远程桌面访问不了/8.jpg" alt="1"></p>
+<ol start="8">
+<li><p>一个直接的办法就是在客户端上抓包。看下客户端有没有发出这个RST包。如果没有，结合着网络拓  扑，那基本就可以确定是AC发了这个RST包了（第一个，客户环境比较简单；第二个，谁叫AC是行  为管控呢）。如果客户端上的抓包有这个RST，那就是客户端的问题。</p>
+</li>
+<li><p>如果客户说，我电脑上不能安装其他软件（不管为啥，你就当死活不允许好了）。那就是说，我们  不能在客户端上抓包。那好，我们就只能在现有的数据包中获取蛛丝马迹了。</p>
+</li>
+<li><p>此时，我们还有一个方法判断是不是由客户端发出的这个RST包，那就是通过IP.ID这个参数。</p>
+</li>
+<li><p>IP.ID是什么鬼？那我们要知道数据包是如何封装的，如下图所示。如果看不懂，请参考<a href="https://wizardforcel.gitbooks.io/network-basic/content/0.html" target="_blank" rel="noopener">网络基本功</a>。IP.ID是IP数据报头中的一个字段。表明了一个数据包的身份，比如一个数据内容过大，被传输的时候就要对这个数据进行切割，即进行分片。当接收方收到这些分片后，需要把这些分片组装起来，那接收方每次收这么多的数据包，它咋知道哪些分片是从同一个数据内容中出来的呢？就要靠IP.ID了，通过IP.ID就可以把这些分片组装起来，还原成最初始的大块数据。就像你玩乐高玩具，乐  高里面这么多零件，如果这些零件中混入了其他玩具的零件。那你想把这个乐高玩具组装起来肯定需要一个标识来进行识别哪些零件是同属于一个乐高模型的。</p>
+<p><img src="/2019/07/07/远程桌面访问不了/9.jpg" alt="1"></p>
+</li>
+<li><p>上述还只是告诉了你，啥是IP.ID。那回到问题中来，你还需要知道的一个点就是，如果是一个设备   去发数据包，那么他的IP.ID增长是线性的。即一般来说，同一台设备发出第一个包，如果IP.ID是1，   第二个包就是2。就算不符合这规律，那数值起码也不会差太多。</p>
+</li>
+<li><p>我们再来看下wireshark，299号包的IP.ID=18970。302号包的IP.ID=18971。而304号包的IP.ID=22566。那RST包和之前的两个包，这数值也差的太多了啊，所以基本能判断这个包不是客户端发出的。</p>
+<p><img src="/2019/07/07/远程桌面访问不了/10.jpg" alt="1"></p>
+</li>
+</ol>
+<p> <img src="/2019/07/07/远程桌面访问不了/11.jpg" alt="1"></p>
+<p> <img src="/2019/07/07/远程桌面访问不了/12.jpg" alt="1"></p>
+</blockquote>
+</li>
+</ol>
+
+      
+
+      
+
+          
+        
+          
+        </div>
+
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dilidonglong.github.io/2019/07/07/远程桌面访问不了/" data-id="cjz71ovpm000vr0quppli73wd" class="article-share-link">分享</a>
+      
+    </footer>
+
+  
+
+  
+
+  
+
+</article>
+
+
+
+      
         <article id="post-视频会议卡顿" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
@@ -228,7 +358,7 @@
 
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/06/13/视频会议卡顿/" data-id="cjz70liry000guoqujpbx7lgd" class="article-share-link">分享</a>
+      <a data-url="https://dilidonglong.github.io/2019/06/13/视频会议卡顿/" data-id="cjz71ovp4000hr0qun59gukel" class="article-share-link">分享</a>
       
     </footer>
 
@@ -420,7 +550,7 @@
 
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/06/12/并行-串行-异步传输/" data-id="cjz70litd001duoqucd51zb8l" class="article-share-link">分享</a>
+      <a data-url="https://dilidonglong.github.io/2019/06/12/并行-串行-异步传输/" data-id="cjz71ovq6001er0qu3hqyc7lw" class="article-share-link">分享</a>
       
     </footer>
 
@@ -556,7 +686,7 @@
 
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/06/11/访问X友软件卡顿/" data-id="cjz70lis0000juoquuvod0ri1" class="article-share-link">分享</a>
+      <a data-url="https://dilidonglong.github.io/2019/06/11/访问X友软件卡顿/" data-id="cjz71ovpf000mr0qukpe2vrcr" class="article-share-link">分享</a>
       
     </footer>
 
@@ -766,106 +896,7 @@
 
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/05/06/英语名词/" data-id="cjz70lirw000fuoquddnolvs7" class="article-share-link">分享</a>
-      
-    </footer>
-
-  
-
-  
-
-  
-
-</article>
-
-
-
-      
-        <article id="post-软考试题3" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
-
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h2 itemprop="name">
-      <a class="article-title" href="/2019/05/06/软考试题3/">软考试题3</a>
-    </h2>
-  
-
-      </header>
-    
-
-    
-      <div class="article-meta">
-        <a href="/2019/05/06/软考试题3/" class="article-date">
-  <time datetime="2019-05-06T14:56:29.000Z" itemprop="datePublished">2019-05-06</time>
-</a>
-        
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/软考/">软考</a>
-  </div>
-
-      </div>
-    
-
-    <div class="article-entry" itemprop="articleBody">
-      
-
-      
-
-      
-        <h1 id="软考试题3"><a href="#软考试题3" class="headerlink" title="软考试题3"></a>软考试题3</h1><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>A、B是局域网上两个相距1km的站点，A采用同步传输方式以1Mb/s的速率向B发送长度为200，000字节的文件。假定数据帧长为128比特，其中首部为48比特:应答帧为22比特，A在收到B的应答帧后发送下一帧。传送文件花费的时间为（  ）s，有效的数据速率为（  ）Mb/s（传播速率为200m/us）<br>A.1.6            B.2.4              C.3.2                  D.3.6<br>A.0.2            B.0.5              C.0.7                  D.0.8</p>
-<h2 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h2><ol>
-<li><p>数据传输的过程中，可以理解成是寄快递。比如我想给我妈寄一支牙刷，牙刷用纸盒子包着。我妈拿到这个快递后，真正有用的想要的也就只有这个牙刷而已，那个纸盒子不是真正想要的东西。不过纸盒子上会有寄件人和收件人的信息。</p>
-</li>
-<li><p>题干中说的<code>假定数据帧长为128比特，其中首部为48比特</code>，其中首部48比特就类似于是纸盒子。128比特就类似于是被纸盒子包着的牙刷。那此时真正有用的数据部分是多少比特呢？聪明如你，很快就知道了是128-48=80bit。也就是说这80bit就类似于是这个牙刷。</p>
-<hr>
-</li>
-<li><p>现在假设寄的不是牙刷，而是一个需要组装的电脑桌。这个桌子不像牙刷那么好寄，东西太多了，一个纸盒子可能还放不下，要多个纸盒子包着，然后再寄出去。</p>
-</li>
-<li><p>题干中说的200，000字节（即200，000x8=1600，000比特）的文件就类似于是需要组装的电脑桌。每个纸盒子只能放电脑桌部件的一部分，即每个盒子只能放80比特的内容。</p>
-</li>
-<li><p>那么此时需要多少个纸盒子装呢？聪明如你，相信已经知道了。1600 000/80=20 000。</p>
-</li>
-<li><p>一个纸盒子再加上里面的部件，合起来一共是128个比特。那么所有的包裹（纸盒子+电脑桌部件）加起来，占多少个比特呢。就是20 000x128=2560 000比特。</p>
-<hr>
-</li>
-<li><p>快递公司穷，只有一辆车来运包裹，一次还只能运一个。运过去之后，还得等对方说一句我收到了，才能接着发第二个包裹。对方说的那句我收到了，就类似于题干中说的22比特的应答帧。也就是说，我发20 000个包裹过去，居然要回应20 000次我收到了。</p>
-<hr>
-</li>
-<li><p>上述了解完后，可以开始做题了。我们知道如何计算一个数据帧从发出到对方接收所需要时间的公式，即发送时延+传播时延</p>
-</li>
-<li><p><strong>发送时延=数据帧长度/数据速率。把题中数值带入，即128bit/1Mbps=0.000128s。</strong></p>
-</li>
-<li><p><strong>传播时延=两点间距离/光速的三分之二。把题中数值带入，即1000m/（2x10^8）mps=0.000005s</strong></p>
-</li>
-<li><p><strong>所以从发送方发出一个帧到接收方接收，所需要的时间是0.000128+0.000005s=0.000133s</strong></p>
-</li>
-<li><p>我们把包裹发出去，还得等对方说句收到了才能继续发下一个包裹。那么对方说一句收到了，到我们发送方接收到需要多少时间呢？同理可得，<strong>发送时延=数据帧长度/数据速率。把题中数值带入，即22bit/1Mbps=0.000022s。传播时延=两点间距离/光速的三分之二。把题中数值带入，即1000m/（2x10^8）mps=0.000005s</strong>。所以需要的时间是<strong>0.000022s+0.000005s=0.000027s</strong></p>
-<hr>
-</li>
-<li><p>综上，一来一回所需要的时间就是0.000027s+0.000133s=0.00016s</p>
-</li>
-<li><p>这还只是一个包需要的时间，现在要发20 000个包，那总共需要多长时间呢？<strong>对的，0.00016x20 000=3.2s</strong></p>
-<hr>
-</li>
-<li><p>最后一问，问你有效数据速率是多少。你的电脑桌就是真正有效的东西，总共也就1600，000比特，为了发这1600000比特，花了一共3.2s的时间。<strong>所以有效数据速率就是1600000bit/3.2s=500 000bps=0.5Mbps</strong></p>
-</li>
-</ol>
-
-      
-
-      
-
-          
-        
-          
-        </div>
-
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/05/06/软考试题3/" data-id="cjz70lis5000puoquuv5obn0u" class="article-share-link">分享</a>
+      <a data-url="https://dilidonglong.github.io/2019/05/06/英语名词/" data-id="cjz71ovoz000fr0quli7gbwxg" class="article-share-link">分享</a>
       
     </footer>
 
@@ -885,7 +916,7 @@
   
     <nav class="page-nav">
       
-      <a class="extend prev" rel="prev" href="/">上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/">下一页</a>
+      <a class="extend prev" rel="prev" href="/">上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/">下一页</a>
     </nav>
   
 </section>
