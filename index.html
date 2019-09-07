@@ -60,6 +60,121 @@
 
     
       
+        <article id="post-如何在SEED-Ubuntu-VM上运行VirtualBox？" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/">如何在SEED_Ubuntu_VM上运行VirtualBox？</a>
+    </h2>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/" class="article-date">
+  <time datetime="2019-09-07T15:49:44.000Z" itemprop="datePublished">2019-09-07</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/SEED-Labs/">SEED Labs</a>
+  </div>
+
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+      
+
+      
+        <h1 id="如何在SEED-Ubuntu-VM上运行VirtualBox？"><a href="#如何在SEED-Ubuntu-VM上运行VirtualBox？" class="headerlink" title="如何在SEED_Ubuntu_VM上运行VirtualBox？"></a>如何在SEED_Ubuntu_VM上运行VirtualBox？</h1><p><a href="https://seedsecuritylabs.org/Labs_16.04/Documents/SEEDVM_VirtualBoxManual.pdf" target="_blank" rel="noopener">官方原文档</a></p>
+<p>Install the free VirtualBox software first. We recommend <strong>Version 6.0.4</strong> (please stay away from the newer versions, as they still have some issues with our VM).</p>
+<p>首先安装免费的VirtualBox软件。 我们建议使用版本6.0.4（请远离新版本，因为它们仍然存在我们的VM的一些问题）。</p>
+<p><br></p>
+<h2 id="Step-1-Create-a-New-VM-in-VirtualBox"><a href="#Step-1-Create-a-New-VM-in-VirtualBox" class="headerlink" title="Step 1: Create a New VM in VirtualBox"></a>Step 1: Create a New VM in VirtualBox</h2><p>步骤1：在VirtualBox中创建一个新的VM</p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/1.jpg" alt="1"></p>
+<p><br></p>
+<h2 id="Step-2-Provide-a-Name-and-Select-the-OS-Type-and-Version"><a href="#Step-2-Provide-a-Name-and-Select-the-OS-Type-and-Version" class="headerlink" title="Step 2: Provide a Name and Select the OS Type and Version"></a>Step 2: Provide a Name and Select the OS Type and Version</h2><p>步骤2：进行命名，同时选择操作系统的类型与版本</p>
+<p>Do NOT pick Ubuntu (64-bit), even though your machine is 64 bit. Our prebuilt VM is 32-bit Ubuntu.</p>
+<p>不要选择Ubuntu (64-bit)，尽管你的机器是64位的。我们预建的VM是32位的Ubuntu。</p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/2.png" alt="1"></p>
+<p><br></p>
+<h2 id="Step-3-Set-the-Memory-Size"><a href="#Step-3-Set-the-Memory-Size" class="headerlink" title="Step 3: Set the Memory Size"></a>Step 3: Set the Memory Size</h2><p>步骤3：设置内存容量</p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/3.jpg" alt="1"></p>
+<p><br></p>
+<h2 id="Step-4-Select-the-Pre-built-VM-File-Provided-by-Us"><a href="#Step-4-Select-the-Pre-built-VM-File-Provided-by-Us" class="headerlink" title="Step 4: Select the Pre-built VM File Provided by Us"></a>Step 4: Select the Pre-built VM File Provided by Us</h2><p>步骤4： 选择使用我们提供的预建的VM文件</p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/4.jpg" alt="1"></p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/5.jpg" alt="1"></p>
+<p><br></p>
+<h2 id="In-the-above-step-you-may-encounter-遭遇-the-following-error-otherwise-directly-go-to-Step-5"><a href="#In-the-above-step-you-may-encounter-遭遇-the-following-error-otherwise-directly-go-to-Step-5" class="headerlink" title="In the above step, you may encounter(遭遇) the following error; otherwise, directly go to Step 5."></a>In the above step, you may encounter(遭遇) the following error; otherwise, directly go to Step 5.</h2><p>在上面的步骤中，你可能会遇到以下错误; 如果没有，则直接转到步骤5。</p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/6.jpg" alt="1"></p>
+<p><strong>Reason and Solution:</strong> This is because you copied the VM files from another VM, which is already loaded into VirtualBox. These two VMs have the same UUID, which is not allowed by Virtualbox. Here are several solutions depending on your situations:</p>
+<p><strong>原因和解决方法：</strong>这是因为你从其他VM复制VM文件，而这个VM已经被加载过VirtualBox中了。这两个VM有着同样的UUID，而在VirtualBox中是不允许这样的。取决于你的状况，有以下几个解决方案：</p>
+<ul>
+<li>If you plan to create multiple VMs using the same image, please use the clone<br>mechanism (See Appendix A for details).</li>
+<li>如果你使用相同的镜像创建多个VM，请使用克隆机制（更多细节请参考附录A）</li>
+<li>If the older VM with the same UUID is no longer needed, remove it from VirtualBox will solve the problem.</li>
+<li>如果不再需要具有相同UUID的旧的VM，则从VirtualBox中删除它可以解决问题。</li>
+<li>If you do want to keep the older VM, you can change the UUID of the new VM. The fastest way is to directly modify SEEDUbuntu16.04.vmdk, which is a text file. Search for the ddb.uuid.image entry, and change its value (e.g., change the last byte from ‘d’ to ‘e’)</li>
+<li>如果你确实想要保留旧的VM，你可以为新的VM修改UUID。 最快的方法是直接修改SEEDUbuntu16.04.vmdk，这是一个文本文件。 搜索ddb.uuid.image条目，并更改其值（例如，将最后一个字节从“d”更改为“e”）</li>
+</ul>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/7.jpg" alt="1"></p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/8.jpg" alt="1"></p>
+<p>If there is no error (or after you fix the error), your VM will be created successfully.</p>
+<p>如果没有出现错误（或是你已经修复了错误），你的VM将成功创建。</p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/9.jpg" alt="1"></p>
+<p><br></p>
+<h2 id="Step-5-Configure-the-VM"><a href="#Step-5-Configure-the-VM" class="headerlink" title="Step 5: Configure the VM"></a>Step 5: Configure the VM</h2><p>步骤5：配置VM</p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/10.jpg" alt="1"></p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/11.jpg" alt="1"></p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/12.jpg" alt="1"></p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/13.jpg" alt="1"></p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/14.jpg" alt="1"></p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/15.jpg" alt="1"></p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/16.jpg" alt="1"></p>
+<p><br></p>
+<h2 id="Step-6-Start-the-VM"><a href="#Step-6-Start-the-VM" class="headerlink" title="Step 6: Start the VM"></a>Step 6: Start the VM</h2><p>步骤6：启动VM</p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/17.jpg" alt="1"><em>**</em></p>
+<p><br></p>
+<h2 id="Step-7-Stop-the-VM-or-Save-the-VM’s-State"><a href="#Step-7-Stop-the-VM-or-Save-the-VM’s-State" class="headerlink" title="Step 7: Stop the VM or Save the VM’s State"></a>Step 7: Stop the VM or Save the VM’s State</h2><p>步骤7：停止VM或是保存VM的状态</p>
+<p>When you are done with your VM, you can always shut it down (from inside Ubuntu). A better alternative is to “freeze” the computer, so everything is saved. When you need it again, you can “unfreeze” it, and resume from where you left off. This is much faster and convenient than shutting down and rebooting the VM. To achieve this, you can use the “Save State” option.</p>
+<p>用完VM后，你可以随时关闭它（从Ubuntu内部）。 更好的选择是“freeze冻结”计算机，以便保存所有内容。 当你再次需要它时，你可以“unfreeze解冻”它，并从你离开的地方恢复。 这比关闭和重新启动VM快得多，方便快捷。 为此，你可以使用“Save State保存状态”选项。</p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/18.jpg" alt="1"></p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/19.jpg" alt="1"></p>
+
+      
+
+      
+
+          
+        
+          
+        </div>
+
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dilidonglong.github.io/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/" data-id="ck09sgnhy00094ovdilsz8fwz" class="article-share-link">分享</a>
+      
+    </footer>
+
+  
+
+  
+
+  
+
+</article>
+
+
+
+      
         <article id="post-markdown语法" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
@@ -615,7 +730,7 @@
 
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/08/11/markdown语法/" data-id="ck051aeid000510vd7b99ffkl" class="article-share-link">分享</a>
+      <a data-url="https://dilidonglong.github.io/2019/08/11/markdown语法/" data-id="ck09sgnhn00024ovds4gluplk" class="article-share-link">分享</a>
       
     </footer>
 
@@ -860,7 +975,7 @@
 
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/08/11/grep-正则表达式-awk-sed/" data-id="ck051aei8000410vd24560z7d" class="article-share-link">分享</a>
+      <a data-url="https://dilidonglong.github.io/2019/08/11/grep-正则表达式-awk-sed/" data-id="ck09sgni5000f4ovdn367euay" class="article-share-link">分享</a>
       
     </footer>
 
@@ -1060,7 +1175,7 @@
 
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/08/11/iptables笔记/" data-id="ck051aeja000j10vdf0p6y2ql" class="article-share-link">分享</a>
+      <a data-url="https://dilidonglong.github.io/2019/08/11/iptables笔记/" data-id="ck09sgnhf00004ovdquccsiaw" class="article-share-link">分享</a>
       
     </footer>
 
@@ -1224,216 +1339,7 @@
 
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/07/18/新东方赵丽托福英语词汇8000-01/" data-id="ck051aeju000s10vd7xhs916e" class="article-share-link">分享</a>
-      
-    </footer>
-
-  
-
-  
-
-  
-
-</article>
-
-
-
-      
-        <article id="post-新东方赵丽托福英语词汇8000-00" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
-
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h2 itemprop="name">
-      <a class="article-title" href="/2019/07/15/新东方赵丽托福英语词汇8000-00/">新东方赵丽托福英语词汇8000-00</a>
-    </h2>
-  
-
-      </header>
-    
-
-    
-      <div class="article-meta">
-        <a href="/2019/07/15/新东方赵丽托福英语词汇8000-00/" class="article-date">
-  <time datetime="2019-07-15T13:50:05.000Z" itemprop="datePublished">2019-07-15</time>
-</a>
-        
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/英语/">英语</a>
-  </div>
-
-      </div>
-    
-
-    <div class="article-entry" itemprop="articleBody">
-      
-
-      
-
-      
-        <h1 id="新东方赵丽托福英语词汇8000-00"><a href="#新东方赵丽托福英语词汇8000-00" class="headerlink" title="新东方赵丽托福英语词汇8000-00"></a>新东方赵丽托福英语词汇8000-00</h1><p>共18词</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">haunt</th>
-<th style="text-align:center">flaunt</th>
-<th style="text-align:center">daunt</th>
-<th style="text-align:center">vaunt</th>
-<th style="text-align:center">gaunt</th>
-<th style="text-align:center">jaunt</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">journey</td>
-<td style="text-align:center">saunter</td>
-<td style="text-align:center">taunt</td>
-<td style="text-align:center">ponderous</td>
-<td style="text-align:center">slurp</td>
-<td style="text-align:center">drone</td>
-</tr>
-<tr>
-<td style="text-align:center">quaff</td>
-<td style="text-align:center">ambition</td>
-<td style="text-align:center">schedule</td>
-<td style="text-align:center">pajama</td>
-<td style="text-align:center">famine</td>
-<td style="text-align:center">sanguine</td>
-</tr>
-</tbody>
-</table>
-<h2 id="1-拆分法—aunt系列"><a href="#1-拆分法—aunt系列" class="headerlink" title="1.拆分法—aunt系列"></a>1.拆分法—aunt系列</h2><p><strong>haunt</strong>(home+aunt)</p>
-<blockquote>
-<blockquote>
-<p>verb:(鬼魂)出没;(不快的事情)萦绕</p>
-<p>1.A headless rider haunts the country lanes.<br>一个无头骑士常出没于乡间的小路上。</p>
-<p>2.The memory of that day still haunts me.<br>我的脑海中常常回想起那天的情景。</p>
-</blockquote>
-<blockquote>
-<p>noun:常来常往的地方</p>
-<p>The pub is a favourite haunt of artists.<br>这家酒吧是艺术家最爱光顾的地方。</p>
-</blockquote>
-</blockquote>
-<p><br></p>
-<p><strong>flaunt</strong>(fly+aunt)</p>
-<blockquote>
-<p>verb:炫耀，夸耀</p>
-<p>He did not believe in flaunting his wealth.<br>他不相信摆阔有什么好处。</p>
-</blockquote>
-<p><br></p>
-<p><strong>daunt</strong>(da打+aunt)</p>
-<blockquote>
-<p>verb:恐吓；使胆怯；使气馁；使失去信心 </p>
-<p>She was a brave woman but she felt daunted by the task ahead.<br>她是一个勇敢的女人，但对面前的任务却感到信心不足。</p>
-</blockquote>
-<p><br></p>
-<p><strong>vaunt</strong>(v5+aunt)</p>
-<blockquote>
-<p>不及物动词<br>夸耀, 吹嘘[…] [of, over, about]<br>~ of one’s skill夸耀自己的技巧</p>
-<p>可数名词<br>自夸, 夸张, 吹嘘<br>make a ~ of﹍ 夸耀…</p>
-</blockquote>
-<p><br></p>
-<p><strong>gaunt</strong>(gre+aunt)</p>
-<blockquote>
-<p>adjective:瘦削憔悴的（常因疾病、饥饿或忧虑）</p>
-<p>a gaunt face<br>憔悴的面容</p>
-</blockquote>
-<p><br></p>
-<p><strong>jaunt</strong>(接+aunt)</p>
-<blockquote>
-<p>noun:短途旅行</p>
-<p>a weekend jaunt</p>
-<p>周末小旅行</p>
-</blockquote>
-<p>ps:<strong>journey</strong>接你：长途旅行</p>
-<p><br></p>
-<p><strong>saunter</strong>(see+aunter)姑姑到处乱看</p>
-<blockquote>
-<p>verb:闲逛</p>
-<p>He sauntered by, looking as if he had all the time in the world.<br>他悠闲地走过，仿佛时间对他来说是无穷无尽的。</p>
-</blockquote>
-<p><br></p>
-<p><strong>taunt</strong>(吐，呸+aunt)</p>
-<blockquote>
-<blockquote>
-<p>verb:辱骂；嘲笑</p>
-<p>The other kids continually taunted him about his size.<br>其他孩子不断地耻笑他的个头儿。</p>
-</blockquote>
-<blockquote>
-<p>noun:嘲笑（或讽刺、奚落等）的言辞</p>
-<p>Black players often had to endure racist taunts.<br>黑人运动员经常得忍受种族歧视性的奚落。</p>
-</blockquote>
-</blockquote>
-<p><br></p>
-<hr>
-<h2 id="2-谐音联想法"><a href="#2-谐音联想法" class="headerlink" title="2.谐音联想法"></a>2.谐音联想法</h2><p><strong>ponderous</strong>(胖的要死)</p>
-<blockquote>
-<p>adjective:笨重的，缓慢的</p>
-<p>She watched the cow’s ponderous progress.<br>她看着牛迟缓地向前走着。</p>
-</blockquote>
-<p><br></p>
-<p><strong>slurp</strong>(嗖的一下)</p>
-<blockquote>
-<p>verb:（喝东西时）发出啧啧的声音</p>
-<p>He was slurping his tea.<br>他正咂着嘴喝茶。</p>
-</blockquote>
-<p><br></p>
-<p><strong>drone</strong>(juan～juan～,蜜蜂等嗡嗡的声音)</p>
-<blockquote>
-<p>noun:嗡嗡声</p>
-<p>the distant drone of traffic<br>远处车辆往来发出的嗡嗡声</p>
-</blockquote>
-<p><br></p>
-<p><strong>quaff</strong>(夸父追日饮一河之水；马和骡子kuafukuafu喝水的声音)</p>
-<blockquote>
-<p>verb:豪饮；痛饮；开怀畅饮</p>
-</blockquote>
-<p><br></p>
-<p><strong>ambition</strong>(俺必胜)</p>
-<blockquote>
-<p>noun:追求的目标;野心</p>
-<p>1.It had been her lifelong ambition.<br>这是她终身追求的目标。</p>
-<p>2.She was intelligent but suffered from a lack of ambition.<br>她很聪明，但却缺乏远大志向。</p>
-</blockquote>
-<p><br></p>
-<hr>
-<h2 id="3-拼音联想法"><a href="#3-拼音联想法" class="headerlink" title="3.拼音联想法"></a>3.拼音联想法</h2><p><strong>schedule</strong>(s+che+du+le,该死的车又堵了，我们不得不改变我们的计划表)</p>
-<blockquote>
-<p>noun:工作计划；日程安排</p>
-<p>I have a hectic schedule for the next few days.<br>我今后几天的日程紧得要命。</p>
-</blockquote>
-<p><br></p>
-<p><strong>pajama</strong>(pa+ja+ma,趴在家妈妈穿的)</p>
-<blockquote>
-<p>noun:睡衣</p>
-</blockquote>
-<p><br></p>
-<p><strong>famine</strong>(fa+mi+ne,发米呢)</p>
-<blockquote>
-<p>noun:饥荒</p>
-<p>a severe famine<br>严重饥荒</p>
-</blockquote>
-<p><br></p>
-<p><strong>sanguine</strong>(san+gui+ne,三桂呢)</p>
-<blockquote>
-<p>adjective:充满信心的；乐观的;面色红润的</p>
-<p>hey are less sanguine about the company’s long-term prospects.<br>他们对公司的远景不那么乐观。</p>
-</blockquote>
-
-      
-
-      
-
-          
-        
-          
-        </div>
-
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/07/15/新东方赵丽托福英语词汇8000-00/" data-id="ck051aejz001210vdimj8afvo" class="article-share-link">分享</a>
+      <a data-url="https://dilidonglong.github.io/2019/07/18/新东方赵丽托福英语词汇8000-01/" data-id="ck09sgni9000l4ovdjukb6qtp" class="article-share-link">分享</a>
       
     </footer>
 

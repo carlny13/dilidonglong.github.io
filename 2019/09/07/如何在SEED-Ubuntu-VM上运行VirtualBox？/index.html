@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  
+    <meta name="keywords" content="network,linux">
+  
+  
+    <meta name="description" content="兰芝生于幽谷，不以无人而不芳">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    如何在SEED_Ubuntu_VM上运行VirtualBox？ |
+    
+    望伊如西の博客</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+  
+  <script src="/js/pace.min.js"></script>
+</head>
+</html>
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-如何在SEED-Ubuntu-VM上运行VirtualBox？" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      如何在SEED_Ubuntu_VM上运行VirtualBox？
+    </h1>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/" class="article-date">
+  <time datetime="2019-09-07T15:49:44.000Z" itemprop="datePublished">2019-09-07</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/SEED-Labs/">SEED Labs</a>
+  </div>
+
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+      
+
+      
+        <h1 id="如何在SEED-Ubuntu-VM上运行VirtualBox？"><a href="#如何在SEED-Ubuntu-VM上运行VirtualBox？" class="headerlink" title="如何在SEED_Ubuntu_VM上运行VirtualBox？"></a>如何在SEED_Ubuntu_VM上运行VirtualBox？</h1><p><a href="https://seedsecuritylabs.org/Labs_16.04/Documents/SEEDVM_VirtualBoxManual.pdf" target="_blank" rel="noopener">官方原文档</a></p>
+<p>Install the free VirtualBox software first. We recommend <strong>Version 6.0.4</strong> (please stay away from the newer versions, as they still have some issues with our VM).</p>
+<p>首先安装免费的VirtualBox软件。 我们建议使用版本6.0.4（请远离新版本，因为它们仍然存在我们的VM的一些问题）。</p>
+<p><br></p>
+<h2 id="Step-1-Create-a-New-VM-in-VirtualBox"><a href="#Step-1-Create-a-New-VM-in-VirtualBox" class="headerlink" title="Step 1: Create a New VM in VirtualBox"></a>Step 1: Create a New VM in VirtualBox</h2><p>步骤1：在VirtualBox中创建一个新的VM</p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/1.jpg" alt="1"></p>
+<p><br></p>
+<h2 id="Step-2-Provide-a-Name-and-Select-the-OS-Type-and-Version"><a href="#Step-2-Provide-a-Name-and-Select-the-OS-Type-and-Version" class="headerlink" title="Step 2: Provide a Name and Select the OS Type and Version"></a>Step 2: Provide a Name and Select the OS Type and Version</h2><p>步骤2：进行命名，同时选择操作系统的类型与版本</p>
+<p>Do NOT pick Ubuntu (64-bit), even though your machine is 64 bit. Our prebuilt VM is 32-bit Ubuntu.</p>
+<p>不要选择Ubuntu (64-bit)，尽管你的机器是64位的。我们预建的VM是32位的Ubuntu。</p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/2.png" alt="1"></p>
+<p><br></p>
+<h2 id="Step-3-Set-the-Memory-Size"><a href="#Step-3-Set-the-Memory-Size" class="headerlink" title="Step 3: Set the Memory Size"></a>Step 3: Set the Memory Size</h2><p>步骤3：设置内存容量</p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/3.jpg" alt="1"></p>
+<p><br></p>
+<h2 id="Step-4-Select-the-Pre-built-VM-File-Provided-by-Us"><a href="#Step-4-Select-the-Pre-built-VM-File-Provided-by-Us" class="headerlink" title="Step 4: Select the Pre-built VM File Provided by Us"></a>Step 4: Select the Pre-built VM File Provided by Us</h2><p>步骤4： 选择使用我们提供的预建的VM文件</p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/4.jpg" alt="1"></p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/5.jpg" alt="1"></p>
+<p><br></p>
+<h2 id="In-the-above-step-you-may-encounter-遭遇-the-following-error-otherwise-directly-go-to-Step-5"><a href="#In-the-above-step-you-may-encounter-遭遇-the-following-error-otherwise-directly-go-to-Step-5" class="headerlink" title="In the above step, you may encounter(遭遇) the following error; otherwise, directly go to Step 5."></a>In the above step, you may encounter(遭遇) the following error; otherwise, directly go to Step 5.</h2><p>在上面的步骤中，你可能会遇到以下错误; 如果没有，则直接转到步骤5。</p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/6.jpg" alt="1"></p>
+<p><strong>Reason and Solution:</strong> This is because you copied the VM files from another VM, which is already loaded into VirtualBox. These two VMs have the same UUID, which is not allowed by Virtualbox. Here are several solutions depending on your situations:</p>
+<p><strong>原因和解决方法：</strong>这是因为你从其他VM复制VM文件，而这个VM已经被加载过VirtualBox中了。这两个VM有着同样的UUID，而在VirtualBox中是不允许这样的。取决于你的状况，有以下几个解决方案：</p>
+<ul>
+<li>If you plan to create multiple VMs using the same image, please use the clone<br>mechanism (See Appendix A for details).</li>
+<li>如果你使用相同的镜像创建多个VM，请使用克隆机制（更多细节请参考附录A）</li>
+<li>If the older VM with the same UUID is no longer needed, remove it from VirtualBox will solve the problem.</li>
+<li>如果不再需要具有相同UUID的旧的VM，则从VirtualBox中删除它可以解决问题。</li>
+<li>If you do want to keep the older VM, you can change the UUID of the new VM. The fastest way is to directly modify SEEDUbuntu16.04.vmdk, which is a text file. Search for the ddb.uuid.image entry, and change its value (e.g., change the last byte from ‘d’ to ‘e’)</li>
+<li>如果你确实想要保留旧的VM，你可以为新的VM修改UUID。 最快的方法是直接修改SEEDUbuntu16.04.vmdk，这是一个文本文件。 搜索ddb.uuid.image条目，并更改其值（例如，将最后一个字节从“d”更改为“e”）</li>
+</ul>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/7.jpg" alt="1"></p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/8.jpg" alt="1"></p>
+<p>If there is no error (or after you fix the error), your VM will be created successfully.</p>
+<p>如果没有出现错误（或是你已经修复了错误），你的VM将成功创建。</p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/9.jpg" alt="1"></p>
+<p><br></p>
+<h2 id="Step-5-Configure-the-VM"><a href="#Step-5-Configure-the-VM" class="headerlink" title="Step 5: Configure the VM"></a>Step 5: Configure the VM</h2><p>步骤5：配置VM</p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/10.jpg" alt="1"></p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/11.jpg" alt="1"></p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/12.jpg" alt="1"></p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/13.jpg" alt="1"></p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/14.jpg" alt="1"></p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/15.jpg" alt="1"></p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/16.jpg" alt="1"></p>
+<p><br></p>
+<h2 id="Step-6-Start-the-VM"><a href="#Step-6-Start-the-VM" class="headerlink" title="Step 6: Start the VM"></a>Step 6: Start the VM</h2><p>步骤6：启动VM</p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/17.jpg" alt="1"><em>**</em></p>
+<p><br></p>
+<h2 id="Step-7-Stop-the-VM-or-Save-the-VM’s-State"><a href="#Step-7-Stop-the-VM-or-Save-the-VM’s-State" class="headerlink" title="Step 7: Stop the VM or Save the VM’s State"></a>Step 7: Stop the VM or Save the VM’s State</h2><p>步骤7：停止VM或是保存VM的状态</p>
+<p>When you are done with your VM, you can always shut it down (from inside Ubuntu). A better alternative is to “freeze” the computer, so everything is saved. When you need it again, you can “unfreeze” it, and resume from where you left off. This is much faster and convenient than shutting down and rebooting the VM. To achieve this, you can use the “Save State” option.</p>
+<p>用完VM后，你可以随时关闭它（从Ubuntu内部）。 更好的选择是“freeze冻结”计算机，以便保存所有内容。 当你再次需要它时，你可以“unfreeze解冻”它，并从你离开的地方恢复。 这比关闭和重新启动VM快得多，方便快捷。 为此，你可以使用“Save State保存状态”选项。</p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/18.jpg" alt="1"></p>
+<p><img src="/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/19.jpg" alt="1"></p>
+
+      
+
+      
+
+          
+        
+          
+        </div>
+
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dilidonglong.github.io/2019/09/07/如何在SEED-Ubuntu-VM上运行VirtualBox？/" data-id="ck09sgnhy00094ovdilsz8fwz" class="article-share-link">分享</a>
+      
+    </footer>
+
+  
+
+  
+    
+  <nav class="article-nav">
+    
+    
+      <a href="/2019/08/11/markdown语法/" class="article-nav-link">
+        <strong class="article-nav-caption">后一篇</strong>
+        <div class="article-nav-title">markdown语法</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+    
+  <div class="gitalk" id="gitalk-container"></div>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+  <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+  <script type="text/javascript">
+    var gitalk = new Gitalk({
+      clientID: '15c18d9b0a015598eb07',
+      clientSecret: 'a3853e070f5ab7e4de32abbdda82175936eab5cf',
+      repo: 'gitalk',
+      owner: 'dilidonglong',
+      admin: ['dilidonglong'],
+      // id: location.pathname,      // Ensure uniqueness and length less than 50
+      id: md5(location.pathname),
+      distractionFreeMode: false,  // Facebook-like distraction free mode
+      pagerDirection: 'last'
+    })
+
+  gitalk.render('gitalk-container')
+  </script>
+
+  
+
+</article>
+
+
+
+</section>
+
+  
+  <div id="gitalk-container"></div>  
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+  <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+  <script type="text/javascript">
+      var gitalk = new Gitalk({
+        clientID: '15c18d9b0a015598eb07',  // 这里一定要注意主题 config.yml 中 clientID 的大小写，否则参数传不过来，对应下边的 "问题一"
+        clientSecret: 'a3853e070f5ab7e4de32abbdda82175936eab5cf',
+        repo: 'gitalk',
+        owner: 'dilidonglong',
+        admin: ['dilidonglong'],
+        id: md5(location.pathname),      // 保持默认，官方注释（Ensure uniqueness and length less than 50），文章 URL 不能太长 "问题二"
+        distractionFreeMode: false  // 不喜欢评论时候的遮盖层所以选择 false ，而且我觉得这个也没有必要放在 config.yml 中配置
+      })
+
+  gitalk.render('gitalk-container')
+  </script>
+
+
+
+  
+
+
+  <footer class="footer">
+  
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2019 望伊如西の博客</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="望伊如西の博客"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">主页</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/categories">分类</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">相册</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">关于</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">归档</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="Search">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+      <li class="nav-item">
+          <div class="totop" id="totop">
+    <i class="fe fe-rocket"></i>
+</div>
+      </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+<script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+  <script src="/js/search.js"></script>
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+</html>
