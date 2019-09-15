@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   
   
@@ -27,8 +27,10 @@
 <body>
 <main class="content">
   <section class="outer">
-  <article id="post-访问X友软件卡顿" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+  
 
+<article id="post-访问X友软件卡顿" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+  
   <div class="article-inner">
     
       <header class="article-header">
@@ -38,6 +40,10 @@
       访问X友软件卡顿
     </h1>
   
+  
+
+
+
 
       </header>
     
@@ -55,8 +61,19 @@
       </div>
     
 
+    
+      
+    <div class="tocbot"></div>
+
+
+
+
+
+    
+
     <div class="article-entry" itemprop="articleBody">
       
+
 
       
 
@@ -67,17 +84,35 @@
 <hr>
 <p>客户内网拓扑：</p>
 <p>总部和分部通过woc做vpn对接（没开加速），其中eth0口是内网口，pppoe和wan（eth2）口是外网口。分支woc的wan口（pppoe）地址是100.64.7.184，eth0（lan口）地址是10.37.11.254，lan口下连一台测试电脑10.37.11.180。总部单臂部署，X友服务器是10.37.1.77。分支pc通过X友软件和总部的X友服务器做数据交互。</p>
-<p><img src="/2019/06/11/访问X友软件卡顿/1.png" alt="1"></p>
+<img src="/2019/06/11/访问X友软件卡顿/1.png" title="This is an test image">
+
+<a id="more"></a>
+
 <h2 id="2-排错操作："><a href="#2-排错操作：" class="headerlink" title="2.排错操作："></a>2.排错操作：</h2><ol>
 <li><p>在分支客户端电脑开始访问X友前，在分支woc和总部woc的eth0口，vpntun口，wan口写下抓包命令。写完之后执行命令，之后再用电脑正式访问X友。看到现象后，等待几秒再停止所有接口的抓包。</p>
-<p><img src="/2019/06/11/访问X友软件卡顿/2.png" alt="2"></p>
+<img src="/2019/06/11/访问X友软件卡顿/2.png" title="This is an test image">
+
+
+
 </li>
+</ol>
+<ol start="2">
 <li><p>其实在抓到上述6份比较漂亮的包之前，我还重复上述操作过几次。虽然时间比较久了，但是我看到自己有导出csv的后缀文件，估计是我那时候想通过比较几个文件中的ip.id来判断访问应用的时候是否存在丢包。估计那时候我没看出啥东西来，就纯浪费时间去了。</p>
-<p><img src="/2019/06/11/访问X友软件卡顿/3.png" alt="3"></p>
+<img src="/2019/06/11/访问X友软件卡顿/3.png" title="This is an test image">
+
+
+
 </li>
+</ol>
+<ol start="3">
 <li><p>后来听说X友这种应用访问卡慢，是因为小包交互过多导致的。就试着打开了一个包fenzhieth0.pcap，然后输入过滤条件，来看下200字节以下的包有多少。emmmm一看占比57.6%呢，小包很多了很多了</p>
-<p><img src="/2019/06/11/访问X友软件卡顿/4.png" alt="4"></p>
+<img src="/2019/06/11/访问X友软件卡顿/4.png" title="This is an test image">
+
+
+
 </li>
+</ol>
+<ol start="4">
 <li><p>于是脑补出理由，打电话给渠道。举个例子，访问X友打开软件要传输15000字节的数据，公网延时是20-30ms，比如小包只传100字节，那这15000字节的数据就要传输150次，时间上就是20ms*150，这样访问就会出现卡顿的情况。如果是用ftp等测试，每次传输是1000字节的话，就是传输15次，所以访问ftp服务器的时候你就不会觉得卡。所以这是X友那边发包机制的问题，和我们设备没有关系</p>
 </li>
 <li><p>渠道觉得好有道理，然后就信了，之后他去和客户解释就再也没找我了。工单关闭</p>
@@ -101,24 +136,24 @@
 <li><p>之前做了这么一个操作，把pcap文件导出成csv文件，想通过比较各个csv文件中是否存在丢包。但是没有看是什么东西来，而且上述操作比较耗时间。要知道的是，如果数据包丢失，就会导致重传或是有重复ACK。那我们是不是可以通过wireshark工具来自动分析下</p>
 </li>
 <li><p>先通过过滤条件，把测试电脑与服务器的互访流量给过滤处理</p>
-<p><img src="/2019/06/11/访问X友软件卡顿/5.png" alt="5"></p>
+<img src="/2019/06/11/访问X友软件卡顿/5.png" title="This is an test image">
 </li>
 <li><p>然后在把文件重新保存一份</p>
-<p><img src="/2019/06/11/访问X友软件卡顿/6.png" alt="6"></p>
+<img src="/2019/06/11/访问X友软件卡顿/6.png" title="This is an test image">
 </li>
 <li><p>先打开fenzhieth0这个包。过滤出客户端和服务器双向交互的流量</p>
 </li>
 <li><p>随机选择一个包，然后右键点击<strong>Follow</strong>—&gt;<strong>tcp stream</strong>，过滤出一个tcp连接的互访流量</p>
-<p><img src="/2019/06/11/访问X友软件卡顿/7.png" alt="7"></p>
+<img src="/2019/06/11/访问X友软件卡顿/7.png" title="This is an test image">
 </li>
 <li><p>然后点击<strong>统计</strong> <strong>statistics</strong>—&gt;<strong>TCP Stream Graphs</strong>—&gt;<strong>time sequence</strong> <strong>（stevens）</strong>，可以看到该连接，一个方向上的seq号增长情况</p>
-<p><img src="/2019/06/11/访问X友软件卡顿/8.png" alt="8"></p>
+<img src="/2019/06/11/访问X友软件卡顿/8.png" title="This is an test image">
 </li>
 <li><p>可以看到弹出下框，也就意味着。在该连接中，服务器到用户客户端方向的数据流增长过程中，有5s左右是卡住了。那我们通过Stevens图，可以找到卡住的2个点，包号分别是467号包与819号包</p>
-<p><img src="/2019/06/11/访问X友软件卡顿/9.png" alt="9"></p>
+<img src="/2019/06/11/访问X友软件卡顿/9.png" title="This is an test image">
 </li>
 <li><p>可以看到下图，服务器在等待客户端发送816号包。而816号包的发出，是在468号包发出之后耗时近6s。</p>
-<p><img src="/2019/06/11/访问X友软件卡顿/10.png" alt="10"></p>
+<img src="/2019/06/11/访问X友软件卡顿/10.png" title="This is an test image">
 </li>
 <li><p>后续又按上述操作，观察了其他的几个tcp连接，以及zongbueth0口的抓包情况。都是一模一样的，总会有几秒卡住</p>
 </li>
@@ -138,21 +173,14 @@
 <p>​        ——个人认为不会，因为woc开启后，是分支的woc设备和分支内网电脑做交互。把woc设备当做是总部的服务器，那内网客户端和woc交互数据的时候，依旧会出现上面这种情况，因为这种情况是在客户端电脑上发生的。要想解决，就得从客户端上看是什么原因导致了这6s的延时发包。</p>
 
       
-
-      
-
-          
-        
-          
-        </div>
-
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/06/11/访问X友软件卡顿/" data-id="ck0gs6j1g00137wvdtcpgg924" class="article-share-link">分享</a>
+      <a data-url="https://dilidonglong.github.io/2019/06/11/访问X友软件卡顿/" data-id="ck0l41uw3001330vd5higc2j7"
+         class="article-share-link">分享</a>
       
     </footer>
 
-  
+  </div>
 
   
     
@@ -207,33 +235,7 @@
 
 
 </section>
-
-  
-  <div id="gitalk-container"></div>  
-  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
-  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-  <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
-  <script type="text/javascript">
-      var gitalk = new Gitalk({
-        clientID: '15c18d9b0a015598eb07',  // 这里一定要注意主题 config.yml 中 clientID 的大小写，否则参数传不过来，对应下边的 "问题一"
-        clientSecret: 'a3853e070f5ab7e4de32abbdda82175936eab5cf',
-        repo: 'gitalk',
-        owner: 'dilidonglong',
-        admin: ['dilidonglong'],
-        id: md5(location.pathname),      // 保持默认，官方注释（Ensure uniqueness and length less than 50），文章 URL 不能太长 "问题二"
-        distractionFreeMode: false  // 不喜欢评论时候的遮盖层所以选择 false ，而且我觉得这个也没有必要放在 config.yml 中配置
-      })
-
-  gitalk.render('gitalk-container')
-  </script>
-
-
-
-  
-
-
   <footer class="footer">
-  
   <div class="outer">
     <div class="float-right">
       <ul class="list-inline">
@@ -251,9 +253,10 @@
 </footer>
 
 </main>
-<aside class="sidebar">
-  <button class="navbar-toggle"></button>
 
+<aside class="sidebar sidebar-specter">
+  
+    <button class="navbar-toggle"></button>
 <nav class="navbar">
   
     <div class="logo">
@@ -267,7 +270,7 @@
       </li>
     
       <li class="nav-item">
-        <a class="nav-item-link" href="/categories">分类</a>
+        <a class="nav-item-link" href="/archives">归档</a>
       </li>
     
       <li class="nav-item">
@@ -275,11 +278,11 @@
       </li>
     
       <li class="nav-item">
-        <a class="nav-item-link" href="/about">关于</a>
+        <a class="nav-item-link" href="/categories">分类</a>
       </li>
     
       <li class="nav-item">
-        <a class="nav-item-link" href="/archives">归档</a>
+        <a class="nav-item-link" href="/about">关于</a>
       </li>
     
     <li class="nav-item">
@@ -290,14 +293,13 @@
     </li>
   </ul>
 </nav>
-
 <nav class="navbar navbar-bottom">
   <ul class="nav">
-      <li class="nav-item">
-          <div class="totop" id="totop">
-    <i class="fe fe-rocket"></i>
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
 </div>
-      </li>
+    </li>
     <li class="nav-item">
       
         <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
@@ -307,29 +309,39 @@
     </li>
   </ul>
 </nav>
-
 <div class="search-form-wrap">
   <div class="local-search local-search-plugin">
   <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
   <div id="local-search-result" class="local-search-result"></div>
 </div>
 </div>
-</aside>
-<script src="/js/jquery-2.0.3.min.js"></script>
+  </aside>
+  <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.justifiedGallery.min.js"></script>
 <script src="/js/lazyload.min.js"></script>
 <script src="/js/busuanzi-2.3.pure.min.js"></script>
-
 
   <script src="/fancybox/jquery.fancybox.min.js"></script>
 
 
 
-
-
-
-  <script src="/js/search.js"></script>
+  <script src="/js/tocbot.min.js"></script>
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
 
 
 <script src="/js/ocean.js"></script>
+
 </body>
 </html>

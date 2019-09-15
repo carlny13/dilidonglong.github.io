@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   
   
@@ -27,8 +27,10 @@
 <body>
 <main class="content">
   <section class="outer">
-  <article id="post-设置分类列表页" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+  
 
+<article id="post-设置分类列表页" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+  
   <div class="article-inner">
     
       <header class="article-header">
@@ -38,6 +40,10 @@
       设置分类列表页
     </h1>
   
+  
+
+
+
 
       </header>
     
@@ -55,8 +61,19 @@
       </div>
     
 
+    
+      
+    <div class="tocbot"></div>
+
+
+
+
+
+    
+
     <div class="article-entry" itemprop="articleBody">
       
+
 
       
 
@@ -75,10 +92,16 @@
 <li>保存</li>
 </ol>
 </blockquote>
+<a id="more"></a>
+
 <p>上述操作做完之后，查看效果。发现文章里面是有分类的显示</p>
-<p><img src="/2019/04/27/设置分类列表页/1.png" alt="分类显示"></p>
+<img src="/2019/04/27/设置分类列表页/1.png" title="This is an test image">
+
 <p>但是，在主页里面点击分类的连接，进入分类网页，没有任何显示。如下图红框处，最开始是没有任何显示的.</p>
-<p><img src="/2019/04/27/设置分类列表页/2.png" alt="2"></p>
+<img src="/2019/04/27/设置分类列表页/2.png" title="This is an test image">
+
+<br>
+
 <h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><p>网上查了大量文章，很多都只是说了配置问题，我是按配置正确操作的，但是就是解决不了。</p>
 <p>后来看到一篇文章，猜测出应该是这个ocean主题缺少对应的代码。</p>
 <p>参考链接：<a href="http://chensd.com/2016-06/hexo-theme-guide.html#分类列表页与分类文章列表页" target="_blank" rel="noopener">hexo主题开发指南-分类列表页与分类文章列表页</a></p>
@@ -103,21 +126,14 @@
 <p>通过上述操作，问题解决。不过显示出来的样式不是自己喜欢的那种。等以后自己学会编程，再回头过来修改吧～</p>
 
       
-
-      
-
-          
-        
-          
-        </div>
-
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/04/27/设置分类列表页/" data-id="ck0gs6j1f00107wvd80csayhm" class="article-share-link">分享</a>
+      <a data-url="https://dilidonglong.github.io/2019/04/27/设置分类列表页/" data-id="ck0l41uw3001030vdw710z7g7"
+         class="article-share-link">分享</a>
       
     </footer>
 
-  
+  </div>
 
   
     
@@ -172,33 +188,7 @@
 
 
 </section>
-
-  
-  <div id="gitalk-container"></div>  
-  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
-  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-  <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
-  <script type="text/javascript">
-      var gitalk = new Gitalk({
-        clientID: '15c18d9b0a015598eb07',  // 这里一定要注意主题 config.yml 中 clientID 的大小写，否则参数传不过来，对应下边的 "问题一"
-        clientSecret: 'a3853e070f5ab7e4de32abbdda82175936eab5cf',
-        repo: 'gitalk',
-        owner: 'dilidonglong',
-        admin: ['dilidonglong'],
-        id: md5(location.pathname),      // 保持默认，官方注释（Ensure uniqueness and length less than 50），文章 URL 不能太长 "问题二"
-        distractionFreeMode: false  // 不喜欢评论时候的遮盖层所以选择 false ，而且我觉得这个也没有必要放在 config.yml 中配置
-      })
-
-  gitalk.render('gitalk-container')
-  </script>
-
-
-
-  
-
-
   <footer class="footer">
-  
   <div class="outer">
     <div class="float-right">
       <ul class="list-inline">
@@ -216,9 +206,10 @@
 </footer>
 
 </main>
-<aside class="sidebar">
-  <button class="navbar-toggle"></button>
 
+<aside class="sidebar sidebar-specter">
+  
+    <button class="navbar-toggle"></button>
 <nav class="navbar">
   
     <div class="logo">
@@ -232,7 +223,7 @@
       </li>
     
       <li class="nav-item">
-        <a class="nav-item-link" href="/categories">分类</a>
+        <a class="nav-item-link" href="/archives">归档</a>
       </li>
     
       <li class="nav-item">
@@ -240,11 +231,11 @@
       </li>
     
       <li class="nav-item">
-        <a class="nav-item-link" href="/about">关于</a>
+        <a class="nav-item-link" href="/categories">分类</a>
       </li>
     
       <li class="nav-item">
-        <a class="nav-item-link" href="/archives">归档</a>
+        <a class="nav-item-link" href="/about">关于</a>
       </li>
     
     <li class="nav-item">
@@ -255,14 +246,13 @@
     </li>
   </ul>
 </nav>
-
 <nav class="navbar navbar-bottom">
   <ul class="nav">
-      <li class="nav-item">
-          <div class="totop" id="totop">
-    <i class="fe fe-rocket"></i>
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
 </div>
-      </li>
+    </li>
     <li class="nav-item">
       
         <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
@@ -272,29 +262,39 @@
     </li>
   </ul>
 </nav>
-
 <div class="search-form-wrap">
   <div class="local-search local-search-plugin">
   <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
   <div id="local-search-result" class="local-search-result"></div>
 </div>
 </div>
-</aside>
-<script src="/js/jquery-2.0.3.min.js"></script>
+  </aside>
+  <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.justifiedGallery.min.js"></script>
 <script src="/js/lazyload.min.js"></script>
 <script src="/js/busuanzi-2.3.pure.min.js"></script>
-
 
   <script src="/fancybox/jquery.fancybox.min.js"></script>
 
 
 
-
-
-
-  <script src="/js/search.js"></script>
+  <script src="/js/tocbot.min.js"></script>
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
 
 
 <script src="/js/ocean.js"></script>
+
 </body>
 </html>

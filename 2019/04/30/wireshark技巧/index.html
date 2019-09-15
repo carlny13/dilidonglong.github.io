@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   
   
@@ -27,8 +27,10 @@
 <body>
 <main class="content">
   <section class="outer">
-  <article id="post-wireshark技巧" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+  
 
+<article id="post-wireshark技巧" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+  
   <div class="article-inner">
     
       <header class="article-header">
@@ -38,6 +40,10 @@
       wireshark技巧
     </h1>
   
+  
+
+
+
 
       </header>
     
@@ -55,8 +61,19 @@
       </div>
     
 
+    
+      
+    <div class="tocbot"></div>
+
+
+
+
+
+    
+
     <div class="article-entry" itemprop="articleBody">
       
+
 
       
 
@@ -79,6 +96,10 @@
 <li>host 10.3.1.1 or 10.3.1.2：抓取发到/来自10.3.1.1，以及与之通讯的所有数据流，与10.3.1.2，以及与之通讯的所有数据流</li>
 <li>host <a href="http://www.espn.com：抓取发到/来自所有解析为www.espn.com的IP地址的数据流" target="_blank" rel="noopener">www.espn.com：抓取发到/来自所有解析为www.espn.com的IP地址的数据流</a></li>
 </ol>
+<a id="more"></a>
+
+
+
 <h3 id="1-2-抓取指定IP地址范围的数据流"><a href="#1-2-抓取指定IP地址范围的数据流" class="headerlink" title="1.2 抓取指定IP地址范围的数据流:"></a>1.2 抓取指定IP地址范围的数据流:</h3><ol>
 <li>net 10.3.0.0/16：抓取网络10.3.0.0上发到/来自所有主机的数据流(16表示长度)</li>
 <li>net 10.3.0.0 mask 255.255.0.0：与之前的过滤结果相同</li>
@@ -92,7 +113,12 @@
 <li>icmp[icmptype]==&lt; identifier &gt;: 抓取 ICMP代码等于identifier的ICMP报文, 如icmp-echo 以及 icmp-request。</li>
 </ol>
 <p>方括号中第一个数字表示从<u><strong>协议头</strong></u>开始的偏移量，第二个数字表示需要观察多少位。</p>
-<p><img src="/2019/04/30/wireshark技巧/1.png" alt="image004.png"></p>
+<img src="/2019/04/30/wireshark技巧/1.png" title="This is an test image">
+
+
+
+
+
 <h3 id="1-3-抓取发到广播或多播地址的数据流"><a href="#1-3-抓取发到广播或多播地址的数据流" class="headerlink" title="1.3 抓取发到广播或多播地址的数据流:"></a>1.3 抓取发到广播或多播地址的数据流:</h3><p>只需侦听广播或多播数据流，就可以掌握网络上主机的许多信息。</p>
 <ol>
 <li>ip broadcast：抓取广播报文</li>
@@ -149,7 +175,12 @@
 <li>tcp[13] &amp; 0x08 = 8: PSH set and ACK not set</li>
 <li>tcp[13]是从<u><strong>协议头</strong></u>开始的偏移量，0,1,3,5,6,8是标识位。</li>
 </ul>
-<p><img src="/2019/04/30/wireshark技巧/2.png" alt="image005.png"></p>
+<img src="/2019/04/30/wireshark技巧/2.png" title="This is an test image">
+
+
+
+
+
 <hr>
 <h2 id="2-抓包后设置过滤条件（显示过滤器）"><a href="#2-抓包后设置过滤条件（显示过滤器）" class="headerlink" title="2.抓包后设置过滤条件（显示过滤器）"></a>2.抓包后设置过滤条件（显示过滤器）</h2><h3 id="2-1-协议过滤器"><a href="#2-1-协议过滤器" class="headerlink" title="2.1 协议过滤器"></a>2.1 协议过滤器</h3><ol>
 <li>arp：显示所有包括ARP请求和回复在内的所有ARP数据流。</li>
@@ -279,21 +310,14 @@
 </blockquote>
 
       
-
-      
-
-          
-        
-          
-        </div>
-
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/04/30/wireshark技巧/" data-id="ck0gs6j0x00097wvd87cemjui" class="article-share-link">分享</a>
+      <a data-url="https://dilidonglong.github.io/2019/04/30/wireshark技巧/" data-id="ck0l41uus000b30vd667twafi"
+         class="article-share-link">分享</a>
       
     </footer>
 
-  
+  </div>
 
   
     
@@ -348,33 +372,7 @@
 
 
 </section>
-
-  
-  <div id="gitalk-container"></div>  
-  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
-  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-  <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
-  <script type="text/javascript">
-      var gitalk = new Gitalk({
-        clientID: '15c18d9b0a015598eb07',  // 这里一定要注意主题 config.yml 中 clientID 的大小写，否则参数传不过来，对应下边的 "问题一"
-        clientSecret: 'a3853e070f5ab7e4de32abbdda82175936eab5cf',
-        repo: 'gitalk',
-        owner: 'dilidonglong',
-        admin: ['dilidonglong'],
-        id: md5(location.pathname),      // 保持默认，官方注释（Ensure uniqueness and length less than 50），文章 URL 不能太长 "问题二"
-        distractionFreeMode: false  // 不喜欢评论时候的遮盖层所以选择 false ，而且我觉得这个也没有必要放在 config.yml 中配置
-      })
-
-  gitalk.render('gitalk-container')
-  </script>
-
-
-
-  
-
-
   <footer class="footer">
-  
   <div class="outer">
     <div class="float-right">
       <ul class="list-inline">
@@ -392,9 +390,10 @@
 </footer>
 
 </main>
-<aside class="sidebar">
-  <button class="navbar-toggle"></button>
 
+<aside class="sidebar sidebar-specter">
+  
+    <button class="navbar-toggle"></button>
 <nav class="navbar">
   
     <div class="logo">
@@ -408,7 +407,7 @@
       </li>
     
       <li class="nav-item">
-        <a class="nav-item-link" href="/categories">分类</a>
+        <a class="nav-item-link" href="/archives">归档</a>
       </li>
     
       <li class="nav-item">
@@ -416,11 +415,11 @@
       </li>
     
       <li class="nav-item">
-        <a class="nav-item-link" href="/about">关于</a>
+        <a class="nav-item-link" href="/categories">分类</a>
       </li>
     
       <li class="nav-item">
-        <a class="nav-item-link" href="/archives">归档</a>
+        <a class="nav-item-link" href="/about">关于</a>
       </li>
     
     <li class="nav-item">
@@ -431,14 +430,13 @@
     </li>
   </ul>
 </nav>
-
 <nav class="navbar navbar-bottom">
   <ul class="nav">
-      <li class="nav-item">
-          <div class="totop" id="totop">
-    <i class="fe fe-rocket"></i>
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
 </div>
-      </li>
+    </li>
     <li class="nav-item">
       
         <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
@@ -448,29 +446,39 @@
     </li>
   </ul>
 </nav>
-
 <div class="search-form-wrap">
   <div class="local-search local-search-plugin">
   <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
   <div id="local-search-result" class="local-search-result"></div>
 </div>
 </div>
-</aside>
-<script src="/js/jquery-2.0.3.min.js"></script>
+  </aside>
+  <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.justifiedGallery.min.js"></script>
 <script src="/js/lazyload.min.js"></script>
 <script src="/js/busuanzi-2.3.pure.min.js"></script>
-
 
   <script src="/fancybox/jquery.fancybox.min.js"></script>
 
 
 
-
-
-
-  <script src="/js/search.js"></script>
+  <script src="/js/tocbot.min.js"></script>
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
 
 
 <script src="/js/ocean.js"></script>
+
 </body>
 </html>

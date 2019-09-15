@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   
   
@@ -27,8 +27,10 @@
 <body>
 <main class="content">
   <section class="outer">
-  <article id="post-文件系统" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+  
 
+<article id="post-文件系统" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+  
   <div class="article-inner">
     
       <header class="article-header">
@@ -38,6 +40,10 @@
       文件系统
     </h1>
   
+  
+
+
+
 
       </header>
     
@@ -55,8 +61,19 @@
       </div>
     
 
+    
+      
+    <div class="tocbot"></div>
+
+
+
+
+
+    
+
     <div class="article-entry" itemprop="articleBody">
       
+
 
       
 
@@ -67,17 +84,15 @@
 <table>
 <thead>
 <tr>
-<th style="text-align:center">权限与属性</th>
-<th style="text-align:center">实际数据</th>
+<th align="center">权限与属性</th>
+<th align="center">实际数据</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center">inode表</td>
-<td style="text-align:center">数据区块</td>
+<tbody><tr>
+<td align="center">inode表</td>
+<td align="center">数据区块</td>
 </tr>
-</tbody>
-</table>
+</tbody></table>
 <p>区块有放置<strong>inode表</strong>的区块，有放置<strong>数据</strong>的数据区块，以及记录<strong>整个文件系统整体信息</strong>的超级区块</p>
 <blockquote>
 <p>超级区块：记录inode和数据区块总量、使用量、剩余量及文件系统格式等</p>
@@ -87,6 +102,8 @@
 <p><strong>索引式文件系统</strong>，包含了inode。通过inode，我们可以数据存放在哪些数据区块里面，所以可以一次性全部提取出来。该方式性能比较好，比如linux的ext2文件系统</p>
 <p>再比如u盘一般使用FAT文件系统，这种就不是索引式文件系统。它没有inode，所以无法把数据一次性全提取出来。每个区块号码都记录在前一个区块里面，所以提取的时候得一个连着一个提取。</p>
 <p><strong>碎片整理</strong>，在非索引式文件系统里面，由于有时候数据写入的区块太过于分散，所以读取的时候性能会很差，通过磁盘碎片整理，可以把同一个文件的区块集合在一起，这样读取起来就比较容易。</p>
+<a id="more"></a>
+
 <h2 id="1-ext2文件系统"><a href="#1-ext2文件系统" class="headerlink" title="1.ext2文件系统"></a>1.ext2文件系统</h2><p>在分区上进行格式化的时候，就已经规划好了<strong>inode</strong>和<strong>数据区块</strong></p>
 <p>把放置inode的区块和数据区块全部都放一起，会导致很难管理</p>
 <p>所以在ext2的文件系统上，会弄出多个<strong>区块群组</strong>，每个区块群组都有自己的<strong>inode</strong>，<strong>数据区块</strong>和<strong>超级区块</strong></p>
@@ -128,7 +145,9 @@
 </ul>
 </blockquote>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 显示目前系统被格式化的设备</span></span><br><span class="line">[root@vultr ~]<span class="comment"># blkid</span></span><br><span class="line">/dev/vda1: UUID=<span class="string">"19c82273-828c-4d85-bc4e-6fc269acc524"</span> TYPE=<span class="string">"ext4"</span></span><br></pre></td></tr></table></figure>
+
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line">[root@vultr ~]<span class="comment"># dumpe2fs /dev/vda1</span></span><br><span class="line">dumpe2fs 1.42.9 (28-Dec-2013)</span><br><span class="line">Filesystem volume name:   &lt;none&gt;</span><br><span class="line">Last mounted on:          /</span><br><span class="line">Filesystem UUID:          19c82273-828c-4d85-bc4e-6fc269acc524</span><br><span class="line">Filesystem magic number:  0xEF53</span><br><span class="line">Filesystem revision <span class="comment">#:    1 (dynamic)</span></span><br><span class="line">Filesystem features:      has_journal ext_attr resize_inode dir_index filetype needs_recovery extent 64bit flex_bg sparse_super large_file huge_file uninit_bg dir_nlink extra_isize</span><br><span class="line">Filesystem flags:         signed_directory_hash </span><br><span class="line">Default mount options:    user_xattr acl</span><br><span class="line">Filesystem state:         clean                    <span class="comment">#文件系统状态，clean表示没问题</span></span><br><span class="line">Errors behavior:          Continue</span><br><span class="line">Filesystem OS <span class="built_in">type</span>:       Linux</span><br><span class="line">Inode count:              640000                   <span class="comment">#inode总数</span></span><br><span class="line">Block count:              2621179                  <span class="comment">#区块总数</span></span><br><span class="line">Reserved block count:     131057                   <span class="comment">#保留的区块总数</span></span><br><span class="line">Free blocks:              2026205                  <span class="comment">#还有多少可用区块</span></span><br><span class="line">Free inodes:              599345                   <span class="comment">#还有多少可用inode</span></span><br><span class="line">First block:              0</span><br><span class="line">Block size:               4096                     <span class="comment">#单个区块大小</span></span><br><span class="line">Fragment size:            4096</span><br><span class="line">Group descriptor size:    64</span><br><span class="line">Reserved GDT blocks:      248</span><br><span class="line">Blocks per group:         32768</span><br><span class="line">Fragments per group:      32768</span><br><span class="line">Inodes per group:         8000</span><br><span class="line">Inode blocks per group:   500</span><br><span class="line">Flex block group size:    16</span><br><span class="line">Filesystem created:       Wed Dec  5 17:22:49 2018</span><br><span class="line">Last mount time:          Wed Apr 10 10:10:48 2019</span><br><span class="line">Last write time:          Wed Apr 10 10:10:46 2019</span><br><span class="line">Mount count:              4</span><br><span class="line">Maximum mount count:      -1</span><br><span class="line">Last checked:             Sat Mar  9 02:38:28 2019</span><br><span class="line">Check interval:           0 (&lt;none&gt;)</span><br><span class="line">Lifetime writes:          3452 MB</span><br><span class="line">Reserved blocks uid:      0 (user root)</span><br><span class="line">Reserved blocks gid:      0 (group root)</span><br><span class="line">First inode:              11</span><br><span class="line">Inode size:	          256                           <span class="comment">#inode表大小</span></span><br><span class="line">Required extra isize:     28</span><br><span class="line">Desired extra isize:      28</span><br><span class="line">Journal inode:            8</span><br><span class="line">Default directory <span class="built_in">hash</span>:   half_md4</span><br><span class="line">Directory Hash Seed:      6cbf0c8a-63c4-43df-aaba-cd82ae9cb153</span><br><span class="line">Journal backup:           inode blocks</span><br><span class="line">Journal features:         journal_incompat_revoke journal_64bit</span><br><span class="line">Journal size:             32M</span><br><span class="line">Journal length:           8192</span><br><span class="line">Journal sequence:         0x0004f118</span><br><span class="line">Journal start:            7195</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Group 0: (Blocks 0-32767) [ITABLE_ZEROED]                <span class="comment">#区块组0所占区块号码为0-32767</span></span><br><span class="line">  Checksum 0x6f25, unused inodes 0</span><br><span class="line">  Primary superblock at 0, Group descriptors at 1-2      <span class="comment">#文件系统描述说明在1-2号区块内</span></span><br><span class="line">  Reserved GDT blocks at 3-250</span><br><span class="line">  Block bitmap at 251 (+251), Inode bitmap at 267 (+267) </span><br><span class="line">                                                    <span class="comment">#区块对照表和inode对照表在251和267区块内</span></span><br><span class="line">  Inode table at 283-782 (+283)                     </span><br><span class="line">  <span class="comment">#一个inode表占256B，总共有782-283+1=500个区块，一个区块大小占4KB。所以inode的总数是500*4kB/256B</span></span><br><span class="line">  </span><br><span class="line">  <span class="comment">#以下几行记录，记录了可用的区块数，及可用的inode表述。可知，inode表为0了。</span></span><br><span class="line">  19990 free blocks, 0 free inodes, 1728 directories</span><br><span class="line">  Free blocks: 11866, 11890-11922, 11928-11935, 11943-11951, 12249, 12313, 12350, 12832-32767</span><br><span class="line">  Free inodes: </span><br><span class="line">……后续省略……</span><br></pre></td></tr></table></figure>
+
 <h2 id="2-文件系统与目录树的关系"><a href="#2-文件系统与目录树的关系" class="headerlink" title="2.文件系统与目录树的关系"></a>2.文件系统与目录树的关系</h2><h3 id="2-1目录"><a href="#2-1目录" class="headerlink" title="2.1目录"></a>2.1目录</h3><p>在文件系统上创建一个目录时，文件系统会分配<strong>一个inode</strong>与<strong>至少一块区块</strong>（里面记录了子目录及文件的inode表位置编号）给目录</p>
 <h3 id="2-2文件"><a href="#2-2文件" class="headerlink" title="2.2文件"></a>2.2文件</h3><p>在文件系统上创建一个文件时，文件系统会分配<strong>一个inode</strong>及所需个数的<strong>数据区块</strong>。</p>
 <h3 id="2-3目录树的读取"><a href="#2-3目录树的读取" class="headerlink" title="2.3目录树的读取"></a>2.3目录树的读取</h3><p>文件存放在目录下，所以我们得要先知道该目录所对应的区块。区块里面记录了子目录及文件的inode表号。找到我想要的文件所对应的inode表号，再去找该文件的inode。找到之后就知道该文件放置在哪个区块了。</p>
@@ -143,21 +162,14 @@
 <h3 id="4-3实时运行区"><a href="#4-3实时运行区" class="headerlink" title="4.3实时运行区"></a>4.3实时运行区</h3><p>当有文件要被建立时，xfs会在这个区段里找一个到数个的扩展区块，将文件放置在这个区块内，等分配完毕再写入到数据区的inode与区块中。</p>
 
       
-
-      
-
-          
-        
-          
-        </div>
-
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/04/30/文件系统/" data-id="ck0gs6j16000k7wvdg9xliqf9" class="article-share-link">分享</a>
+      <a data-url="https://dilidonglong.github.io/2019/04/30/文件系统/" data-id="ck0l41uv8000k30vdx1xkg7kb"
+         class="article-share-link">分享</a>
       
     </footer>
 
-  
+  </div>
 
   
     
@@ -212,33 +224,7 @@
 
 
 </section>
-
-  
-  <div id="gitalk-container"></div>  
-  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
-  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-  <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
-  <script type="text/javascript">
-      var gitalk = new Gitalk({
-        clientID: '15c18d9b0a015598eb07',  // 这里一定要注意主题 config.yml 中 clientID 的大小写，否则参数传不过来，对应下边的 "问题一"
-        clientSecret: 'a3853e070f5ab7e4de32abbdda82175936eab5cf',
-        repo: 'gitalk',
-        owner: 'dilidonglong',
-        admin: ['dilidonglong'],
-        id: md5(location.pathname),      // 保持默认，官方注释（Ensure uniqueness and length less than 50），文章 URL 不能太长 "问题二"
-        distractionFreeMode: false  // 不喜欢评论时候的遮盖层所以选择 false ，而且我觉得这个也没有必要放在 config.yml 中配置
-      })
-
-  gitalk.render('gitalk-container')
-  </script>
-
-
-
-  
-
-
   <footer class="footer">
-  
   <div class="outer">
     <div class="float-right">
       <ul class="list-inline">
@@ -256,9 +242,10 @@
 </footer>
 
 </main>
-<aside class="sidebar">
-  <button class="navbar-toggle"></button>
 
+<aside class="sidebar sidebar-specter">
+  
+    <button class="navbar-toggle"></button>
 <nav class="navbar">
   
     <div class="logo">
@@ -272,7 +259,7 @@
       </li>
     
       <li class="nav-item">
-        <a class="nav-item-link" href="/categories">分类</a>
+        <a class="nav-item-link" href="/archives">归档</a>
       </li>
     
       <li class="nav-item">
@@ -280,11 +267,11 @@
       </li>
     
       <li class="nav-item">
-        <a class="nav-item-link" href="/about">关于</a>
+        <a class="nav-item-link" href="/categories">分类</a>
       </li>
     
       <li class="nav-item">
-        <a class="nav-item-link" href="/archives">归档</a>
+        <a class="nav-item-link" href="/about">关于</a>
       </li>
     
     <li class="nav-item">
@@ -295,14 +282,13 @@
     </li>
   </ul>
 </nav>
-
 <nav class="navbar navbar-bottom">
   <ul class="nav">
-      <li class="nav-item">
-          <div class="totop" id="totop">
-    <i class="fe fe-rocket"></i>
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
 </div>
-      </li>
+    </li>
     <li class="nav-item">
       
         <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
@@ -312,29 +298,39 @@
     </li>
   </ul>
 </nav>
-
 <div class="search-form-wrap">
   <div class="local-search local-search-plugin">
   <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
   <div id="local-search-result" class="local-search-result"></div>
 </div>
 </div>
-</aside>
-<script src="/js/jquery-2.0.3.min.js"></script>
+  </aside>
+  <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.justifiedGallery.min.js"></script>
 <script src="/js/lazyload.min.js"></script>
 <script src="/js/busuanzi-2.3.pure.min.js"></script>
-
 
   <script src="/fancybox/jquery.fancybox.min.js"></script>
 
 
 
-
-
-
-  <script src="/js/search.js"></script>
+  <script src="/js/tocbot.min.js"></script>
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
 
 
 <script src="/js/ocean.js"></script>
+
 </body>
 </html>
