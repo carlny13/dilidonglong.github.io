@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://dilidonglong.github.io/"/>
-  <updated>2019-09-15T14:24:00.296Z</updated>
+  <updated>2019-09-25T15:42:01.390Z</updated>
   <id>https://dilidonglong.github.io/</id>
   
   <author>
@@ -15,6 +15,60 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>科学上网</title>
+    <link href="https://dilidonglong.github.io/2019/09/25/%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/"/>
+    <id>https://dilidonglong.github.io/2019/09/25/科学上网/</id>
+    <published>2019-09-25T14:21:48.000Z</published>
+    <updated>2019-09-25T15:42:01.390Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h2 id=&quot;1-概述&quot;&gt;&lt;a href=&quot;#1-概述&quot; class=&quot;headerlink&quot; title=&quot;1.概述&quot;&gt;&lt;/a&gt;1.概述&lt;/h2&gt;&lt;p&gt;该篇文档为自己所做笔记，防止后续忘记如何部署。&lt;/p&gt;
+&lt;p&gt;VPS的购买省略，可以参考该文档&lt;a
+        
+      
+    
+    </summary>
+    
+    
+      <category term="小技巧" scheme="https://dilidonglong.github.io/categories/%E5%B0%8F%E6%8A%80%E5%B7%A7/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>数据包的嗅探与欺骗实验</title>
+    <link href="https://dilidonglong.github.io/2019/09/17/%E6%95%B0%E6%8D%AE%E5%8C%85%E7%9A%84%E5%97%85%E6%8E%A2%E4%B8%8E%E6%AC%BA%E9%AA%97%E5%AE%9E%E9%AA%8C/"/>
+    <id>https://dilidonglong.github.io/2019/09/17/数据包的嗅探与欺骗实验/</id>
+    <published>2019-09-16T16:32:41.000Z</published>
+    <updated>2019-09-23T15:27:57.722Z</updated>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;参考文档：&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://zhuanlan.zhihu.com/p/51002301&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;网络工程师的Python之路—Scapy基础篇&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://zhuanlan.zhihu.com/p/53264096&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;网络工程师的Python之路—Scapy应用篇&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;br&gt;
+
+&lt;h1 id=&quot;1-Overview&quot;&gt;&lt;a href=&quot;#1-Overview&quot; class=&quot;headerlink&quot; title=&quot;1.Overview&quot;&gt;&lt;/a&gt;1.Overview&lt;/h1&gt;&lt;p&gt;&lt;strong&gt;1.概要&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Packet sniffing and spoofing are two important concepts in network security; they are two major threats（威胁）  in network communication. Being able to understand these two threats is essential（必要） for understanding security measures in networking. There are many packet sniffing and spoofing tools, such as Wireshark, Tcpdump, Netwox, Scapy, etc. Some of these tools are widely used by security experts, as well as by attackers. Being able to use these tools is important for students, but what is more important for students in a network security course is to understand how these tools work, i.e., how packet sniffing and spoofing are implemented in software.&lt;/p&gt;
+&lt;p&gt;数据包嗅探和欺骗是在网络安全中两个比较重要的概念。它们是在网络通信中两个主要的威胁。能够理解这两种威胁对于理解网络中的安全措施至关重要。有许多数据包监听和嗅探工具，例如Wireshark, Tcpdump, Netwox, Scapy等等。其中的一些工具被安全专家广泛使用，当然也有攻击者。对于学生而言，尽力去使用这些工具很重要，但是对于网络安全课程的学生而言，更重要的是理解这些工具是如何工作的。例如，在软件中数据包的嗅探和欺骗是如何实现的。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="SEED Labs" scheme="https://dilidonglong.github.io/categories/SEED-Labs/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>如何使用VirtualBox运行SEED_Ubuntu_VM？</title>
@@ -255,7 +309,7 @@
 &lt;/ol&gt;
 &lt;p&gt;总部有三层环境，AC透明模式部署，分支二层环境，就一个网段&lt;/p&gt;
 &lt;ol start=&quot;3&quot;&gt;
-&lt;li&gt;&lt;p&gt;数据包是总部访问分支访问不了的时候抓取的数据包，要求通过数据包，分析问题原因。&lt;/p&gt;&lt;/li&gt;&lt;/ol&gt;
+&lt;li&gt;&lt;p&gt;数据包是总部访问分支访问不了的时候抓取的数据包，要求通过数据包，分析问题原因。&lt;/p&gt;
     
     </summary>
     
@@ -544,71 +598,6 @@
     
     
       <category term="linux" scheme="https://dilidonglong.github.io/categories/linux/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>软考试题1</title>
-    <link href="https://dilidonglong.github.io/2019/04/29/%E8%BD%AF%E8%80%83%E8%AF%95%E9%A2%981/"/>
-    <id>https://dilidonglong.github.io/2019/04/29/软考试题1/</id>
-    <published>2019-04-29T14:54:48.000Z</published>
-    <updated>2019-09-15T14:25:27.670Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;问题&quot;&gt;&lt;a href=&quot;#问题&quot; class=&quot;headerlink&quot; title=&quot;问题&quot;&gt;&lt;/a&gt;问题&lt;/h2&gt;&lt;p&gt;若主机hostA的MAC地址为aa-aa-aa-aa-aa-aa，主机hostB的MAC地址为bb-bb-bb-bb-bb-bb。由hostA发出的查询hostB的MAC地址的帧格式如下图所示，则此帧中的目标MAC地址为（ D ），ARP报文中的目标MAC地址为（ C ）。&lt;/p&gt;
-&lt;img src=&quot;/2019/04/29/软考试题1/1.png&quot; title=&quot;This is an test image&quot;&gt;
-
-
-
-&lt;p&gt;问题1选项&lt;/p&gt;
-&lt;p&gt;A aa-aa-aa-aa-aa-aa&lt;/p&gt;
-&lt;p&gt;B bb-bb-bb-bb-bb-bb&lt;/p&gt;
-&lt;p&gt;C 00-00-00-00-00-00&lt;/p&gt;
-&lt;p&gt;D ff-ff-ff-ff-ff-ff&lt;/p&gt;
-&lt;p&gt;问题2选项&lt;/p&gt;
-&lt;p&gt;A aa-aa-aa-aa-aa-aa&lt;/p&gt;
-&lt;p&gt;B bb-bb-bb-bb-bb-bb&lt;/p&gt;
-&lt;p&gt;C 00-00-00-00-00-00&lt;/p&gt;
-&lt;p&gt;D ff-ff-ff-ff-ff-ff&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="软考" scheme="https://dilidonglong.github.io/categories/%E8%BD%AF%E8%80%83/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>设置分类列表页</title>
-    <link href="https://dilidonglong.github.io/2019/04/27/%E8%AE%BE%E7%BD%AE%E5%88%86%E7%B1%BB%E5%88%97%E8%A1%A8%E9%A1%B5/"/>
-    <id>https://dilidonglong.github.io/2019/04/27/设置分类列表页/</id>
-    <published>2019-04-27T02:46:42.000Z</published>
-    <updated>2019-09-15T14:26:38.909Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;设置分类列表页&quot;&gt;&lt;a href=&quot;#设置分类列表页&quot; class=&quot;headerlink&quot; title=&quot;设置分类列表页&quot;&gt;&lt;/a&gt;设置分类列表页&lt;/h1&gt;&lt;h2 id=&quot;问题&quot;&gt;&lt;a href=&quot;#问题&quot; class=&quot;headerlink&quot; title=&quot;问题&quot;&gt;&lt;/a&gt;问题&lt;/h2&gt;&lt;p&gt;最近通过github+hexo(ocean主题)搭建了博客。期间遇到了各种问题，主要还是因为自己不是程序员，有些代码看不懂。&lt;/p&gt;
-&lt;p&gt;比如我想，以后如果文章多起来，只有一个归档可不行，最好要有个分类的界面。把文章都整理好，以后也方便自己查东西。&lt;/p&gt;
-&lt;p&gt;照着网上的操作：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;ol&gt;
-&lt;li&gt;先生成一个分类的网页，输入命令&lt;code&gt;hexo new page categories&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;找到对应网页的md文件，在其头部内添加上&lt;code&gt;type: &amp;quot;categories&amp;quot;&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;最后测试，新建一篇文章，在文章md文件头部上添加&lt;code&gt;categories: 分类的名称&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;保存&lt;/li&gt;
-&lt;li&gt;最后需要在主页上把分类页展现出来。&lt;/li&gt;
-&lt;li&gt;找到主题配置文件&lt;code&gt;_config.yml&lt;/code&gt;。在&lt;code&gt;meun&lt;/code&gt;中加入&lt;code&gt;分类: /categories&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;保存&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/blockquote&gt;
-    
-    </summary>
-    
-    
-      <category term="小技巧" scheme="https://dilidonglong.github.io/categories/%E5%B0%8F%E6%8A%80%E5%B7%A7/"/>
     
     
   </entry>
