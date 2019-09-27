@@ -183,7 +183,7 @@
 <h2 id="2-3-Task-1-3-Traceroute"><a href="#2-3-Task-1-3-Traceroute" class="headerlink" title="2.3 Task 1.3: Traceroute"></a>2.3 Task 1.3: Traceroute</h2><p><strong>任务1.3 路由追踪</strong></p>
 <p>The objective of this task is to use Scapy to estimate（预估） the distance, in terms of number of routers, between your VM and a selected destination. This is basically what is implemented by the traceroute tool. In this task, we will write our own tool. The idea is quite straightforward: just send an packet (any type) to the destination, with its Time-To-Live (TTL) field set to 1 first. This packet will be dropped by the first router, which will send us an ICMP error message, telling us that the time-to-live has exceeded. That is how we get the IP address of the first router. We then increase our TTL field to 2, send out another packet, and get the IP address of the second router. We will repeat this procedure（程序，步骤） until our packet finally reach the destination. It should be noted that this experiment only gets an estimated result, because in theory（理论）, not all these packets take the same route (but in practice（练习）, they may within a short period of time). The code in the following shows one round in the procedure.</p>
 <p>这个实验的目的是使用Scapy来预估在我们的VM和被选择的目的地之间的路径（以路由器的数量为单位）。这基本是通过路由追踪工具实现的。在这个任务中，我们将写一个我们自己的工具。这个想法相当简单直白：仅发送一个数据包（任意类型）到达目的地，并首先设置它的TTL字段为1。这个包将会被第一个路由器所丢弃，路由器则发送给我们一个ICMP错误信息。我们接下来增加我们的TTL字段为2，发送另一个数据包，则可以获得第二个路由器的IP地址。我们将重复这些步骤，直到我们的数据包最终到达目的地。需要注意的是，这个实验仅能获得一个预估的结果，因为理论上来说，不是所有的数据包都会经过同一个路由器（但是在练习中，他们可能会在很短的时间段内）。以下代码展示了在该过程中的一轮操作。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a = IP()</span><br><span class="line">a.dst = ’<span class="number">1.2</span><span class="number">.3</span><span class="number">.4</span>’</span><br><span class="line">a.ttl = <span class="number">3</span> b = ICMP()</span><br><span class="line">send(a/b)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">a = IP()</span><br><span class="line">a.dst = ’<span class="number">1.2</span><span class="number">.3</span><span class="number">.4</span>’</span><br><span class="line">a.ttl = <span class="number">3</span> </span><br><span class="line">b = ICMP()</span><br><span class="line">send(a/b)</span><br></pre></td></tr></table></figure>
 
 <p>If you are an experienced Python programmer, you can write your tool to perform the entire procedure automatically. If you are new to Python programming, you can do it by manually changing the TTL field in each round, and record the IP address based on your observation（意见，注目） from Wireshark. Either way is acceptable, as long as you get the result.</p>
 <p>如果你是一个经验丰富的Python程序员，你能写下你自己的工具来自动执行整个过程。如果你是一个Python新手，则可以通过在每个回合中手动更改TTL字段来实现，并根据Wireshark的观察记录IP地址。两种方式都是可以接受的，只要你获得了结果。</p>
@@ -196,7 +196,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.github.io/2019/09/17/数据包的嗅探与欺骗实验/" data-id="ck0zfsu7d000gcgvdrm2kpxi4"
+      <a data-url="https://dilidonglong.site/2019/09/17/数据包的嗅探与欺骗实验/" data-id="ck0zfsu7d000gcgvdrm2kpxi4"
          class="article-share-link">分享</a>
       
     </footer>

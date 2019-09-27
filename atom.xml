@@ -5,9 +5,9 @@
   <subtitle>兰芝生于幽谷，不以无人而不芳</subtitle>
   <link href="/atom.xml" rel="self"/>
   
-  <link href="https://dilidonglong.github.io/"/>
+  <link href="https://dilidonglong.site/"/>
   <updated>2019-09-25T15:45:15.846Z</updated>
-  <id>https://dilidonglong.github.io/</id>
+  <id>https://dilidonglong.site/</id>
   
   <author>
     <name>John Doe</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>科学上网</title>
-    <link href="https://dilidonglong.github.io/2019/09/25/%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/"/>
-    <id>https://dilidonglong.github.io/2019/09/25/科学上网/</id>
+    <link href="https://dilidonglong.site/2019/09/25/%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/"/>
+    <id>https://dilidonglong.site/2019/09/25/科学上网/</id>
     <published>2019-09-25T14:21:48.000Z</published>
     <updated>2019-09-25T15:45:15.846Z</updated>
     
@@ -64,17 +64,17 @@
     </summary>
     
     
-      <category term="小技巧" scheme="https://dilidonglong.github.io/categories/%E5%B0%8F%E6%8A%80%E5%B7%A7/"/>
+      <category term="小技巧" scheme="https://dilidonglong.site/categories/%E5%B0%8F%E6%8A%80%E5%B7%A7/"/>
     
     
   </entry>
   
   <entry>
     <title>数据包的嗅探与欺骗实验</title>
-    <link href="https://dilidonglong.github.io/2019/09/17/%E6%95%B0%E6%8D%AE%E5%8C%85%E7%9A%84%E5%97%85%E6%8E%A2%E4%B8%8E%E6%AC%BA%E9%AA%97%E5%AE%9E%E9%AA%8C/"/>
-    <id>https://dilidonglong.github.io/2019/09/17/数据包的嗅探与欺骗实验/</id>
+    <link href="https://dilidonglong.site/2019/09/17/%E6%95%B0%E6%8D%AE%E5%8C%85%E7%9A%84%E5%97%85%E6%8E%A2%E4%B8%8E%E6%AC%BA%E9%AA%97%E5%AE%9E%E9%AA%8C/"/>
+    <id>https://dilidonglong.site/2019/09/17/数据包的嗅探与欺骗实验/</id>
     <published>2019-09-16T16:32:41.000Z</published>
-    <updated>2019-09-23T15:27:57.722Z</updated>
+    <updated>2019-09-26T03:52:51.797Z</updated>
     
     <summary type="html">
     
@@ -92,15 +92,15 @@
     </summary>
     
     
-      <category term="SEED Labs" scheme="https://dilidonglong.github.io/categories/SEED-Labs/"/>
+      <category term="SEED Labs" scheme="https://dilidonglong.site/categories/SEED-Labs/"/>
     
     
   </entry>
   
   <entry>
     <title>如何使用VirtualBox运行SEED_Ubuntu_VM？</title>
-    <link href="https://dilidonglong.github.io/2019/09/07/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8VirtualBox%E8%BF%90%E8%A1%8CSEED_Ubuntu_VM%EF%BC%9F/"/>
-    <id>https://dilidonglong.github.io/2019/09/07/如何使用VirtualBox运行SEED_Ubuntu_VM？/</id>
+    <link href="https://dilidonglong.site/2019/09/07/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8VirtualBox%E8%BF%90%E8%A1%8CSEED_Ubuntu_VM%EF%BC%9F/"/>
+    <id>https://dilidonglong.site/2019/09/07/如何使用VirtualBox运行SEED_Ubuntu_VM？/</id>
     <published>2019-09-07T15:49:44.000Z</published>
     <updated>2019-09-15T14:24:00.296Z</updated>
     
@@ -113,15 +113,15 @@
     </summary>
     
     
-      <category term="SEED Labs" scheme="https://dilidonglong.github.io/categories/SEED-Labs/"/>
+      <category term="SEED Labs" scheme="https://dilidonglong.site/categories/SEED-Labs/"/>
     
     
   </entry>
   
   <entry>
     <title>markdown语法</title>
-    <link href="https://dilidonglong.github.io/2019/08/11/markdown%E8%AF%AD%E6%B3%95/"/>
-    <id>https://dilidonglong.github.io/2019/08/11/markdown语法/</id>
+    <link href="https://dilidonglong.site/2019/08/11/markdown%E8%AF%AD%E6%B3%95/"/>
+    <id>https://dilidonglong.site/2019/08/11/markdown语法/</id>
     <published>2019-08-11T14:09:25.000Z</published>
     <updated>2019-09-15T15:03:20.807Z</updated>
     
@@ -155,15 +155,15 @@
     </summary>
     
     
-      <category term="小技巧" scheme="https://dilidonglong.github.io/categories/%E5%B0%8F%E6%8A%80%E5%B7%A7/"/>
+      <category term="小技巧" scheme="https://dilidonglong.site/categories/%E5%B0%8F%E6%8A%80%E5%B7%A7/"/>
     
     
   </entry>
   
   <entry>
     <title>grep/正则表达式/awk/sed</title>
-    <link href="https://dilidonglong.github.io/2019/08/11/grep-%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F-awk-sed/"/>
-    <id>https://dilidonglong.github.io/2019/08/11/grep-正则表达式-awk-sed/</id>
+    <link href="https://dilidonglong.site/2019/08/11/grep-%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F-awk-sed/"/>
+    <id>https://dilidonglong.site/2019/08/11/grep-正则表达式-awk-sed/</id>
     <published>2019-08-11T13:30:15.000Z</published>
     <updated>2019-09-15T14:38:30.931Z</updated>
     
@@ -178,15 +178,15 @@
     </summary>
     
     
-      <category term="linux" scheme="https://dilidonglong.github.io/categories/linux/"/>
+      <category term="linux" scheme="https://dilidonglong.site/categories/linux/"/>
     
     
   </entry>
   
   <entry>
     <title>iptables笔记</title>
-    <link href="https://dilidonglong.github.io/2019/08/11/iptables%E7%AC%94%E8%AE%B0/"/>
-    <id>https://dilidonglong.github.io/2019/08/11/iptables笔记/</id>
+    <link href="https://dilidonglong.site/2019/08/11/iptables%E7%AC%94%E8%AE%B0/"/>
+    <id>https://dilidonglong.site/2019/08/11/iptables笔记/</id>
     <published>2019-08-11T13:25:59.000Z</published>
     <updated>2019-09-16T14:49:44.239Z</updated>
     
@@ -201,15 +201,15 @@
     </summary>
     
     
-      <category term="linux" scheme="https://dilidonglong.github.io/categories/linux/"/>
+      <category term="linux" scheme="https://dilidonglong.site/categories/linux/"/>
     
     
   </entry>
   
   <entry>
     <title>新东方赵丽托福英语词汇8000-01</title>
-    <link href="https://dilidonglong.github.io/2019/07/18/%E6%96%B0%E4%B8%9C%E6%96%B9%E8%B5%B5%E4%B8%BD%E6%89%98%E7%A6%8F%E8%8B%B1%E8%AF%AD%E8%AF%8D%E6%B1%878000-01/"/>
-    <id>https://dilidonglong.github.io/2019/07/18/新东方赵丽托福英语词汇8000-01/</id>
+    <link href="https://dilidonglong.site/2019/07/18/%E6%96%B0%E4%B8%9C%E6%96%B9%E8%B5%B5%E4%B8%BD%E6%89%98%E7%A6%8F%E8%8B%B1%E8%AF%AD%E8%AF%8D%E6%B1%878000-01/"/>
+    <id>https://dilidonglong.site/2019/07/18/新东方赵丽托福英语词汇8000-01/</id>
     <published>2019-07-18T14:53:40.000Z</published>
     <updated>2019-09-15T15:03:30.339Z</updated>
     
@@ -264,15 +264,15 @@
     </summary>
     
     
-      <category term="英语" scheme="https://dilidonglong.github.io/categories/%E8%8B%B1%E8%AF%AD/"/>
+      <category term="英语" scheme="https://dilidonglong.site/categories/%E8%8B%B1%E8%AF%AD/"/>
     
     
   </entry>
   
   <entry>
     <title>新东方赵丽托福英语词汇8000-00</title>
-    <link href="https://dilidonglong.github.io/2019/07/15/%E6%96%B0%E4%B8%9C%E6%96%B9%E8%B5%B5%E4%B8%BD%E6%89%98%E7%A6%8F%E8%8B%B1%E8%AF%AD%E8%AF%8D%E6%B1%878000-00/"/>
-    <id>https://dilidonglong.github.io/2019/07/15/新东方赵丽托福英语词汇8000-00/</id>
+    <link href="https://dilidonglong.site/2019/07/15/%E6%96%B0%E4%B8%9C%E6%96%B9%E8%B5%B5%E4%B8%BD%E6%89%98%E7%A6%8F%E8%8B%B1%E8%AF%AD%E8%AF%8D%E6%B1%878000-00/"/>
+    <id>https://dilidonglong.site/2019/07/15/新东方赵丽托福英语词汇8000-00/</id>
     <published>2019-07-15T13:50:05.000Z</published>
     <updated>2019-09-15T15:03:35.323Z</updated>
     
@@ -311,15 +311,15 @@
     </summary>
     
     
-      <category term="英语" scheme="https://dilidonglong.github.io/categories/%E8%8B%B1%E8%AF%AD/"/>
+      <category term="英语" scheme="https://dilidonglong.site/categories/%E8%8B%B1%E8%AF%AD/"/>
     
     
   </entry>
   
   <entry>
     <title>远程桌面访问不了</title>
-    <link href="https://dilidonglong.github.io/2019/07/07/%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E8%AE%BF%E9%97%AE%E4%B8%8D%E4%BA%86/"/>
-    <id>https://dilidonglong.github.io/2019/07/07/远程桌面访问不了/</id>
+    <link href="https://dilidonglong.site/2019/07/07/%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E8%AE%BF%E9%97%AE%E4%B8%8D%E4%BA%86/"/>
+    <id>https://dilidonglong.site/2019/07/07/远程桌面访问不了/</id>
     <published>2019-07-07T08:08:47.000Z</published>
     <updated>2019-09-15T14:36:22.026Z</updated>
     
@@ -341,15 +341,15 @@
     </summary>
     
     
-      <category term="实战" scheme="https://dilidonglong.github.io/categories/%E5%AE%9E%E6%88%98/"/>
+      <category term="实战" scheme="https://dilidonglong.site/categories/%E5%AE%9E%E6%88%98/"/>
     
     
   </entry>
   
   <entry>
     <title>视频会议卡顿</title>
-    <link href="https://dilidonglong.github.io/2019/06/13/%E8%A7%86%E9%A2%91%E4%BC%9A%E8%AE%AE%E5%8D%A1%E9%A1%BF/"/>
-    <id>https://dilidonglong.github.io/2019/06/13/视频会议卡顿/</id>
+    <link href="https://dilidonglong.site/2019/06/13/%E8%A7%86%E9%A2%91%E4%BC%9A%E8%AE%AE%E5%8D%A1%E9%A1%BF/"/>
+    <id>https://dilidonglong.site/2019/06/13/视频会议卡顿/</id>
     <published>2019-06-13T14:29:26.000Z</published>
     <updated>2019-09-15T14:32:14.187Z</updated>
     
@@ -362,15 +362,15 @@
     </summary>
     
     
-      <category term="实战" scheme="https://dilidonglong.github.io/categories/%E5%AE%9E%E6%88%98/"/>
+      <category term="实战" scheme="https://dilidonglong.site/categories/%E5%AE%9E%E6%88%98/"/>
     
     
   </entry>
   
   <entry>
     <title>并行/串行/异步传输</title>
-    <link href="https://dilidonglong.github.io/2019/06/12/%E5%B9%B6%E8%A1%8C-%E4%B8%B2%E8%A1%8C-%E5%BC%82%E6%AD%A5%E4%BC%A0%E8%BE%93/"/>
-    <id>https://dilidonglong.github.io/2019/06/12/并行-串行-异步传输/</id>
+    <link href="https://dilidonglong.site/2019/06/12/%E5%B9%B6%E8%A1%8C-%E4%B8%B2%E8%A1%8C-%E5%BC%82%E6%AD%A5%E4%BC%A0%E8%BE%93/"/>
+    <id>https://dilidonglong.site/2019/06/12/并行-串行-异步传输/</id>
     <published>2019-06-12T14:45:28.000Z</published>
     <updated>2019-09-15T15:00:03.015Z</updated>
     
@@ -395,15 +395,15 @@
     </summary>
     
     
-      <category term="收录文章" scheme="https://dilidonglong.github.io/categories/%E6%94%B6%E5%BD%95%E6%96%87%E7%AB%A0/"/>
+      <category term="收录文章" scheme="https://dilidonglong.site/categories/%E6%94%B6%E5%BD%95%E6%96%87%E7%AB%A0/"/>
     
     
   </entry>
   
   <entry>
     <title>访问X友软件卡顿</title>
-    <link href="https://dilidonglong.github.io/2019/06/11/%E8%AE%BF%E9%97%AEX%E5%8F%8B%E8%BD%AF%E4%BB%B6%E5%8D%A1%E9%A1%BF/"/>
-    <id>https://dilidonglong.github.io/2019/06/11/访问X友软件卡顿/</id>
+    <link href="https://dilidonglong.site/2019/06/11/%E8%AE%BF%E9%97%AEX%E5%8F%8B%E8%BD%AF%E4%BB%B6%E5%8D%A1%E9%A1%BF/"/>
+    <id>https://dilidonglong.site/2019/06/11/访问X友软件卡顿/</id>
     <published>2019-06-11T14:23:27.000Z</published>
     <updated>2019-09-15T15:02:53.973Z</updated>
     
@@ -420,15 +420,15 @@
     </summary>
     
     
-      <category term="实战" scheme="https://dilidonglong.github.io/categories/%E5%AE%9E%E6%88%98/"/>
+      <category term="实战" scheme="https://dilidonglong.site/categories/%E5%AE%9E%E6%88%98/"/>
     
     
   </entry>
   
   <entry>
     <title>英语名词</title>
-    <link href="https://dilidonglong.github.io/2019/05/06/%E8%8B%B1%E8%AF%AD%E5%90%8D%E8%AF%8D/"/>
-    <id>https://dilidonglong.github.io/2019/05/06/英语名词/</id>
+    <link href="https://dilidonglong.site/2019/05/06/%E8%8B%B1%E8%AF%AD%E5%90%8D%E8%AF%8D/"/>
+    <id>https://dilidonglong.site/2019/05/06/英语名词/</id>
     <published>2019-05-06T14:57:04.000Z</published>
     <updated>2019-09-15T15:03:55.705Z</updated>
     
@@ -442,15 +442,15 @@
     </summary>
     
     
-      <category term="英语" scheme="https://dilidonglong.github.io/categories/%E8%8B%B1%E8%AF%AD/"/>
+      <category term="英语" scheme="https://dilidonglong.site/categories/%E8%8B%B1%E8%AF%AD/"/>
     
     
   </entry>
   
   <entry>
     <title>软考试题3</title>
-    <link href="https://dilidonglong.github.io/2019/05/06/%E8%BD%AF%E8%80%83%E8%AF%95%E9%A2%983/"/>
-    <id>https://dilidonglong.github.io/2019/05/06/软考试题3/</id>
+    <link href="https://dilidonglong.site/2019/05/06/%E8%BD%AF%E8%80%83%E8%AF%95%E9%A2%983/"/>
+    <id>https://dilidonglong.site/2019/05/06/软考试题3/</id>
     <published>2019-05-06T14:56:29.000Z</published>
     <updated>2019-09-15T15:03:41.780Z</updated>
     
@@ -461,15 +461,15 @@
     </summary>
     
     
-      <category term="软考" scheme="https://dilidonglong.github.io/categories/%E8%BD%AF%E8%80%83/"/>
+      <category term="软考" scheme="https://dilidonglong.site/categories/%E8%BD%AF%E8%80%83/"/>
     
     
   </entry>
   
   <entry>
     <title>软考试题2</title>
-    <link href="https://dilidonglong.github.io/2019/05/06/%E8%BD%AF%E8%80%83%E8%AF%95%E9%A2%982/"/>
-    <id>https://dilidonglong.github.io/2019/05/06/软考试题2/</id>
+    <link href="https://dilidonglong.site/2019/05/06/%E8%BD%AF%E8%80%83%E8%AF%95%E9%A2%982/"/>
+    <id>https://dilidonglong.site/2019/05/06/软考试题2/</id>
     <published>2019-05-06T14:55:13.000Z</published>
     <updated>2019-09-15T15:03:49.219Z</updated>
     
@@ -480,15 +480,15 @@
     </summary>
     
     
-      <category term="软考" scheme="https://dilidonglong.github.io/categories/%E8%BD%AF%E8%80%83/"/>
+      <category term="软考" scheme="https://dilidonglong.site/categories/%E8%BD%AF%E8%80%83/"/>
     
     
   </entry>
   
   <entry>
     <title>tcpdump技巧</title>
-    <link href="https://dilidonglong.github.io/2019/04/30/tcpdump%E6%8A%80%E5%B7%A7/"/>
-    <id>https://dilidonglong.github.io/2019/04/30/tcpdump技巧/</id>
+    <link href="https://dilidonglong.site/2019/04/30/tcpdump%E6%8A%80%E5%B7%A7/"/>
+    <id>https://dilidonglong.site/2019/04/30/tcpdump技巧/</id>
     <published>2019-04-30T15:44:49.000Z</published>
     <updated>2019-04-30T00:45:16.000Z</updated>
     
@@ -506,15 +506,15 @@
     </summary>
     
     
-      <category term="linux" scheme="https://dilidonglong.github.io/categories/linux/"/>
+      <category term="linux" scheme="https://dilidonglong.site/categories/linux/"/>
     
     
   </entry>
   
   <entry>
     <title>wireshark技巧</title>
-    <link href="https://dilidonglong.github.io/2019/04/30/wireshark%E6%8A%80%E5%B7%A7/"/>
-    <id>https://dilidonglong.github.io/2019/04/30/wireshark技巧/</id>
+    <link href="https://dilidonglong.site/2019/04/30/wireshark%E6%8A%80%E5%B7%A7/"/>
+    <id>https://dilidonglong.site/2019/04/30/wireshark技巧/</id>
     <published>2019-04-30T15:40:03.000Z</published>
     <updated>2019-09-15T14:56:20.442Z</updated>
     
@@ -542,15 +542,15 @@
     </summary>
     
     
-      <category term="小技巧" scheme="https://dilidonglong.github.io/categories/%E5%B0%8F%E6%8A%80%E5%B7%A7/"/>
+      <category term="小技巧" scheme="https://dilidonglong.site/categories/%E5%B0%8F%E6%8A%80%E5%B7%A7/"/>
     
     
   </entry>
   
   <entry>
     <title>文件系统的简单操作</title>
-    <link href="https://dilidonglong.github.io/2019/04/30/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%AE%80%E5%8D%95%E6%93%8D%E4%BD%9C/"/>
-    <id>https://dilidonglong.github.io/2019/04/30/文件系统的简单操作/</id>
+    <link href="https://dilidonglong.site/2019/04/30/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%AE%80%E5%8D%95%E6%93%8D%E4%BD%9C/"/>
+    <id>https://dilidonglong.site/2019/04/30/文件系统的简单操作/</id>
     <published>2019-04-30T15:34:18.000Z</published>
     <updated>2019-09-15T15:04:10.578Z</updated>
     
@@ -562,15 +562,15 @@
     </summary>
     
     
-      <category term="linux" scheme="https://dilidonglong.github.io/categories/linux/"/>
+      <category term="linux" scheme="https://dilidonglong.site/categories/linux/"/>
     
     
   </entry>
   
   <entry>
     <title>文件系统</title>
-    <link href="https://dilidonglong.github.io/2019/04/30/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/"/>
-    <id>https://dilidonglong.github.io/2019/04/30/文件系统/</id>
+    <link href="https://dilidonglong.site/2019/04/30/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/"/>
+    <id>https://dilidonglong.site/2019/04/30/文件系统/</id>
     <published>2019-04-30T15:33:00.000Z</published>
     <updated>2019-09-15T15:04:19.035Z</updated>
     
@@ -604,15 +604,15 @@
     </summary>
     
     
-      <category term="linux" scheme="https://dilidonglong.github.io/categories/linux/"/>
+      <category term="linux" scheme="https://dilidonglong.site/categories/linux/"/>
     
     
   </entry>
   
   <entry>
     <title>磁盘分区</title>
-    <link href="https://dilidonglong.github.io/2019/04/30/%E7%A3%81%E7%9B%98%E5%88%86%E5%8C%BA/"/>
-    <id>https://dilidonglong.github.io/2019/04/30/磁盘分区/</id>
+    <link href="https://dilidonglong.site/2019/04/30/%E7%A3%81%E7%9B%98%E5%88%86%E5%8C%BA/"/>
+    <id>https://dilidonglong.site/2019/04/30/磁盘分区/</id>
     <published>2019-04-30T15:32:07.000Z</published>
     <updated>2019-09-15T15:04:24.352Z</updated>
     
@@ -624,7 +624,7 @@
     </summary>
     
     
-      <category term="linux" scheme="https://dilidonglong.github.io/categories/linux/"/>
+      <category term="linux" scheme="https://dilidonglong.site/categories/linux/"/>
     
     
   </entry>
