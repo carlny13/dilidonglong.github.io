@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://dilidonglong.site/"/>
-  <updated>2019-09-27T16:07:08.040Z</updated>
+  <updated>2019-09-28T14:22:00.038Z</updated>
   <id>https://dilidonglong.site/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://dilidonglong.site/2019/09/27/%E4%BD%BF%E7%94%A8CDN%E5%8A%A0%E9%80%9F%E5%8D%9A%E5%AE%A2%E6%89%93%E5%BC%80%E9%80%9F%E5%BA%A6%EF%BC%88Cloudflare%EF%BC%89/"/>
     <id>https://dilidonglong.site/2019/09/27/使用CDN加速博客打开速度（Cloudflare）/</id>
     <published>2019-09-27T15:03:52.000Z</published>
-    <updated>2019-09-27T16:07:08.040Z</updated>
+    <updated>2019-09-28T14:22:00.038Z</updated>
     
     <summary type="html">
     
@@ -41,7 +41,7 @@
     <link href="https://dilidonglong.site/2019/09/25/%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/"/>
     <id>https://dilidonglong.site/2019/09/25/科学上网/</id>
     <published>2019-09-25T14:21:48.000Z</published>
-    <updated>2019-09-25T15:45:15.846Z</updated>
+    <updated>2019-09-28T05:45:46.613Z</updated>
     
     <summary type="html">
     
@@ -56,6 +56,9 @@
 &lt;p&gt;Shadowsocks和V2Ray任选其一&lt;/p&gt;
 &lt;br&gt;
 
+&lt;p&gt;利用上述文档可以更换IP，注意记得更换IP后要重装系统并&lt;strong&gt;重启设备&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;同时在hostwinds中可以创建快照。恢复快照是在重装系统中，选择之前的快照恢复即可，同时记得做完上述操作后要重启设备&lt;/p&gt;
+&lt;p&gt;同时重装过系统后，密码可能需要修改，修改之后同样要重启设备&lt;/p&gt;
 &lt;h2 id=&quot;2-Shadowsocks部署&quot;&gt;&lt;a href=&quot;#2-Shadowsocks部署&quot; class=&quot;headerlink&quot; title=&quot;2.Shadowsocks部署&quot;&gt;&lt;/a&gt;2.Shadowsocks部署&lt;/h2&gt;&lt;h3 id=&quot;2-1-服务器部署&quot;&gt;&lt;a href=&quot;#2-1-服务器部署&quot; class=&quot;headerlink&quot; title=&quot;2.1 服务器部署&quot;&gt;&lt;/a&gt;2.1 服务器部署&lt;/h3&gt;&lt;ol&gt;
 &lt;li&gt;命令行中，输入以下命令，并回车。直接复制即可。这一步是下载安装执行脚本到本地目录下&lt;/li&gt;
 &lt;/ol&gt;
