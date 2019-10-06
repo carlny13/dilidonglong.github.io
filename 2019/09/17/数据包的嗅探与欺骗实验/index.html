@@ -80,6 +80,8 @@
       
         <blockquote>
 <p>参考文档：</p>
+<p><a href="https://wizardforcel.gitbooks.io/scapy-docs/content/" target="_blank" rel="noopener">Scapy中文文档</a></p>
+<p><a href="http://sinhub.cn/2018/06/what-can-we-do-with-scapy/" target="_blank" rel="noopener">我们可以拿Scapy做什么</a></p>
 <p><a href="https://zhuanlan.zhihu.com/p/51002301" target="_blank" rel="noopener">网络工程师的Python之路—Scapy基础篇</a></p>
 <p><a href="https://zhuanlan.zhihu.com/p/53264096" target="_blank" rel="noopener">网络工程师的Python之路—Scapy应用篇</a></p>
 </blockquote>
@@ -117,6 +119,7 @@
 <br>
 
 <h1 id="2-Lab-Task-Set-1-Using-Tools-to-Sniff-and-Spoof-Packets"><a href="#2-Lab-Task-Set-1-Using-Tools-to-Sniff-and-Spoof-Packets" class="headerlink" title="2.Lab Task Set 1: Using Tools to Sniff and Spoof Packets"></a>2.Lab Task Set 1: Using Tools to Sniff and Spoof Packets</h1><p><strong>2.实验任务组1：使用工具嗅探和欺骗数据包</strong></p>
+<p>（注：spoof有欺骗和冒充的意思，有的地方翻译成冒充感觉更合适）</p>
 <p>Many tools can be used to do sniffing and spoofing, but most of them only provide fixed functionalities. Scapy is different: it can be used not only as a tool, but also as <em>a building block（一块积木）</em> to construct other sniffing and spoofing tools, i.e., we can integrate（合并） the Scapy functionalities into our own program. In this set of tasks, we will use Scapy for each task. </p>
 <p>许多工具能够被用来嗅探和欺骗，但是其中大部分只能提供固定功能。Scapy则不同：它不仅可以被用作一个工具，还可以作为一个构建其他嗅探和欺骗工具的基石。例如，我们能把Scapy的功能加到我们的程序中。在这组任务中，我们将使用Scapy完成每一个任务。</p>
 <p>To use Scapy, we can write a Python program, and then execute this program using Python. See the following example. We should run Python using the root privilege because the privilege is required for spoofing packets. At the beginning of the program (Line º), we should import all Scapy’s modules.</p>
@@ -189,9 +192,9 @@
 </ul>
 <br>
 
-<h2 id="2-2-Task-1-2-Spoofing-ICMP-Packets"><a href="#2-2-Task-1-2-Spoofing-ICMP-Packets" class="headerlink" title="2.2  Task 1.2: Spoofing ICMP Packets"></a>2.2  Task 1.2: Spoofing ICMP Packets</h2><p><strong>任务1.2 欺骗ICMP数据包</strong></p>
+<h2 id="2-2-Task-1-2-Spoofing-ICMP-Packets"><a href="#2-2-Task-1-2-Spoofing-ICMP-Packets" class="headerlink" title="2.2  Task 1.2: Spoofing ICMP Packets"></a>2.2  Task 1.2: Spoofing ICMP Packets</h2><p><strong>任务1.2 冒充ICMP数据包</strong></p>
 <p>As a packet spoofing tool, Scapy allows us to set the fields of IP packets to arbitrary（任意的） values. The objective of this task is to spoof IP packets with an arbitrary source IP address. We will spoof ICMP echo request packets, and send them to another VM on the same network. We will use Wireshark to observe whether our request will be accepted by the receiver. If it is accepted, an echo reply packet will be sent to the spoofed IP address. The following code shows an example of how to spoof an ICMP packets.</p>
-<p>作为一个包欺骗工具，Scapy允许我们去设置IP数据包字段的任意值。这个任务的目的是欺骗带有任意源IP地址的IP数据包。我们将欺骗ICMP的echo请求数据包，并且把他们发送到处于相同网络的另一台VM上。我们将使用Wireshark来验证我们的请求是否会被另外一台接收者主机所接受。如果接收方接收到了，一个echo应答包将被发送到被欺骗的IP地址上。以下代码展示了一个案例，即如何欺骗一个ICMP数据包。</p>
+<p>作为一个包欺骗工具，Scapy允许我们去设置IP数据包字段的任意值。这个任务的目的是冒充带有任意源IP地址的IP数据包。我们将冒充ICMP的echo请求数据包，并且把他们发送到处于相同网络的另一台VM上。我们将使用Wireshark来验证我们的请求是否会被另外一台接收者主机所接受。如果接收方接收到了，一个echo应答包将被发送到被冒充的IP地址上。以下代码展示了一个案例，即如何冒充一个ICMP数据包。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> scapy.all <span class="keyword">import</span> *</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = IP()						//<span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.dst = ‘<span class="number">10.0</span><span class="number">.2</span><span class="number">.3</span>’				//<span class="number">2</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = ICMP()						//<span class="number">3</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>p = a/b							//<span class="number">4</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>send(p)							//<span class="number">5</span></span><br><span class="line">.</span><br><span class="line">Sent <span class="number">1</span> packets.</span><br></pre></td></tr></table></figure>
 
 <p>In the code above, Line1 creates an IP object from the IP class; a class attribute（属性） is defined for each IP header field. We can use ls(a) or ls(IP) to see all the attribute names/values. We can also use a.show() and IP.show() to do the same. Line2 shows how to set the destination IP address field. If a field is not set, a default value will be used.</p>
@@ -200,6 +203,35 @@
 
 <p>Line 3 creates an ICMP object. The default type is echo request. In Line 4, we stack a and b together to form a new object. The / operator is overloaded by the IP class, so it no longer represents（代表） division（除法）; instead, it means adding b as the payload field of a and modifying（修改） the fields of a accordingly（从而，于是）. As a result, we get a new object that represent an ICMP packet. We can now send out this packet using send() in Line 5. Please make any necessary change to the sample code, and then demonstrate（证明） that you can spoof an ICMP echo request packet with an arbitrary source IP address.</p>
 <p>行3创建了一个ICMP对象。默认类型是echo请求。在行4，我们把a和b堆叠在了一起以创建一个新的对象。/操作是被IP类重载，因此它将不在表示除法；相反，他意味着添加b作为a的负载字段，并且修改a的字段。（注：在这里的意思就是经常听到的，ICMP被IP封装。）结果就是，我们得到一个新的对象来代表一个ICMP数据包。在行5，我们现在就可以把这个数据包使用send()发送出去了。请对这段简单代码做出任何有必要的改变，然后证明你能欺骗一个带有任意源IP的ICMP请求数据包</p>
+<br>
+
+<blockquote>
+<ol>
+<li><p>我在VM1中的zhangshuaiyang这个目录下，又新建了一个文件，名为task1.2.py</p>
+</li>
+<li><p>文件代码如下。目的是想看下，我是否成功创建了一个冒充的数据包。因为VM1的ip地址是10.0.2.15，我把它设置成了10.0.2.55。如果不写这条语句<code>a.src = &#39;10.0.2.55&#39;</code>，那么默认使用的是设备的出口ip</p>
+</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="comment">#!/usr/bin/python</span></span><br><span class="line">&gt; <span class="keyword">from</span> scapy.all <span class="keyword">import</span> *</span><br><span class="line">&gt; a = IP()</span><br><span class="line">&gt; a.src = <span class="string">'10.0.2.55'</span></span><br><span class="line">&gt; a.dst = <span class="string">'10.0.2.4'</span></span><br><span class="line">&gt; b = ICMP()</span><br><span class="line">&gt; p = a/b</span><br><span class="line">&gt; ls(p)</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<ol start="3">
+<li>然后执行文件，显示如下。说明确实可以随意创建一个数据包，并改变其中内容</li>
+</ol>
+<img src="/2019/09/17/数据包的嗅探与欺骗实验/5.png" title="This is an test image">
+
+<ol start="4">
+<li>再次修改task1.2.py中的代码，修改如下。把显示ls()改成了发送send()</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="comment">#!/usr/bin/python</span></span><br><span class="line">&gt; <span class="keyword">from</span> scapy.all <span class="keyword">import</span> *</span><br><span class="line">&gt; a = IP()</span><br><span class="line">&gt; a.src = <span class="string">'10.0.2.55'</span></span><br><span class="line">&gt; a.dst = <span class="string">'10.0.2.4'</span></span><br><span class="line">&gt; b = ICMP()</span><br><span class="line">&gt; p = a/b</span><br><span class="line">&gt; send(p)</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<ol start="5">
+<li>执行代码，展示如下。可以看到，在VM1中执行了该文件代码，然后再在VM2上用wireshark抓包。wireshark告诉我们，首先先是一个目的mac地址是08:00:27:04:d9:58（也就是VM1的mac地址）的主机发送了一个arp广播请求，然后VM2给出了单播回应。当VM1获得了VM2的mac地址，那么就可以封装数据包了。此时你能看到第三个包就是ICMP的包，同时ICMP的源IP是10.0.2.55。VM2收到ICMP请求，那么就要给出回应。需要给10.0.2.55这个IP回应，但是我们的实验环境中根本就没有10.0.2.55，所以VM2是获取不到10.0.2.55的mac地址的，也就无法封装数据包给回应。当VM2发送了三个请求10.0.2.55的mac地址arp数据包后，还没有收到arp回应，此时就停止发送arp广播请求了。</li>
+</ol>
+<img src="/2019/09/17/数据包的嗅探与欺骗实验/6.png" title="This is an test image">
+
+</blockquote>
 <br>
 
 <h2 id="2-3-Task-1-3-Traceroute"><a href="#2-3-Task-1-3-Traceroute" class="headerlink" title="2.3 Task 1.3: Traceroute"></a>2.3 Task 1.3: Traceroute</h2><p><strong>任务1.3 路由追踪</strong></p>
