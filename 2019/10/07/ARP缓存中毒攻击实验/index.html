@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  
+    <meta name="keywords" content="network,linux">
+  
+  
+    <meta name="description" content="兰芝生于幽谷，不以无人而不芳">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    ARP缓存中毒攻击实验 |
+    
+    望伊如西の博客</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+  
+  <script src="/js/pace.min.js"></script>
+</head>
+</html>
+<body>
+<main class="content">
+  <section class="outer">
+  
+
+<article id="post-ARP缓存中毒攻击实验" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      ARP缓存中毒攻击实验
+    </h1>
+  
+  
+
+
+
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/10/07/ARP缓存中毒攻击实验/" class="article-date">
+  <time datetime="2019-10-07T12:14:47.000Z" itemprop="datePublished">2019-10-07</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/SEED-Labs/">SEED Labs</a>
+  </div>
+
+      </div>
+    
+
+    
+      
+    <div class="tocbot"></div>
+
+
+
+
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+      
+
+      
+        <blockquote>
+<p>参考文档：<br><a href="https://seedsecuritylabs.org/Labs_16.04/PDF/ARP_Attack.pdf" target="_blank" rel="noopener">官方原文档</a></p>
+</blockquote>
+<br>
+
+<h1 id="1-Overview"><a href="#1-Overview" class="headerlink" title="1.Overview"></a>1.Overview</h1><p><strong>1.概要</strong></p>
+<p>The Address Resolution Protocol (ARP) is a communication protocol used for discovering the link layer address, such as a MAC address,  given an IP address.  The ARP protocol is a very simple protocol,  and it does not implement any security measure. The ARP cache poisoning attack is a common attack against the ARP protocol. Under such an attack, attackers can fool the victim into accepting forged IP-to-MAC mappings. This can cause the victim’s packets to be redirected to the computer with the forged MAC address.</p>
+<p>地址解析协议（ARP）是一个用来发现数据链路层地址的通信协议，例如给出IP地址来获取MAC地址。ARP协议是一个非常简单的协议，并且它并没有实现任何安全措施。ARP缓存中毒攻击是一个依赖于ARP协议的常见攻击。在这种攻击下，攻击者可以欺骗受害者以接受伪造的IP到MAC映射。这可能导致受害者的数据包使用伪造的MAC地址重定向到计算机。</p>
+<p>The objective of this lab is for students to gain the first-hand experience on the ARP cache poisoning attack, and learn what damages can be caused by such an attack. In particular, students will use the ARP attack to launch a man-in-the-middle attack, where the attacker can intercept and modify the packets between the two victims A and B.</p>
+<p> 这个实验的目的是为学生在ARP缓存中毒攻击上获得第一手的经验，并且学到通过这种攻击会导致什么样的危险。更重要的是，学生将使用ARP攻击来发起中间人攻击，攻击者可以在其中拦截和修改两个受害者A和B之间的数据包。</p>
+<p><strong>Lab environment.</strong> This lab has been tested on our pre-built Ubuntu 16.04 VM, which can be downloaded from the SEED website.</p>
+<p><strong>实验环境。</strong>该实验已经在预建的Ubuntu 16.04 VM上通过测试，该VM可以在SEED网页上下载。</p>
+<br>
+
+<h1 id="2-Task-1-ARP-Cache-Poisoning"><a href="#2-Task-1-ARP-Cache-Poisoning" class="headerlink" title="2. Task 1: ARP Cache Poisoning"></a>2. Task 1: ARP Cache Poisoning</h1><p><strong>2.任务1：ARP缓存中毒</strong></p>
+<p>The objective of this task is to use packet spoofing to launch an ARP cache poisoning attack on a target, such that when two victim machines A and B try to communicate with each other, their packets will be intercepted by the attacker, who can make changes to the packets, and can thus become the man in the middle between A and B. This is called Man-In-The-Middle (MITM) attack. In this lab, we use ARP cahce poisoning to conduct an MITM attack.</p>
+<p>这个实验的目标是，使用数据包欺骗来发起ARP缓存中毒攻击，以便当两个受害设备A与B试图互相通信时，它们的数据包将被攻击者截获，攻击者可以修改数据包，并且可以成为在A和B之间的中间人。这就是所谓的中间人(MITM)攻击。在该实验中，我们使用ARP缓存中毒来进行中间人攻击。</p>
+<p>The following code skeleton（骨架，框架） shows how to construct an ARP packet using Scapy.</p>
+<p>以下代码框架展示了如何使用Scapy构建ARP数据包。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python3</span></span><br><span class="line"><span class="keyword">from</span> scapy.all <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">E = Ether()</span><br><span class="line">A = ARP()</span><br><span class="line"></span><br><span class="line">pkt = E/A sendp(pkt)</span><br></pre></td></tr></table></figure>
+
+<p>The above program constructs and sends an ARP packet. Please set necessary attribute（属性） names/values to define your own ARP packet. We can use ls(ARP) to see the attribute names of the ARP class. If a field is not set, a default value will be used (see the third column（纵行，列） of the output):</p>
+<p>以上程序构建并发送了一个ARP包。请设置必要的属性名称/值来定义你自己的ARP数据包。我们可以使用ls(ARP)来查看ARP类中的属性名称。如果字段没有设置，则将使用默认的值（参考输出的第三列）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ python3</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> scapy.all <span class="keyword">import</span> *</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ls(ARP)</span><br><span class="line">hwtype     : XShortField                         = (<span class="number">1</span>)</span><br><span class="line">ptype      : XShortEnumField                     = (<span class="number">2048</span>)</span><br><span class="line">hwlen      : ByteField                           = (<span class="number">6</span>)</span><br><span class="line">plen       : ByteField                           = (<span class="number">4</span>)</span><br><span class="line">op         : ShortEnumField                      = (<span class="number">1</span>)</span><br><span class="line">hwsrc      : ARPSourceMACField                   = (<span class="literal">None</span>)</span><br><span class="line">psrc       : SourceIPField                       = (<span class="literal">None</span>)</span><br><span class="line">hwdst      : MACField                            = (<span class="string">'00:00:00:00:00:00'</span>)</span><br><span class="line">pdst       : IPField                             = (<span class="string">'0.0.0.0'</span>)</span><br></pre></td></tr></table></figure>
+
+<p>In this task, we have three VMs, A, B, and M. We would like to attack A’s ARP cache, such that the following results is achieved in A’s ARP cache.</p>
+<p>在该实验中，我们将需要3台VM，即A,B和M。我们想要攻击A的ARP缓存，以便在A的ARP缓存中实现以下结果。</p>
+<p><code>B’s IP address --&gt; M’s MAC address</code></p>
+<p>There are many ways to conduct（举办，进行） ARP cache poisoning attack. Students need to try the following three methods, and report whether each method works or not.</p>
+<p>进行ARP缓存中毒攻击的方法有很多。学生需要尝试以下三种方式，并且记录每种方式是否可行。</p>
+<ul>
+<li><p><strong>Task 1A (using ARP request).</strong> On host M, construct an ARP request packet and send to host A. Check whether M’s MAC address is mapped to B’s IP address in A’s ARP cache.</p>
+<p><strong>任务1A（使用ARP请求）</strong>在主机M，构建一个ARP请求包并发送给主机A。检测是否在A的ARP缓存表中有B的IP地址映射了M的MAC地址。</p>
+<br>
+</li>
+<li><p><strong>Task 1B (using ARP reply).</strong> On host M, construct an ARP reply packet and send to host A. Check whether M’s MAC address is mapped to B’s IP address in A’s ARP cache.</p>
+<p><strong>任务1B（使用ARP回应）</strong>在主机M，构建一个ARP回应包并发送到主机A。检测是否在A的ARP缓存表中有B的IP地址映射了M的MAC地址。</p>
+<br>
+</li>
+<li><p><strong>Task 1C (using ARP gratuitous（免费） message).</strong> On host M, construct an ARP gratuitous packets. ARP gratuitous packet is a special ARP request packet. It is used when a host machine needs to update outdated（过时） information on all the other machine’s ARP cache. The gratuitous ARP packet has the following characteristics（特性）:</p>
+<ol>
+<li>The source and destination IP addresses are the same, and they are the IP address of the host issuing the gratuitous ARP.</li>
+<li>The destination MAC addresses in both ARP header and Ethernet header are the broadcast MAC address (ff:ff:ff:ff:ff:ff).</li>
+<li>No reply is expected.</li>
+</ol>
+<p><strong>任务1C（使用无故ARP）</strong>在主机M，构建一个无故ARP报文。无故ARP是一个特殊的ARP请求包。它被使用在，当一个主机设备需要在其他所有的设备的ARP缓存表中更新过时信息时。无故ARP报文拥有以下特点：</p>
+<ol>
+<li>源IP地址和目标IP地址相同，它们是发出免费ARP的主机的IP地址。</li>
+<li>在ARP头部和以太网头部中的目的MAC地址都是广播地址（ff:ff:ff:ff:ff:ff）</li>
+<li>理论来说不会收到回应</li>
+</ol>
+</li>
+</ul>
+<br>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dilidonglong.site/2019/10/07/ARP缓存中毒攻击实验/" data-id="ck1gfu4uj0001ckvd92jn0rxf"
+         class="article-share-link">分享</a>
+      
+    </footer>
+
+  </div>
+
+  
+    
+  <nav class="article-nav">
+    
+    
+      <a href="/2019/09/27/使用CDN加速博客打开速度（Cloudflare）/" class="article-nav-link">
+        <strong class="article-nav-caption">后一篇</strong>
+        <div class="article-nav-title">使用CDN加速博客打开速度（Cloudflare）</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+    
+  <div class="gitalk" id="gitalk-container"></div>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+  <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+  <script type="text/javascript">
+    var gitalk = new Gitalk({
+      clientID: '15c18d9b0a015598eb07',
+      clientSecret: 'a3853e070f5ab7e4de32abbdda82175936eab5cf',
+      repo: 'gitalk',
+      owner: 'dilidonglong',
+      admin: ['dilidonglong'],
+      // id: location.pathname,      // Ensure uniqueness and length less than 50
+      id: md5(location.pathname),
+      distractionFreeMode: false,  // Facebook-like distraction free mode
+      pagerDirection: 'last'
+    })
+
+  gitalk.render('gitalk-container')
+  </script>
+
+  
+
+</article>
+
+
+
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2019 望伊如西の博客</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+
+<aside class="sidebar sidebar-specter">
+  
+    <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="望伊如西の博客"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">主页</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">归档</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">相册</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/categories">分类</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">关于</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="Search">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+  </aside>
+  <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+  <script src="/js/tocbot.min.js"></script>
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+<script src="/js/ocean.js"></script>
+</body>
+</html>
