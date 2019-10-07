@@ -97,12 +97,13 @@
     <link href="https://dilidonglong.site/2019/09/17/%E6%95%B0%E6%8D%AE%E5%8C%85%E7%9A%84%E5%97%85%E6%8E%A2%E4%B8%8E%E6%AC%BA%E9%AA%97%E5%AE%9E%E9%AA%8C/"/>
     <id>https://dilidonglong.site/2019/09/17/数据包的嗅探与欺骗实验/</id>
     <published>2019-09-16T16:32:41.000Z</published>
-    <updated>2019-10-06T15:25:57.427Z</updated>
+    <updated>2019-10-07T12:08:39.000Z</updated>
     
     <summary type="html">
     
       &lt;blockquote&gt;
 &lt;p&gt;参考文档：&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://seedsecuritylabs.org/Labs_16.04/PDF/Sniffing_Spoofing.pdf&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;官方原文档&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://wizardforcel.gitbooks.io/scapy-docs/content/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Scapy中文文档&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://sinhub.cn/2018/06/what-can-we-do-with-scapy/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;我们可以拿Scapy做什么&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://zhuanlan.zhihu.com/p/51002301&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;网络工程师的Python之路—Scapy基础篇&lt;/a&gt;&lt;/p&gt;

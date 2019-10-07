@@ -80,6 +80,7 @@
       
         <blockquote>
 <p>参考文档：</p>
+<p><a href="https://seedsecuritylabs.org/Labs_16.04/PDF/Sniffing_Spoofing.pdf" target="_blank" rel="noopener">官方原文档</a></p>
 <p><a href="https://wizardforcel.gitbooks.io/scapy-docs/content/" target="_blank" rel="noopener">Scapy中文文档</a></p>
 <p><a href="http://sinhub.cn/2018/06/what-can-we-do-with-scapy/" target="_blank" rel="noopener">我们可以拿Scapy做什么</a></p>
 <p><a href="https://zhuanlan.zhihu.com/p/51002301" target="_blank" rel="noopener">网络工程师的Python之路—Scapy基础篇</a></p>
@@ -241,11 +242,35 @@
 
 <p>If you are an experienced Python programmer, you can write your tool to perform the entire procedure automatically. If you are new to Python programming, you can do it by manually changing the TTL field in each round, and record the IP address based on your observation（意见，注目） from Wireshark. Either way is acceptable, as long as you get the result.</p>
 <p>如果你是一个经验丰富的Python程序员，你能写下你自己的工具来自动执行整个过程。如果你是一个Python新手，则可以通过在每个回合中手动更改TTL字段来实现，并根据Wireshark的观察记录IP地址。两种方式都是可以接受的，只要你获得了结果。</p>
+<blockquote>
+<ol>
+<li><p>选第二个方式。。。。。</p>
+</li>
+<li><p>新建一个文件task1.3.py，代码如下</p>
+</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="comment">#!/usr/bin/python</span></span><br><span class="line">&gt; <span class="keyword">from</span> scapy.all <span class="keyword">import</span> *</span><br><span class="line">&gt; </span><br><span class="line">&gt; a= IP()</span><br><span class="line">&gt; a.dst = <span class="string">"114.114.114.114"</span></span><br><span class="line">&gt; i = <span class="number">0</span></span><br><span class="line">&gt; <span class="keyword">while</span> i &lt; <span class="number">20</span> :</span><br><span class="line">&gt;         a.ttl = i</span><br><span class="line">&gt;         b = ICMP()</span><br><span class="line">&gt;         send(a/b)</span><br><span class="line">&gt;         i = i+<span class="number">1</span></span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<ol start="3">
+<li><p>执行文件后，在wireshark中观察。通过黑色部分知道经过的跳数</p>
+<img src="/2019/09/17/数据包的嗅探与欺骗实验/7.png" title="This is an test image">
+
+</li>
+</ol>
+</blockquote>
 <br>
 
 <h2 id="2-4-Task-1-4-Sniffing-and-then-Spoofing"><a href="#2-4-Task-1-4-Sniffing-and-then-Spoofing" class="headerlink" title="2.4  Task 1.4: Sniffing and-then Spoofing"></a>2.4  Task 1.4: Sniffing and-then Spoofing</h2><p><strong>任务1.4 嗅探然后欺骗</strong></p>
 <p>In this task, you will combine the sniffing and spoofing techniques to implement the following sniff-and- then-spoof program. You need two VMs on the same LAN. From VM A, you ping an IP X. This will generate（产生） an ICMP echo request packet. If X is alive, the ping program will receive an echo reply, and print out the response. Your sniff-and-then-spoof program runs on VM B, which monitors（监控） the LAN through packet sniffing. Whenever it sees an ICMP echo request, regardless（无论） of what the target IP address is, your program should immediately send out an echo reply using the packet spoofing technique. Therefore, regardless of whether machine X is alive or not, the ping program will always receive a reply, indicating that X is alive. You need to use Scapy to do this task. In your report, you need to provide evidence（证据） to demonstrate that your technique works.</p>
 <p>在这个任务中，你将结合嗅探和欺骗技术来实现以下的嗅探然后欺骗程序。你需要在同一个局域网中有2个VM。从VM A，你ping一个IP X。这将产生一个ICMPecho请求数据包。如果X是活跃状态，ping程序将会接收一个echo回应，并且打印出回应结果。你的嗅探然后欺骗程序运行在VM B，它监控这个局域网通过的数据包。每当它看到ICMP echo请求时，无论目标IP地址是什么，你的程序都应立即使用数据包欺骗技术发出回显应答。因此，无论机器X是否处于活动状态，ping程序都将始终收到答复，表明X处于活动状态。你需要使用Scapy来完成该任务。在你的报告中，你需要提供证据以证明你的技术有效。</p>
+<blockquote>
+<ol>
+<li>上述实验应该要在连接设备是集线器的情况下（或是称之为CSMA/CD环境）使用。如果连接终端的设备是交换机，那么局域网中的其他终端很可能不会收到数据包。而在CSMA/CD的环境中，那么终端才会收到这个网络环境里面的数据包</li>
+<li>同时ping测试的时候，VM1不能ping同网段的ip地址，因为ping同网段的地址，那么数据包封装的时候，在数据链路层会需要同网段ip的目的mac，也就会导致发送arp广播请求，而VM2收到广播请求，如果不写代码程序，那么它不会回应这个arp广播请求做欺骗</li>
+<li>如果是ping不同网段ip时，那么数据包会经过网关转发，这样的ping包由于在CSMA/CD的环境中，那么VM2就能收到该数据包</li>
+</ol>
+</blockquote>
 
       
     </div>
