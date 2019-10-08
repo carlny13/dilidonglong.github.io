@@ -80,16 +80,23 @@
       
         <blockquote>
 <p>参考文档：<br><a href="https://seedsecuritylabs.org/Labs_16.04/PDF/ARP_Attack.pdf" target="_blank" rel="noopener">官方原文档</a></p>
+<p><a href="http://sinhub.cn/2018/06/what-can-we-do-with-scapy/" target="_blank" rel="noopener">我们可以拿Scapy做什么</a></p>
+<p><a href="https://colobu.com/2014/09/18/linux-tcpip-tuning/" target="_blank" rel="noopener">Linux TCP/IP 协议栈调优</a></p>
 </blockquote>
 <br>
 
 <h1 id="1-Overview"><a href="#1-Overview" class="headerlink" title="1.Overview"></a>1.Overview</h1><p><strong>1.概要</strong></p>
 <p>The Address Resolution Protocol (ARP) is a communication protocol used for discovering the link layer address, such as a MAC address,  given an IP address.  The ARP protocol is a very simple protocol,  and it does not implement any security measure. The ARP cache poisoning attack is a common attack against the ARP protocol. Under such an attack, attackers can fool the victim into accepting forged IP-to-MAC mappings. This can cause the victim’s packets to be redirected to the computer with the forged MAC address.</p>
 <p>地址解析协议（ARP）是一个用来发现数据链路层地址的通信协议，例如给出IP地址来获取MAC地址。ARP协议是一个非常简单的协议，并且它并没有实现任何安全措施。ARP缓存中毒攻击是一个依赖于ARP协议的常见攻击。在这种攻击下，攻击者可以欺骗受害者以接受伪造的IP到MAC映射。这可能导致受害者的数据包使用伪造的MAC地址重定向到计算机。</p>
+<a id="more"></a>
+
 <p>The objective of this lab is for students to gain the first-hand experience on the ARP cache poisoning attack, and learn what damages can be caused by such an attack. In particular, students will use the ARP attack to launch a man-in-the-middle attack, where the attacker can intercept and modify the packets between the two victims A and B.</p>
 <p> 这个实验的目的是为学生在ARP缓存中毒攻击上获得第一手的经验，并且学到通过这种攻击会导致什么样的危险。更重要的是，学生将使用ARP攻击来发起中间人攻击，攻击者可以在其中拦截和修改两个受害者A和B之间的数据包。</p>
 <p><strong>Lab environment.</strong> This lab has been tested on our pre-built Ubuntu 16.04 VM, which can be downloaded from the SEED website.</p>
 <p><strong>实验环境。</strong>该实验已经在预建的Ubuntu 16.04 VM上通过测试，该VM可以在SEED网页上下载。</p>
+<p><strong>拓扑图如下：</strong>在该图中，我们的主机1和3分别为该文档中的主机A和B，主机2则为该文档中的主机M</p>
+<img src="/2019/10/07/ARP缓存中毒攻击实验/seedlab拓扑图.png" title="This is an test image">
+
 <br>
 
 <h1 id="2-Task-1-ARP-Cache-Poisoning"><a href="#2-Task-1-ARP-Cache-Poisoning" class="headerlink" title="2. Task 1: ARP Cache Poisoning"></a>2. Task 1: ARP Cache Poisoning</h1><p><strong>2.任务1：ARP缓存中毒</strong></p>
@@ -132,6 +139,31 @@
 </li>
 </ul>
 <br>
+
+<h1 id="3-Task-2-MITM-Attack-on-Telnet-using-ARP-Cache-Poisoning"><a href="#3-Task-2-MITM-Attack-on-Telnet-using-ARP-Cache-Poisoning" class="headerlink" title="3.Task 2:MITM Attack on Telnet using ARP Cache Poisoning"></a>3.Task 2:MITM Attack on Telnet using ARP Cache Poisoning</h1><p><strong>3.任务2：使用ARP缓存中毒在telnet上实现中间人攻击</strong></p>
+<p>Hosts A and B are communicating using Telnet, and Host M wants to intercept their communication, so it can make changes to the data sent between A and B. The setup is depicted（描述，描绘） in Figure 1.</p>
+<p>主机A和B正在使用telnet通信，而主机M想要拦截它们的通信，因此它可以对发送给A和B的数据做出修改。设置如图1所示。</p>
+<p><strong>Step 1 (Launch the ARP cache poisoning attack).</strong> First, Host M conducts（举办） an ARP cache poisoning attack on both A and B, such that in A’s ARP cache, B’s IP address maps to M’s MAC address, and in B’s ARP cache, A’s IP address also maps to M’s MAC address. After this step, packets sent between A and B will all be sent to M. We will use the ARP cache poisoning attack from Task 1 to achieve this goal.</p>
+<p> <strong>步骤1（发起ARP缓存中毒攻击）。</strong>首先，主机M在A和B上都进行ARP缓存中毒攻击，以便在A的ARP缓存上有B的IP地址映射到M的MAC地址，同时在B的ARP缓存上也有A的IP地址映射到M的MAC地址。这步之后，在AB之间发送的数据包将会全部交给M。我们将使用从任务1实现的ARP缓存中毒攻击来完成这一目标。</p>
+<br>
+
+<p><strong>Step 2 (Testing).</strong> After the attack is successful, please try to ping each other between Hosts A and B, and report your observation. Please show Wireshark results in your report.</p>
+<p><strong>步骤2（测试）。</strong>当攻击成功后，请尝试在AB之间互ping，并且记录你的发现。请在你的报告中展示Wireshark的结果。</p>
+<img src="/2019/10/07/ARP缓存中毒攻击实验/1.jpg" title="This is an test image">
+
+<br>
+
+<p><strong>Step 3 (Turn on IP forwarding).</strong> Now we turn on the IP forwarding on Host M, so it will forward the packets between A and B. Please run the following command and repeat Step 2. Please describe your  observation.</p>
+<p><strong>步骤3（打开IP转发）。</strong>现在我们在主机M上打开了IP转发，所以它将转发在A和B间的数据包。请执行以下命令，并且重复步骤2.请描述你的发现。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo sysctl net.ipv4.ip_forward=1</span><br></pre></td></tr></table></figure>
+
+<br>
+
+<p><strong>Step 4 (Launch the MITM attack).</strong> We are ready to make changes to the Telnet data between A and B. Assume（假设） that A is the Telnet client and B is the Telnet server. After A has connected to the Telnet server on B, for every key stroke（笔、划） typed（除了类型还有打印的意思） in A’s Telnet window, a TCP packet is generated（发生） and sent to B. We would like to intercept the TCP packet, and replace each typed character with a fixed character (say Z). This way, it does not matter what the user types on A, Telnet will always display Z.</p>
+<p><strong>步骤4（发起中间人攻击）。</strong>我们打算修改在A和B间的telnet数据。假设A是telnet客户端，B是telnet服务器。在A连接到B上的Telnet服务器之后，对于在A的Telnet窗口中键入的每个按键，都会生成一个TCP数据包并将其发送到B。我们想截取该TCP数据包，并用固定字符（如Z）替换每个键入的字符。这样，无论用户在A上键入什么，Telnet都将始终显示Z。</p>
+<p>From the previous steps, we are able to redirect the TCP packets to Host M, <strong>but instead of forwarding them, we would like to replace them with a spoofed packet.</strong> （学习这句话的语序）We will write a sniff-and-spoof program to accomplish this goal. In particular, we would like to do the following:</p>
+<p>从之前的步骤，我们重定向了TCP的数据包到主机M，<strong>我们想用一个欺骗性数据包替换它们，而不是转发它们</strong>。我们将写一个嗅探-欺骗程序来完成这个目标。特别的，我们将做如下操作：</p>
+
       
     </div>
     <footer class="article-footer">

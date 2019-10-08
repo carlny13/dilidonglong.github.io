@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://dilidonglong.site/"/>
-  <updated>2019-10-07T13:14:28.001Z</updated>
+  <updated>2019-10-08T15:10:10.635Z</updated>
   <id>https://dilidonglong.site/</id>
   
   <author>
@@ -21,18 +21,20 @@
     <link href="https://dilidonglong.site/2019/10/07/ARP%E7%BC%93%E5%AD%98%E4%B8%AD%E6%AF%92%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/"/>
     <id>https://dilidonglong.site/2019/10/07/ARP缓存中毒攻击实验/</id>
     <published>2019-10-07T12:14:47.000Z</published>
-    <updated>2019-10-07T13:14:28.001Z</updated>
+    <updated>2019-10-08T15:10:10.635Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;blockquote&gt;
-&lt;p&gt;参考文档：&lt;br&gt;&lt;a href=&quot;https://seedsecuritylabs.org/Labs_16.04/PDF/ARP_Attack.pdf&quot; target=&quot;_blank&quot;
-        
-      
+      &lt;blockquote&gt;
+&lt;p&gt;参考文档：&lt;br&gt;&lt;a href=&quot;https://seedsecuritylabs.org/Labs_16.04/PDF/ARP_Attack.pdf&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;官方原文档&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://sinhub.cn/2018/06/what-can-we-do-with-scapy/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;我们可以拿Scapy做什么&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://colobu.com/2014/09/18/linux-tcpip-tuning/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Linux TCP/IP 协议栈调优&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;br&gt;
+
+&lt;h1 id=&quot;1-Overview&quot;&gt;&lt;a href=&quot;#1-Overview&quot; class=&quot;headerlink&quot; title=&quot;1.Overview&quot;&gt;&lt;/a&gt;1.Overview&lt;/h1&gt;&lt;p&gt;&lt;strong&gt;1.概要&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;The Address Resolution Protocol (ARP) is a communication protocol used for discovering the link layer address, such as a MAC address,  given an IP address.  The ARP protocol is a very simple protocol,  and it does not implement any security measure. The ARP cache poisoning attack is a common attack against the ARP protocol. Under such an attack, attackers can fool the victim into accepting forged IP-to-MAC mappings. This can cause the victim’s packets to be redirected to the computer with the forged MAC address.&lt;/p&gt;
+&lt;p&gt;地址解析协议（ARP）是一个用来发现数据链路层地址的通信协议，例如给出IP地址来获取MAC地址。ARP协议是一个非常简单的协议，并且它并没有实现任何安全措施。ARP缓存中毒攻击是一个依赖于ARP协议的常见攻击。在这种攻击下，攻击者可以欺骗受害者以接受伪造的IP到MAC映射。这可能导致受害者的数据包使用伪造的MAC地址重定向到计算机。&lt;/p&gt;
     
     </summary>
     
