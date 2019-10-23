@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://dilidonglong.site/"/>
-  <updated>2019-10-15T15:21:04.606Z</updated>
+  <updated>2019-10-23T16:01:27.897Z</updated>
   <id>https://dilidonglong.site/</id>
   
   <author>
@@ -15,6 +15,40 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>电脑开启系统无线功能</title>
+    <link href="https://dilidonglong.site/2019/10/23/%E7%94%B5%E8%84%91%E5%BC%80%E5%90%AF%E7%B3%BB%E7%BB%9F%E6%97%A0%E7%BA%BF%E5%8A%9F%E8%83%BD/"/>
+    <id>https://dilidonglong.site/2019/10/23/电脑开启系统无线功能/</id>
+    <published>2019-10-23T15:16:44.000Z</published>
+    <updated>2019-10-23T16:01:27.897Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;1-注意事项&quot;&gt;&lt;a href=&quot;#1-注意事项&quot; class=&quot;headerlink&quot; title=&quot;1.注意事项&quot;&gt;&lt;/a&gt;1.注意事项&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;WIN10系统可以快捷开启无线功能&lt;/li&gt;
+&lt;/ol&gt;
+&lt;img src=&quot;/2019/10/23/电脑开启系统无线功能/1.png&quot; title=&quot;This is an test image&quot;&gt;
+
+&lt;ol start=&quot;2&quot;&gt;
+&lt;li&gt;要确保网卡支持无线功能&lt;/li&gt;
+&lt;/ol&gt;
+&lt;br&gt;
+
+&lt;h2 id=&quot;2-开启步骤&quot;&gt;&lt;a href=&quot;#2-开启步骤&quot; class=&quot;headerlink&quot; title=&quot;2.开启步骤&quot;&gt;&lt;/a&gt;2.开启步骤&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;在cmd中输入netsh wlan show drivers，通过支持的承载网络，来确认网络是否能承载&lt;/p&gt;
+&lt;img src=&quot;/2019/10/23/电脑开启系统无线功能/2.png&quot; title=&quot;This is an test image&quot;&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;如果显示的“是”，则输入以下两条命令&lt;/p&gt;
+&lt;figure class=&quot;highlight html&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;netsh wlan set hostednetwork mode=all ssid=接入的名称 key=接入的密码&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;netsh wlan start hostednetwork&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+    
+    </summary>
+    
+    
+      <category term="小技巧" scheme="https://dilidonglong.site/categories/%E5%B0%8F%E6%8A%80%E5%B7%A7/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>ARP缓存中毒攻击实验</title>
@@ -597,26 +631,6 @@
     
     
       <category term="小技巧" scheme="https://dilidonglong.site/categories/%E5%B0%8F%E6%8A%80%E5%B7%A7/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>文件系统的简单操作</title>
-    <link href="https://dilidonglong.site/2019/04/30/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%AE%80%E5%8D%95%E6%93%8D%E4%BD%9C/"/>
-    <id>https://dilidonglong.site/2019/04/30/文件系统的简单操作/</id>
-    <published>2019-04-30T15:34:18.000Z</published>
-    <updated>2019-09-15T15:04:10.578Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;文件系统的简单操作&quot;&gt;&lt;a href=&quot;#文件系统的简单操作&quot; class=&quot;headerlink&quot; title=&quot;文件系统的简单操作&quot;&gt;&lt;/a&gt;文件系统的简单操作&lt;/h1&gt;&lt;h2 id=&quot;1-df和du命令&quot;&gt;&lt;a href=&quot;#1-df和du命令&quot; class=&quot;headerlink&quot; title=&quot;1.df和du命令&quot;&gt;&lt;/a&gt;1.df和du命令&lt;/h2&gt;&lt;h3 id=&quot;df&quot;&gt;&lt;a href=&quot;#df&quot; class=&quot;headerlink&quot; title=&quot;df&quot;&gt;&lt;/a&gt;df&lt;/h3&gt;&lt;p&gt;列出文件系统的整体磁盘使用量，df读取的数据几乎针对一整个文件系统，因为读取范围是&lt;strong&gt;超级区块&lt;/strong&gt;内的信息。&lt;/p&gt;
-&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;18&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;19&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;20&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;21&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;[root@vultr ~]&lt;span class=&quot;comment&quot;&gt;# df&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Filesystem     1K-blocks    Used Available Use% Mounted on&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;devtmpfs          214728       0    214728   0% /dev&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;tmpfs             246392       0    246392   0% /dev/shm&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;/dev/vda1       10291200 2231176   7519412  23% /&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# Filesystem表示文件系统在哪个磁盘分区&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# 1K-blocks表示单位为1k，可以利用-h来变成人们易于理解的单位格式&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# Mounted on表示挂载点&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;--------------------------------------------------------------&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;[root@vultr ~]&lt;span class=&quot;comment&quot;&gt;# df -h&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Filesystem      Size  Used Avail Use% Mounted on&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;devtmpfs        210M     0  210M   0% /dev&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;tmpfs           241M     0  241M   0% /sys/fs/cgroup&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;/dev/vda1       9.9G  2.2G  7.2G  23% /&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;--------------------------------------------------------------&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;[root@vultr ~]&lt;span class=&quot;comment&quot;&gt;# df -Th&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Filesystem     Type      Size  Used Avail Use% Mounted on&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;devtmpfs       devtmpfs  210M     0  210M   0% /dev&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;tmpfs          tmpfs     241M     0  241M   0% /sys/fs/cgroup&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;/dev/vda1      ext4      9.9G  2.2G  7.2G  23% /&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# Type表示文件系统类型&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-    
-    </summary>
-    
-    
-      <category term="linux" scheme="https://dilidonglong.site/categories/linux/"/>
     
     
   </entry>

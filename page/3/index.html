@@ -63,6 +63,73 @@
       
         
 
+<article id="post-文件系统的简单操作" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2019/04/30/文件系统的简单操作/">文件系统的简单操作</a>
+    </h2>
+  
+  
+
+
+
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/04/30/文件系统的简单操作/" class="article-date">
+  <time datetime="2019-04-30T15:34:18.000Z" itemprop="datePublished">2019-04-30</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/linux/">linux</a>
+  </div>
+
+      </div>
+    
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+      
+
+      
+        <h1 id="文件系统的简单操作"><a href="#文件系统的简单操作" class="headerlink" title="文件系统的简单操作"></a>文件系统的简单操作</h1><h2 id="1-df和du命令"><a href="#1-df和du命令" class="headerlink" title="1.df和du命令"></a>1.df和du命令</h2><h3 id="df"><a href="#df" class="headerlink" title="df"></a>df</h3><p>列出文件系统的整体磁盘使用量，df读取的数据几乎针对一整个文件系统，因为读取范围是<strong>超级区块</strong>内的信息。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">[root@vultr ~]<span class="comment"># df</span></span><br><span class="line">Filesystem     1K-blocks    Used Available Use% Mounted on</span><br><span class="line">devtmpfs          214728       0    214728   0% /dev</span><br><span class="line">tmpfs             246392       0    246392   0% /dev/shm</span><br><span class="line">/dev/vda1       10291200 2231176   7519412  23% /</span><br><span class="line"><span class="comment"># Filesystem表示文件系统在哪个磁盘分区</span></span><br><span class="line"><span class="comment"># 1K-blocks表示单位为1k，可以利用-h来变成人们易于理解的单位格式</span></span><br><span class="line"><span class="comment"># Mounted on表示挂载点</span></span><br><span class="line">--------------------------------------------------------------</span><br><span class="line">[root@vultr ~]<span class="comment"># df -h</span></span><br><span class="line">Filesystem      Size  Used Avail Use% Mounted on</span><br><span class="line">devtmpfs        210M     0  210M   0% /dev</span><br><span class="line">tmpfs           241M     0  241M   0% /sys/fs/cgroup</span><br><span class="line">/dev/vda1       9.9G  2.2G  7.2G  23% /</span><br><span class="line">--------------------------------------------------------------</span><br><span class="line">[root@vultr ~]<span class="comment"># df -Th</span></span><br><span class="line">Filesystem     Type      Size  Used Avail Use% Mounted on</span><br><span class="line">devtmpfs       devtmpfs  210M     0  210M   0% /dev</span><br><span class="line">tmpfs          tmpfs     241M     0  241M   0% /sys/fs/cgroup</span><br><span class="line">/dev/vda1      ext4      9.9G  2.2G  7.2G  23% /</span><br><span class="line"><span class="comment"># Type表示文件系统类型</span></span><br></pre></td></tr></table></figure>
+        
+          <a class="article-more-link" href="/2019/04/30/文件系统的简单操作/">阅读全文</a>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dilidonglong.site/2019/04/30/文件系统的简单操作/" data-id="ck23gtv0s000w1kvdci8rhblt"
+         class="article-share-link">分享</a>
+      
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+
+
+
+      
+        
+
 <article id="post-文件系统" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
   
   <div class="article-inner">
@@ -134,7 +201,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.site/2019/04/30/文件系统/" data-id="ck1m7h7a0000pycvdgs2f0eab"
+      <a data-url="https://dilidonglong.site/2019/04/30/文件系统/" data-id="ck23gtv0w00121kvduuai0p6d"
          class="article-share-link">分享</a>
       
     </footer>
@@ -201,7 +268,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.site/2019/04/30/磁盘分区/" data-id="ck1m7h7af000zycvdwfhc7zzv"
+      <a data-url="https://dilidonglong.site/2019/04/30/磁盘分区/" data-id="ck23gtv0y00141kvdnvrsyyzl"
          class="article-share-link">分享</a>
       
     </footer>
@@ -281,7 +348,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.site/2019/04/29/软考试题1/" data-id="ck1m7h7av001gycvdqb837l7i"
+      <a data-url="https://dilidonglong.site/2019/04/29/软考试题1/" data-id="ck23gtv14001f1kvd7ihd4n8w"
          class="article-share-link">分享</a>
       
     </footer>
@@ -360,7 +427,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.site/2019/04/27/设置分类列表页/" data-id="ck1m7h7af0019ycvdfuemm0ki"
+      <a data-url="https://dilidonglong.site/2019/04/27/设置分类列表页/" data-id="ck23gtv12001a1kvd1q4xjtyv"
          class="article-share-link">分享</a>
       
     </footer>
@@ -428,7 +495,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.site/2019/04/26/tshark使用方法/" data-id="ck1m7h7a0000gycvded914pn1"
+      <a data-url="https://dilidonglong.site/2019/04/26/tshark使用方法/" data-id="ck23gtv0h000f1kvdwa4t1uxu"
          class="article-share-link">分享</a>
       
     </footer>
@@ -496,7 +563,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.site/2019/04/25/使用github-hexo创建一个博客/" data-id="ck1m7h79k000fycvd0akr4kys"
+      <a data-url="https://dilidonglong.site/2019/04/25/使用github-hexo创建一个博客/" data-id="ck23gtv0j000h1kvdd4nhctfh"
          class="article-share-link">分享</a>
       
     </footer>

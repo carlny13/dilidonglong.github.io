@@ -11,7 +11,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>
-    软考试题2 |
+    电脑开启系统无线功能 |
     
     望伊如西の博客</title>
   
@@ -29,7 +29,7 @@
   <section class="outer">
   
 
-<article id="post-软考试题2" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+<article id="post-电脑开启系统无线功能" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
   
   <div class="article-inner">
     
@@ -37,7 +37,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      软考试题2
+      电脑开启系统无线功能
     </h1>
   
   
@@ -50,12 +50,12 @@
 
     
       <div class="article-meta">
-        <a href="/2019/05/06/软考试题2/" class="article-date">
-  <time datetime="2019-05-06T14:55:13.000Z" itemprop="datePublished">2019-05-06</time>
+        <a href="/2019/10/23/电脑开启系统无线功能/" class="article-date">
+  <time datetime="2019-10-23T15:16:44.000Z" itemprop="datePublished">2019-10-23</time>
 </a>
         
   <div class="article-category">
-    <a class="article-category-link" href="/categories/软考/">软考</a>
+    <a class="article-category-link" href="/categories/小技巧/">小技巧</a>
   </div>
 
       </div>
@@ -78,46 +78,61 @@
       
 
       
-        <h1 id="软考试题2"><a href="#软考试题2" class="headerlink" title="软考试题2"></a>软考试题2</h1><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>用64K×8的RAM芯片和32K×16的ROM芯片设计一个256K×16的存储器，地址范围为00000H～3FFFFH，其中ROM的地址范围为10000H～1FFFFH，其余为RAM的地址。则地址线为（）根，数据线为（）根；RAM需要（）片，ROM需要（）片。<br>问题1选项<br>A 18       B 9          C 16        D 8<br>问题2选项<br>A 18            B 9             C 16            D 8<br>问题3选项<br>A 1             B 2             C 3                D 6<br>问题4选项<br>A 12            B 2             C 9               D 6</p>
+        <h2 id="1-注意事项"><a href="#1-注意事项" class="headerlink" title="1.注意事项"></a>1.注意事项</h2><ol>
+<li>WIN10系统可以快捷开启无线功能</li>
+</ol>
+<img src="/2019/10/23/电脑开启系统无线功能/1.png" title="This is an test image">
+
+<ol start="2">
+<li>要确保网卡支持无线功能</li>
+</ol>
+<br>
+
+<h2 id="2-开启步骤"><a href="#2-开启步骤" class="headerlink" title="2.开启步骤"></a>2.开启步骤</h2><ol>
+<li><p>在cmd中输入netsh wlan show drivers，通过支持的承载网络，来确认网络是否能承载</p>
+<img src="/2019/10/23/电脑开启系统无线功能/2.png" title="This is an test image">
+</li>
+<li><p>如果显示的“是”，则输入以下两条命令</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">netsh wlan set hostednetwork mode=all ssid=接入的名称 key=接入的密码</span><br><span class="line">netsh wlan start hostednetwork</span><br></pre></td></tr></table></figure>
+
 <a id="more"></a>
 
-<h2 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h2><ol>
-<li><p>64Kx8表示什么？</p>
-<p>表示一个芯片的容量。其中64K表示一个芯片内地址块的数目，8表示每个地址块里面存放的比特位数。</p>
-<p>其中，1K=1024，1M=1024K。64K=64x1024=65536，即一个芯片内有65536个地址块</p>
-<p>你可以理解成，有一个大菜地（芯片），你把这个大菜地分成65536个小菜地（地址块）。每个小菜地里面都能种8颗白菜（比特位数）。一个芯片的容量就是整个大菜地里面能种的白菜数量。</p>
-<hr>
+<img src="/2019/10/23/电脑开启系统无线功能/3.png" title="This is an test image">
 </li>
-<li><p>64Kx8与地址线，数据线的关系？</p>
-<p>64K是一个十进制数，即$2^{16}$。</p>
-<p>地址线传递地址信息。如果用1个比特，可以表示2个地址块（地址块数目是$2^1$），即编号为0的地址块和编号为1的地址块。如果用2个比特，可以表示4个地址块（地址块数目是$2^2$），即编号为00，01，10，11的四个地址块。那么我有16个比特的话，就能表示64K个地址块。<strong>一根地址线就占一个比特位，有16根地址线就表示有16个地址比特位。</strong></p>
-<p>数据线传递数据信息。<strong>一根数据线就占一个比特位，8根数据线就占8个数据比特位。</strong></p>
-<p>这些所谓的线，通过电平的高低变化来表示0或1。只是说不同的线，传递的信息是不同的。地址线传地址信息，数据线传数据信息，控制线传控制信息。这些信息是用0和1表示出来的。</p>
-<hr>
+<li><p>让有线网卡帮助设置的无线网卡上网，设置好后，会显示ssid名称，即图中的hikatie。如果没有设置，则会显示正在识别</p>
+<img src="/2019/10/23/电脑开启系统无线功能/4.png" title="This is an test image">
 </li>
-<li><p>一个256K×16的存储器，由64K×8的RAM芯片和32K×16的ROM芯片组成。</p>
-<p>你可以理解成，一个超级大菜地分成2个中型菜地，一个种白菜，一个种辣椒。</p>
-<p>这两个中型菜地又分别由小菜地（RAM和ROM芯片）组成。</p>
-<hr>
+<li><p>设置开机自启，在C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp目录下，保存wireless.bat文件</p>
+<img src="/2019/10/23/电脑开启系统无线功能/5.png" title="This is an test image">
 </li>
-<li><p>一个256K×16的存储器，地址范围为00000H～3FFFFH（地址编号为十六进制数）。表示有（3FFFF-00000+1）H个地址块。你想下如果有3个数，编号分别为0~3，是不是一共有4个地址块。用3-0=3是不对的，还得再+1。</p>
-<p>即这个存储器（超级大菜地）有（3FFFF-00000+1）H=40000H个地址块，每个地址块能容纳16个比特位数（种16个农作物）。</p>
-<hr>
+<li><p>以上步骤设置好后，就可以用手机接入电脑自带的无线了</p>
 </li>
-<li><p>其中ROM的地址范围为10000H～1FFFFH，这是占了超级大菜地里面的一部分地址块。这部分地址块的数目是多少呢？是（1FFFF-10000+1）H=10000H个。这个十六进制数换成十进制数是64K。</p>
-<p>存储器中ROM芯片给的地址块是64K，每个地址块能容纳16个比特。所以存储器中关于ROM的总容量就是64Kx16。</p>
-<p>由于题目中说了，存储器是由32K×16的ROM芯片组成。ROM总容量已知，每个ROM芯片的容量也已知，此时问你需要多少片<strong>ROM，聪明如你，相信已经知道答案了。（64Kx16）/（32Kx16）=2</strong></p>
-<hr>
+</ol>
+<br>
+
+<h2 id="3-排错"><a href="#3-排错" class="headerlink" title="3.排错"></a>3.排错</h2><ol>
+<li><p>如果显示为<strong>否</strong>，说明无线网卡驱动有问题。需要修改适配器</p>
+<img src="/2019/10/23/电脑开启系统无线功能/2.png" title="This is an test image">
 </li>
-<li><p>ROM占了整个存储器的地址块有64K个。存储器共有256K个。那么留下来给RAM的地址块数目即是（256-64）K=192K个。RAM的总容量就是192Kx16。</p>
-<p>知道RAM的总容量，知道每片RAM芯片的容量64K×8，问你需要多少片<strong>RAM。聪明如你，相信已经知道答案了。（192Kx16）/（64Kx8）=6</strong></p>
+<li><p><strong>此电脑</strong>上右键，打开<strong>管理</strong>，打开<strong>设备管理器</strong>，找到<strong>网络适配器</strong>， 在无线网卡上右键，选择<strong>更新驱动程序软件</strong>，弹出的对话框中选择<strong>浏览计算机以查找驱动程序软件</strong></p>
+<img src="/2019/10/23/电脑开启系统无线功能/6.png" title="This is an test image">
+
+<img src="/2019/10/23/电脑开启系统无线功能/7.png" title="This is an test image">
+</li>
+<li><p>弹出的对话框中选择下面的<strong>从计算机的设备驱动程序列表中选取</strong></p>
+<img src="/2019/10/23/电脑开启系统无线功能/8.png" title="This is an test image">
+</li>
+<li><p>这里有兼容硬件里面有三个驱动可以选， 图中选择的是第三个。我们可以试试安装其他的驱动，一般换个驱动，问题就可以解决了</p>
+<img src="/2019/10/23/电脑开启系统无线功能/9.png" title="This is an test image">
+</li>
+<li><p>注意：netsh wlan stop hostednetwork是关闭无线网络，关闭之后，需要重新启动才能开启网络。</p>
 </li>
 </ol>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.site/2019/05/06/软考试题2/" data-id="ck23gtv17001k1kvdo26tz041"
+      <a data-url="https://dilidonglong.site/2019/10/23/电脑开启系统无线功能/" data-id="ck23gtv0p000s1kvd3izc6svg"
          class="article-share-link">分享</a>
       
     </footer>
@@ -128,19 +143,10 @@
     
   <nav class="article-nav">
     
-      <a href="/2019/05/06/软考试题3/" class="article-nav-link">
-        <strong class="article-nav-caption">前一篇</strong>
-        <div class="article-nav-title">
-          
-            软考试题3
-          
-        </div>
-      </a>
     
-    
-      <a href="/2019/04/30/tcpdump技巧/" class="article-nav-link">
+      <a href="/2019/10/07/ARP缓存中毒攻击实验/" class="article-nav-link">
         <strong class="article-nav-caption">后一篇</strong>
-        <div class="article-nav-title">tcpdump技巧</div>
+        <div class="article-nav-title">ARP缓存中毒攻击实验</div>
       </a>
     
   </nav>
