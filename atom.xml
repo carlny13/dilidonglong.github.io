@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://dilidonglong.site/"/>
-  <updated>2019-10-23T16:01:27.897Z</updated>
+  <updated>2019-10-31T14:51:02.796Z</updated>
   <id>https://dilidonglong.site/</id>
   
   <author>
@@ -15,6 +15,39 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Linux防火墙探索实验</title>
+    <link href="https://dilidonglong.site/2019/10/31/Linux%E9%98%B2%E7%81%AB%E5%A2%99%E6%8E%A2%E7%B4%A2%E5%AE%9E%E9%AA%8C/"/>
+    <id>https://dilidonglong.site/2019/10/31/Linux防火墙探索实验/</id>
+    <published>2019-10-31T14:13:22.000Z</published>
+    <updated>2019-10-31T14:51:02.796Z</updated>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;参考文档：&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://seedsecuritylabs.org/Labs_16.04/PDF/Firewall.pdf&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;1.官方原文档&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.zsythink.net/archives/1199&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;2.iptables详解&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=&quot;1-Overview&quot;&gt;&lt;a href=&quot;#1-Overview&quot; class=&quot;headerlink&quot; title=&quot;1.Overview&quot;&gt;&lt;/a&gt;1.Overview&lt;/h1&gt;&lt;p&gt;The learning objective of this lab is for students to gain the insights（眼光，内省力） on how firewalls work by playing with firewall software and implement a simplified（简化的） packet filtering firewall. Firewalls have several types; in this lab,  we focus on &lt;em&gt;packet filter&lt;/em&gt;.  Packet filters inspect（检测） packets, and decide whether to drop or forward  a packet based on firewall rules. Packet filters are usually &lt;em&gt;stateless&lt;/em&gt;; they filter each packet based only on the information contained in that packet, without paying attention to whether a packet is part of an existing stream of traffic. Packet filters often use a combination（组合） of a packet’s source and destination address, its protocol, and, for TCP and UDP traffic, port numbers. In this lab, students will play with this type of firewall, and also through the implementation of some of the key functionalities, they can understand how firewalls work. Moreover, students will learn how to use SSH tunnels to bypass（绕行，撇开） firewalls. This lab covers the following topics:&lt;/p&gt;
+&lt;p&gt;本次实验的学习目标是让学生通过接触防火墙软件与实现一个简单的包过滤防火墙，以深入理解防火墙的工作原理。防火墙有几种类型；在本次实验中，我们关注于&lt;em&gt;包过滤防火墙&lt;/em&gt;。包过滤器检测数据包，并且基于防火墙规则来决定是丢弃或是转发一个数据包。包过滤器通常来说是&lt;em&gt;无状态的&lt;/em&gt;；它们仅基于数据包中包含的信息来过滤每一个数据包，而不关注数据包是否是现有业务流中的一部分。包过滤器经常组合使用一个数据包的源目地址，协议类型，及TCP和UDP流量的端口号。本实验中，学生将接触该类型防火墙，并且实现部分关键功能，他们能理解防火墙是如何工作的。此外，学生将学习如何使用SSH隧道来绕过防火墙。该实验覆盖以下主题：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Firewall（防火墙）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Netfilter&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Loadable kernel module（可加载的内核模块）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;SSH tunnel（SSH隧道）&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="SEED Labs" scheme="https://dilidonglong.site/categories/SEED-Labs/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>电脑开启系统无线功能</title>
@@ -595,42 +628,6 @@
     
     
       <category term="linux" scheme="https://dilidonglong.site/categories/linux/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>wireshark技巧</title>
-    <link href="https://dilidonglong.site/2019/04/30/wireshark%E6%8A%80%E5%B7%A7/"/>
-    <id>https://dilidonglong.site/2019/04/30/wireshark技巧/</id>
-    <published>2019-04-30T15:40:03.000Z</published>
-    <updated>2019-09-15T14:56:20.442Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;wireshark技巧&quot;&gt;&lt;a href=&quot;#wireshark技巧&quot; class=&quot;headerlink&quot; title=&quot;wireshark技巧&quot;&gt;&lt;/a&gt;wireshark技巧&lt;/h1&gt;&lt;blockquote&gt;
-&lt;p&gt;资料来源：&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://community.emc.com/go/chinese&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;1.EMC中文支持论坛&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://www.dell.com/community/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E8%AE%A8%E8%AE%BA%E5%8C%BA/%E5%A6%82%E6%9E%9C%E7%9C%8B%E4%BA%86%E8%BF%99%E4%B8%AA%E4%BD%A0%E8%BF%98%E6%98%AF%E4%B8%8D%E4%BC%9A%E7%94%A8Wireshark-%E9%82%A3%E5%B0%B1%E6%9D%A5%E6%89%BE%E6%88%91%E5%90%A7-8%E6%9C%886%E6%97%A5%E5%AE%8C%E7%BB%93/td-p/7007033/page/5&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;2.如果看了这个你还是不会用Wireshark-那就来找我吧-8月6日完结&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://linux.51yip.com/search/tcpdump&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;3.Linux命令手册-tcpdump&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://chegva.com/3019.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;4.Linux上使用wireshark(tshark)抓包分析&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://chegva.com/2473.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;5.tcpdump使用技巧&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;1-抓包前设置过滤条件（捕捉过滤器）&quot;&gt;&lt;a href=&quot;#1-抓包前设置过滤条件（捕捉过滤器）&quot; class=&quot;headerlink&quot; title=&quot;1.抓包前设置过滤条件（捕捉过滤器）&quot;&gt;&lt;/a&gt;1.抓包前设置过滤条件（捕捉过滤器）&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;尽量避免使用抓包过滤。即便多看几个报文，也比漏看一个报文要好。&lt;/strong&gt;当你抓取了大量报文的时候，用显示过滤（过滤选项也更多）来重点查看某一数据流。&lt;/p&gt;
-&lt;h3 id=&quot;1-1-抓取指定IP地址的数据流：&quot;&gt;&lt;a href=&quot;#1-1-抓取指定IP地址的数据流：&quot; class=&quot;headerlink&quot; title=&quot;1.1 抓取指定IP地址的数据流：&quot;&gt;&lt;/a&gt;1.1 抓取指定IP地址的数据流：&lt;/h3&gt;&lt;ol&gt;
-&lt;li&gt;host 10.3.1.1：抓取发到/来自10.3.1.1的数据流&lt;/li&gt;
-&lt;li&gt;host 2406:da00:ff00::6b16:f02d：抓取发到/来自IPv6地址2406:da00:ff00::6b16:f02d的数据流&lt;/li&gt;
-&lt;li&gt;not host 10.3.1.1：抓取除了发到/来自10.3.1.1以外的所有数据流&lt;/li&gt;
-&lt;li&gt;src host 10.3.1.1：抓取来自10.3.1.1的数据流&lt;/li&gt;
-&lt;li&gt;dst host 10.3.1.1：抓取发到10.3.1.1的数据流&lt;/li&gt;
-&lt;li&gt;host 10.3.1.1 or 10.3.1.2：抓取发到/来自10.3.1.1，以及与之通讯的所有数据流，与10.3.1.2，以及与之通讯的所有数据流&lt;/li&gt;
-&lt;li&gt;host &lt;a href=&quot;http://www.espn.com：抓取发到/来自所有解析为www.espn.com的IP地址的数据流&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;www.espn.com：抓取发到/来自所有解析为www.espn.com的IP地址的数据流&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;
-    
-    </summary>
-    
-    
-      <category term="小技巧" scheme="https://dilidonglong.site/categories/%E5%B0%8F%E6%8A%80%E5%B7%A7/"/>
     
     
   </entry>

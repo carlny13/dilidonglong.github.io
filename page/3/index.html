@@ -63,6 +63,89 @@
       
         
 
+<article id="post-wireshark技巧" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2019/04/30/wireshark技巧/">wireshark技巧</a>
+    </h2>
+  
+  
+
+
+
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/04/30/wireshark技巧/" class="article-date">
+  <time datetime="2019-04-30T15:40:03.000Z" itemprop="datePublished">2019-04-30</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/小技巧/">小技巧</a>
+  </div>
+
+      </div>
+    
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+      
+
+      
+        <h1 id="wireshark技巧"><a href="#wireshark技巧" class="headerlink" title="wireshark技巧"></a>wireshark技巧</h1><blockquote>
+<p>资料来源：</p>
+<p><a href="https://community.emc.com/go/chinese" target="_blank" rel="noopener">1.EMC中文支持论坛</a></p>
+<p><a href="https://www.dell.com/community/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E8%AE%A8%E8%AE%BA%E5%8C%BA/%E5%A6%82%E6%9E%9C%E7%9C%8B%E4%BA%86%E8%BF%99%E4%B8%AA%E4%BD%A0%E8%BF%98%E6%98%AF%E4%B8%8D%E4%BC%9A%E7%94%A8Wireshark-%E9%82%A3%E5%B0%B1%E6%9D%A5%E6%89%BE%E6%88%91%E5%90%A7-8%E6%9C%886%E6%97%A5%E5%AE%8C%E7%BB%93/td-p/7007033/page/5" target="_blank" rel="noopener">2.如果看了这个你还是不会用Wireshark-那就来找我吧-8月6日完结</a></p>
+<p><a href="http://linux.51yip.com/search/tcpdump" target="_blank" rel="noopener">3.Linux命令手册-tcpdump</a></p>
+<p><a href="https://chegva.com/3019.html" target="_blank" rel="noopener">4.Linux上使用wireshark(tshark)抓包分析</a></p>
+<p><a href="https://chegva.com/2473.html" target="_blank" rel="noopener">5.tcpdump使用技巧</a></p>
+</blockquote>
+<h2 id="1-抓包前设置过滤条件（捕捉过滤器）"><a href="#1-抓包前设置过滤条件（捕捉过滤器）" class="headerlink" title="1.抓包前设置过滤条件（捕捉过滤器）"></a>1.抓包前设置过滤条件（捕捉过滤器）</h2><p><strong>尽量避免使用抓包过滤。即便多看几个报文，也比漏看一个报文要好。</strong>当你抓取了大量报文的时候，用显示过滤（过滤选项也更多）来重点查看某一数据流。</p>
+<h3 id="1-1-抓取指定IP地址的数据流："><a href="#1-1-抓取指定IP地址的数据流：" class="headerlink" title="1.1 抓取指定IP地址的数据流："></a>1.1 抓取指定IP地址的数据流：</h3><ol>
+<li>host 10.3.1.1：抓取发到/来自10.3.1.1的数据流</li>
+<li>host 2406:da00:ff00::6b16:f02d：抓取发到/来自IPv6地址2406:da00:ff00::6b16:f02d的数据流</li>
+<li>not host 10.3.1.1：抓取除了发到/来自10.3.1.1以外的所有数据流</li>
+<li>src host 10.3.1.1：抓取来自10.3.1.1的数据流</li>
+<li>dst host 10.3.1.1：抓取发到10.3.1.1的数据流</li>
+<li>host 10.3.1.1 or 10.3.1.2：抓取发到/来自10.3.1.1，以及与之通讯的所有数据流，与10.3.1.2，以及与之通讯的所有数据流</li>
+<li>host <a href="http://www.espn.com：抓取发到/来自所有解析为www.espn.com的IP地址的数据流" target="_blank" rel="noopener">www.espn.com：抓取发到/来自所有解析为www.espn.com的IP地址的数据流</a></li>
+</ol>
+        
+          <a class="article-more-link" href="/2019/04/30/wireshark技巧/">阅读全文</a>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://dilidonglong.site/2019/04/30/wireshark技巧/" data-id="ck2etvjhx000hwcvdi48p7i3f"
+         class="article-share-link">分享</a>
+      
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+
+
+
+      
+        
+
 <article id="post-文件系统的简单操作" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
   
   <div class="article-inner">
@@ -112,7 +195,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.site/2019/04/30/文件系统的简单操作/" data-id="ck23gtv0s000w1kvdci8rhblt"
+      <a data-url="https://dilidonglong.site/2019/04/30/文件系统的简单操作/" data-id="ck2etvjlt0011wcvd59koct2d"
          class="article-share-link">分享</a>
       
     </footer>
@@ -201,7 +284,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.site/2019/04/30/文件系统/" data-id="ck23gtv0w00121kvduuai0p6d"
+      <a data-url="https://dilidonglong.site/2019/04/30/文件系统/" data-id="ck2etvjle000swcvdxvfppmaq"
          class="article-share-link">分享</a>
       
     </footer>
@@ -268,7 +351,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.site/2019/04/30/磁盘分区/" data-id="ck23gtv0y00141kvdnvrsyyzl"
+      <a data-url="https://dilidonglong.site/2019/04/30/磁盘分区/" data-id="ck2etvjm90015wcvdessi053h"
          class="article-share-link">分享</a>
       
     </footer>
@@ -348,7 +431,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.site/2019/04/29/软考试题1/" data-id="ck23gtv14001f1kvd7ihd4n8w"
+      <a data-url="https://dilidonglong.site/2019/04/29/软考试题1/" data-id="ck2etvjmp001mwcvd47m5bhd1"
          class="article-share-link">分享</a>
       
     </footer>
@@ -427,7 +510,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.site/2019/04/27/设置分类列表页/" data-id="ck23gtv12001a1kvd1q4xjtyv"
+      <a data-url="https://dilidonglong.site/2019/04/27/设置分类列表页/" data-id="ck2etvjmp001dwcvd3nyk0346"
          class="article-share-link">分享</a>
       
     </footer>
@@ -495,7 +578,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.site/2019/04/26/tshark使用方法/" data-id="ck23gtv0h000f1kvdwa4t1uxu"
+      <a data-url="https://dilidonglong.site/2019/04/26/tshark使用方法/" data-id="ck2etvjle000nwcvdj0dmkaex"
          class="article-share-link">分享</a>
       
     </footer>
@@ -563,7 +646,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://dilidonglong.site/2019/04/25/使用github-hexo创建一个博客/" data-id="ck23gtv0j000h1kvdd4nhctfh"
+      <a data-url="https://dilidonglong.site/2019/04/25/使用github-hexo创建一个博客/" data-id="ck2etvjle000lwcvdpirmc8eh"
          class="article-share-link">分享</a>
       
     </footer>
