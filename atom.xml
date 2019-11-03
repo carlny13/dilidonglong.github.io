@@ -88,7 +88,7 @@
     <link href="https://dilidonglong.site/2019/10/07/ARP%E7%BC%93%E5%AD%98%E4%B8%AD%E6%AF%92%E6%94%BB%E5%87%BB%E5%AE%9E%E9%AA%8C/"/>
     <id>https://dilidonglong.site/2019/10/07/ARP缓存中毒攻击实验/</id>
     <published>2019-10-07T12:14:47.000Z</published>
-    <updated>2019-10-29T14:36:17.530Z</updated>
+    <updated>2019-11-03T17:07:07.843Z</updated>
     
     <summary type="html">
     
@@ -96,6 +96,7 @@
 &lt;p&gt;参考文档：&lt;br&gt;&lt;a href=&quot;https://seedsecuritylabs.org/Labs_16.04/PDF/ARP_Attack.pdf&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;官方原文档&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://sinhub.cn/2018/06/what-can-we-do-with-scapy/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;我们可以拿Scapy做什么&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://colobu.com/2014/09/18/linux-tcpip-tuning/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Linux TCP/IP 协议栈调优&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://cloud.tencent.com/developer/article/1092683&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Python黑客编程3网络数据监听和过滤&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;br&gt;
 
