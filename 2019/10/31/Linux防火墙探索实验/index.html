@@ -106,6 +106,23 @@
 <h1 id="2-Lab-Tasks实验组"><a href="#2-Lab-Tasks实验组" class="headerlink" title="2. Lab Tasks实验组"></a>2. Lab Tasks实验组</h1><h2 id="2-1-Task-1-Using-Firewall"><a href="#2-1-Task-1-Using-Firewall" class="headerlink" title="2.1 Task 1: Using Firewall"></a>2.1 Task 1: Using Firewall</h2><p><strong>2.1 实验1：使用防火墙</strong></p>
 <p><em>Linux</em> has a tool called <em>iptables</em>, which is essentially(实质上) a firewall. It has a nice front end program called <em>ufw</em>. In this task, the objective is to use <em>ufw</em> to set up some firewall policies, and observe the behaviors of your system after the policies become effective. You need to set up at least two VMs, one called Machine A, and other called Machine B. You run the firewall on your Machine A. Basically, we use <em>ufw</em> as a personal firewall.  Optionally,  if you have  more VMs,  you can set up a firewall at your router,  so it can protect   a network, instead of just one single computer. After you set up the two VMs, you should perform the following tasks:</p>
 <p><em>Linux</em>有个工具叫<em>iptables</em>，它实质上是个防火墙。它有个很好的前端程序，叫<em>ufw</em>。在该任务中，目标是使用<em>ufw</em>来设置一些防火墙策略，并且在策略生效后观测你系统的行为。你需要设置至少2个VM，一个叫做机器A，而另一个叫做机器B。你在你的机器A上运行防火墙。基本上，我们使用<em>ufw</em>作为一个私人防火墙。（可选），如果你有多个VM，你可以在你的路由器上设置一个防火墙，那么它可以保护你的网络，而不仅仅是一台主机。在你设置了2台VM后，你需要执行以下任务：</p>
+<ul>
+<li><p>Prevent A from doing telnet to Machine B.</p>
+<p>阻止来自A向B的telnet访问。</p>
+</li>
+<li><p>Prevent B from doing telnet to Machine A.</p>
+<p>阻止来自B向A的telnet访问。</p>
+</li>
+<li><p>Prevent A from visiting an external（外部的） web site. You can choose any web site that you like to block, but keep in mind, some web servers have multiple IP addresses.</p>
+<p>阻止A访问外部的站点。你可以选择任何一个你想要禁止的网站，但是记住，一些网站有多个IP地址。</p>
+</li>
+</ul>
+<p>You can find the manual of ufw by typing “man ufw” or search it online. It is pretty straightforward to use.  Please remember that the firewall is not enabled by default, so you should run a command to specifically（明确的） enable it. We list some commonly used commands in Appendix A.</p>
+<p>你可以通过输入“man ufw”来获取ufw的手册，或是在网络上搜索它。这是最直白的使用方式。需要注意的是，防火墙默认是没有开启的，所以你需要通过使用命令来明确开启它。我们在附录A中列出了一些经常被使用的命令。</p>
+<p>Before starting the task, go to the default policy file <code>/etc/default/ufw</code>. find the following entry, and change the rule from DROP to ACCEPT; otherwise, all the incoming traffic will be dropped by default.</p>
+<p>在开始任务之前，找到默认的策略文件夹<code>/etc/default/ufw</code>。找到以下条目，然后把规则从DROP改为ACCEPT；此外，默认情况下的所有流入数据将会被丢弃。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Set the default input policy to ACCEPT, DROP, or REJECT. Please note that if </span></span><br><span class="line"><span class="comment"># you change this you will most likely want to adjust your rules.</span></span><br><span class="line">DEFAULT_INPUT_POLICY=<span class="string">"DROP"</span></span><br></pre></td></tr></table></figure>
+
 
       
     </div>
