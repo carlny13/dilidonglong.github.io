@@ -160,6 +160,44 @@
 
 <img src="/2019/10/31/Linux防火墙探索实验/1.png" title="This is an test image">
 
+<br>
+
+<h3 id="Task-3-a-Telnet-toMachine-B-through-the-firewall"><a href="#Task-3-a-Telnet-toMachine-B-through-the-firewall" class="headerlink" title="Task 3.a: Telnet toMachine B through the firewall"></a>Task 3.a: Telnet toMachine B through the firewall</h3><p><strong>任务3.a：通过防火墙telnet到机器B</strong></p>
+<p>To bypass the firewall, we can establish an SSH tunnel between Machine A and B, so all the telnet traffic will go through this tunnel (encrypted), evading the inspection. Figure 1 illustrates（说明） how the tunnel works. The following command establishes an SSH tunnel between the localhost (port 8000) and machine B (using the default port 22); when packets come out of B’s end, it will be forwarded to Machine C’s port 23 (telnet port). If you only have two VMs, you can use one VM for both Machine B and Machine C.</p>
+<p>要绕过防火墙，我们可以在A和B之间建立一个SSH隧道，那么所有的telnet流量将通过该隧道（被加密），以逃避检测。图1说明了该隧道是如何工作的。以下命令在本机（8000端口）和主机B（默认使用22端口）之间建立了一个SSH隧道；当数据包从B端流出时，它将被转发给主机C的23号端口（即telnet端口）。如果你仅有2台VM，你可以使用一台虚拟机用于B和C。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ ssh -L 8000:Machine_C_IP:23	seed@Machine_B_IP</span><br><span class="line"></span><br><span class="line">// We can now telnet to Machine C via the tunnel:</span><br><span class="line">$ telnet localhost 8000</span><br></pre></td></tr></table></figure>
+
+<p>When we telnet to localhost’s port 8000, SSH will transfer all our TCP packets from one end of the tunnel on localhost:8000 to the other end of the tunnel on Machine B; from there, the packets will be forwarded to Machine C:23. Replies from Machine C will take a reverse（相反的） path, and eventually reach our telnet client. Essentially, we are able to telnet to Machine C. Please describe your observation and explain how you are able to bypass the egress filtering. You should use Wireshark to see what exactly is happening on the wire.</p>
+<p>当我们telnet到本机的8000端口，SSH将转换我们所有的TCP报文，从本机8000端口的隧道一端发送到主机B的隧道另一端；从那里，数据包将会被转发到主机C的23号端口。来自C的回应报文将采用相反的方式，并最终到达我们的telnet客户端。本质上，我们可以telnet到主机C。请描述你的发现并解释你是如何绕过出口过滤的。你应该使用wireshark来观测在链路上到底发生了什么。</p>
+<br>
+
+<h3 id="Task-3-b-Connect-to-Facebook-using-SSH-Tunnel"><a href="#Task-3-b-Connect-to-Facebook-using-SSH-Tunnel" class="headerlink" title="Task 3.b: Connect to Facebook using SSH Tunnel."></a>Task 3.b: Connect to Facebook using SSH Tunnel.</h3><p><strong>任务 3.b：使用SSH隧道连接到Facebook</strong></p>
+<p>To achieve this goal, we can use the approach（途径） similar to that in Task 3.a, i.e., establishing a tunnel between your localhost:port and Machine B, and ask B to forward packets to Facebook. To do that, you can use the following command to set up the tunnel: “ssh -L 8000:FacebookIP:80 …”.  We will not use this approach, and instead, we use a more generic（通用的） approach, called dynamic port forwarding, instead of a static one like that in Task 3.a. To do that, we only specify the local port number, not the final destination. When Machine B receives a packet from the tunnel, it will dynamically decide where it should forward the packet to based on the destination information of the packet.</p>
+<p>为了实现该目标，我们可以使用在任务3.a中类似的方法，例如，在你的本机和主机B之间建立一个隧道，并且要求B转发数据包到Facebook。为了实现上述内容，你可以使用以下命令来设置隧道<code>ssh -L 8000:FacebookIP:80 ...</code>。但是我们将不会使用该方式，相反，我们会使用更通用的方式，叫做动态端口转发，而不是像任务3.a中的静态方式。为此，我们仅需指定本地端口号，而非目的地的。当主机B收到从隧道发来的数据包，它将根据数据包的目的地址信息，动态决定数据包应该转发至何处。</p>
+<p><code>$ ssh -D 9000 -C seed@machine_B</code></p>
+<img src="/2019/10/31/Linux防火墙探索实验/2.png" title="This is an test image">
+
+<p>Similar to the telnet program, which connects localhost:9000, we need to ask Firefox to connect to localhost:9000 every time it needs to connect to a web server, so the traffic can go through our SSH tunnel. To achieve that, we can tell Firefox to use localhost:9000 as its proxy. To support dynamic port forwarding, we need a special type of proxy called <em>SOCKS proxy</em>, which is supported by most browsers. To set up the proxy in Firefox, go to the menu bar, click <em>Edit -&gt; Preferences</em>, scroll（滚动） down to <em>Network Proxy</em>, and click the <em>Settings</em> button. Then follow Figure 2. After the setup is done, please do the following:</p>
+<p>与telnet程序类似，它连接到了本地主机的9000端口，我们要让火狐在每次需要连接到网页服务器的时候，让它来连接到本地主机的9000端口，这样才可以让流量通过我们的SSH隧道。为了实现上述要求，我们可以让火狐使用本地的9000端口作为代理。为了支持动态端口转发，我们需要一个特殊类型的代理，它叫<em>SOCKS proxy</em>，在大部分浏览器中它都是被支持使用的。为了在火狐浏览器中设置代理，请到菜单栏，点击<em>Edit -&gt; Preferences</em>，向下滚动到<em>Network Proxy</em>，并且点击<em>Settings</em>按钮。然后照图2操作。在设置完成后，请做以下步骤：</p>
+<ol>
+<li><p>Run Firefox and go visit the Facebook page. Can you see the Facebook page? Please describe your observation.</p>
+<p>运行火狐然后浏览Facebook页面。你能否看到该网页呢？请描述你的发现。</p>
+</li>
+<li><p>After you get the facebook page, break the SSH tunnel, clear the Firefox cache, and try the connection again. Please describe your observation.</p>
+<p>在你打开了facebook网页后，终止SSH隧道，清空火狐上的缓存，并再次尝试访问网页。请描述你的发现。</p>
+</li>
+<li><p>Establish the SSH tunnel again and connect to Facebook. Describe your observation.</p>
+<p>再次建立SSH隧道，并且连接到Facebook。描述你的发现。</p>
+</li>
+<li><p>Please explain what you have observed, especially on why the SSH tunnel can help bypass the egress filtering. You should use Wireshark to see what exactly is happening on the wire. Please describe your observations and explain them using the packets that you have captured.</p>
+<p>请解释你发现了什么，特别是为什么SSH隧道可以帮助你绕过出口过滤。你应该使用wireshark来观测在链路上到底发生了什么。请描述你的发现并使用你捕获的数据包来解释它们。</p>
+</li>
+</ol>
+<br>
+
+<h3 id="2-4-Task-4-Evading-Ingress-Filtering"><a href="#2-4-Task-4-Evading-Ingress-Filtering" class="headerlink" title="2.4 Task 4: Evading Ingress Filtering"></a>2.4 Task 4: Evading Ingress Filtering</h3><p><strong>2.4 任务4：逃避入口过滤</strong></p>
+<p>Machine A runs a web server behind a firewall; so only the machines in the internal network can access this<br>web server. You are working from home and needs to access this internal web server. You do not have VPN, but you have SSH, which is considered as a poor man’s VPN. You do have an account on Machine A (or another internal machine behind the firewall), but the firewall also blocks incoming SSH connection, so you<br>cannot SSH into any machine on the internal network. Otherwise, you can use the same technique from Task 3 to access the web server. The firewall, however, does not block outgoing SSH connection, i.e., if you want to connect to an outside SSH server, you can still do that.</p>
+<p>The objective of this task is to be able to access the web server on Machine A from outside. We will use two machines to emulate the setup. Machine A is the internal computer, running the protected web server; Machine B is the outside machine at home. On Machine A, we block Machine B from accessing its port 80 (web server) and 22 (SSH server). You need to set up a reverse SSH tunnel on Machine A, so once you get home, you can still access the protected web server on A from home.</p>
 
       
     </div>
